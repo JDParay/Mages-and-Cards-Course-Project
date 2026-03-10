@@ -282,10 +282,21 @@ body {
 .chapter-grid {
     flex-grow: 1;
     display: flex;
-    justify-content: center;
-    align-items: center; /* Vertically centers within the remaining space */
+    flex-direction: row;       /* Forces horizontal alignment */
+    justify-content: center;   /* Centers the group horizontally */
+    align-items: center;       /* Centers the group vertically */
     gap: 30px;
     width: 100%;
+    
+    /* PREVENTS WRAPPING */
+    flex-wrap: nowrap;         
+    overflow-x: auto;          /* Adds a scrollbar if they don't fit the screen */
+    padding: 20px 50px;
+    box-sizing: border-box;
+}
+
+.chapter-grid::-webkit-scrollbar {
+    display: none;
 }
 
 .chapter-card {
