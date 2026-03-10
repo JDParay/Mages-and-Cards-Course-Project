@@ -1,84 +1,167 @@
 :root {
-  --primary-color: #ffcc00;
-  --secondary-color: #2c3e50;
-  --accent-color: #e74c3c;
-  --text-light: #ffffff;
+  /* Color Palette */
+  --bg-gradient-top: #3d1c6f; /* Deep Purple */
+  --bg-gradient-bottom: #24113e; /* Darker Purple */
+  --neon-pink: #ffb3ff; /* The core bright text color */
+  --neon-glow: rgba(255, 179, 255, 0.8); /* The glow color */
+  
+  --btn-bg: #1e0d33; /* Darker button base */
+  --btn-border: #3d1c6f; /* Subdued border */
 }
 
 body {
   margin: 0;
-  background: #1a1a1a; /* Dark background so the UI pops */
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.game-wrapper {
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Roboto', sans-serif;
+  color: var(--neon-pink);
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+
+  /* The Gradient Background */
+  background: radial-gradient(circle at center, var(--bg-gradient-top) 0%, var(--bg-gradient-bottom) 100%);
 }
 
-.main-menu {
+/* --- The Tiled Star Pattern (Using a repeating SVG background) --- */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0.15; /* Subtle texture overlay */
+  /* This is a small, 8-pointed star tile */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 0 L33 27 L60 30 L33 33 L30 60 L27 33 L0 30 L27 27 Z" fill="%23ffffff"/></svg>');
+  background-repeat: repeat;
+  background-size: 60px 60px;
+  z-index: -1;
+}
+
+.menu-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-content {
   text-align: center;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 40px;
-  border-radius: 15px;
-  border: 2px solid var(--secondary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
 }
 
-.game-title {
-  color: var(--primary-color);
-  font-size: 3rem;
-  margin-bottom: 30px;
-  text-shadow: 3px 3px #000;
+/* --- The Logo Icon --- */
+.logo-icon {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 20px;
+}
+.inner-diamond {
+  position: absolute;
+  width: 100%; height: 100%;
+  border: 2px solid var(--neon-pink);
+  transform: rotate(45deg);
+}
+.inner-cross {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--neon-pink);
 }
 
-.menu-options {
+/* --- The Main Title (With Neon Glow) --- */
+.main-title {
+  font-family: 'Unica One', cursive; /* A sleek, futuristic font */
+  font-size: 4.5rem;
+  line-height: 0.9;
+  font-weight: 400;
+  margin: 0;
+  text-transform: uppercase;
+  color: #fff; /* White core */
+  
+  /* THIS CREATES THE NEON GLOW EFFECT */
+  text-shadow: 
+    0 0 10px #fff,
+    0 0 20px var(--neon-glow),
+    0 0 40px var(--neon-glow),
+    0 0 60px var(--neon-glow);
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  color: var(--neon-pink);
+  opacity: 0.8;
+  margin-top: 15px;
+  margin-bottom: 40px;
+}
+
+/* --- The Button Stack --- */
+.button-stack {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 320px;
 }
 
-/* --- THE BUTTON TEMPLATE --- */
-.menu-btn {
-  padding: 15px 40px;
-  font-size: 1.2rem;
+.game-btn {
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: #ddd; /* Base text color, slightly dimmed */
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  background: var(--secondary-color);
-  color: var(--text-light);
-  box-shadow: 0 6px #1a252f; /* The "3D" depth */
-  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.menu-btn:hover {
-  background: #34495e;
-  transform: translateY(-2px);
-  box-shadow: 0 8px #1a252f;
+.game-btn .icon {
+  font-size: 1.1rem;
+  color: var(--neon-pink);
 }
 
-.menu-btn:active {
-  transform: translateY(4px); /* Pushes the button down */
-  box-shadow: 0 2px #1a252f;
+/* --- Button Interactions --- */
+.game-btn:hover {
+  background: rgba(255, 255, 255, 0.05); /* Slight brighten on hover */
+  border-color: #5d2c8f;
+  color: #fff;
+  
+  /* subtle neon highlight on hover */
+  box-shadow: 0 0 15px rgba(255, 179, 255, 0.3);
 }
 
-/* Special styling for the Start button */
-.menu-btn.primary {
-  background: var(--primary-color);
-  color: #000;
-  box-shadow: 0 6px #c49c00;
+.game-btn:active {
+  transform: scale(0.97); /* Small "push" animation */
 }
 
-.menu-btn.quit {
-  background: var(--accent-color);
-  box-shadow: 0 6px #c0392b;
+/* --- Footer Info --- */
+.menu-footer {
+  position: absolute;
+  bottom: 20px;
+  width: calc(100% - 40px);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 0.8rem;
+  opacity: 0.6;
 }
 
-.divider {
-  border: 0;
-  height: 1px;
-  background: #444;
-  margin: 10px 0;
+.footer-left, .footer-right {
+  color: var(--neon-pink);
 }
