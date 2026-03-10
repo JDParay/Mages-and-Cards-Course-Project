@@ -102,19 +102,6 @@ function closeModals() {
 // Start Menu Music on first click
 window.addEventListener('click', () => playMusic('menu'), { once: true });
 
-function setChapterProgress(containerId, current, total) {
-    const container = document.getElementById(containerId);
-    container.style.gridTemplateColumns = `repeat(${total}, 1fr)`;
-    container.innerHTML = ''; // Clear old segments
-
-    for (let i = 0; i < total; i++) {
-        const seg = document.createElement('div');
-        seg.className = i < current ? 'segment filled' : 'segment';
-        container.appendChild(seg);
-    }
-}
-
-
 function handleMenu(destination) {
     if (destination === 'START') {
         playSFX('button');
@@ -125,8 +112,6 @@ function handleMenu(destination) {
         
         // 2. Change the Background Vibe
         document.querySelector('.waterfall-bg').classList.add('bg-campaign');
-        
-        setChapterProgress('antakin-progress', 3, 3);
     }
 }
 
