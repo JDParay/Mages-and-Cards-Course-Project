@@ -162,6 +162,10 @@ body::before {
     width: 400px;
 }
 
+.modal-box h2, .modal-box p {
+    font-family: 'Magica', sans-serif;
+}
+
 /* Show classes */
 .modal-active .modal-overlay,
 .modal-active .modal-box.show {
