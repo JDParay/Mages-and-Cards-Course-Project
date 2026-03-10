@@ -263,26 +263,73 @@ body {
     background-color: #1a0a2e; /* Slightly darker/different purple than menu */
 }
 
-/* Campaign Layout (Matching your image) */
+.back-btn {
+    background: var(--btn-bg);
+    border: 1px solid var(--neon-pink);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Magica', sans-serif;
+}
+
+.back-btn:hover {
+    background: var(--neon-pink);
+    color: var(--btn-bg);
+}
+
+/* --- CHAPTER SELECT GRID --- */
 .chapter-grid {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding-top: 100px;
+    gap: 30px;
+    padding: 20px;
+    margin-top: -50px; /* Centers cards between header and footer */
 }
 
 .chapter-card {
-    background: #1e0d33;
-    border-radius: 10px;
-    padding: 10px;
-    width: 220px;
-    text-align: center;
-    transition: transform 0.2s;
+    width: 260px;
+    background: #130626;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
 }
 
+.chapter-card img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+}
+
+.chapter-card h3 {
+    padding: 15px;
+    margin: 0;
+    font-size: 1rem;
+    color: white;
+    background: #1e0d33;
+    text-align: left;
+}
+
+/* Hover Effect: Glow and Pop */
 .chapter-card:hover {
-    transform: translateY(-10px);
-    border: 2px solid var(--neon-pink);
+    transform: scale(1.05);
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 30px rgba(255, 179, 255, 0.4);
+}
+
+/* Progress Bar at the bottom of the card */
+.progress-container {
+    height: 6px;
+    background: #331a5e;
+    width: 100%;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
 }
 
 /* --- CAMPAIGN UI SHELL --- */
