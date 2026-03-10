@@ -299,7 +299,7 @@ body {
 }
 
 .chapter-card {
-    flex: 0 0 280px; /* Force cards to be exactly 280px wide, no shrinking */
+    flex: 0 0 240px; /* Force cards to be exactly 280px wide, no shrinking */
     height: 480px;   /* Increased height to fit your 430px image + text */
     background: #130626;
     border-radius: 15px;
