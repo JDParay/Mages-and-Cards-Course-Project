@@ -158,6 +158,20 @@ body::before {
     text-align: left;
 }
 
+.is-blurred {
+    filter: blur(10px);
+    transition: filter 0.3s ease; /* Makes the blur "fade in" smoothly */
+}
+
+/* The dark overlay that sits between the menu and the popup */
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* Dim the background slightly */
+    z-index: 100;
+}
+
 .close-x {
     position: absolute;
     top: 30px;
