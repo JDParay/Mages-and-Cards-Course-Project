@@ -280,10 +280,12 @@ body {
 
 /* --- CHAPTER SELECT GRID --- */
 .chapter-grid {
+    flex-grow: 1;        /* Takes up all available space between header and footer */
     display: flex;
-    gap: 30px;
-    padding: 20px;
-    margin-top: -50px; /* Centers cards between header and footer */
+    justify-content: center;
+    align-items: center; /* This centers the cards vertically */
+    gap: 25px;
+    padding: 0 40px;
 }
 
 .chapter-card {
@@ -347,6 +349,14 @@ body {
     box-sizing: border-box;
 }
 
+#campaign-screen {
+    display: none; /* Controlled by JS */
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
 .campaign-title {
     font-family: 'Magica', sans-serif;
     color: white;
@@ -365,6 +375,10 @@ body {
     position: absolute;
     bottom: 0;
     border-top: 2px solid rgba(255, 179, 255, 0.1);
+}
+
+.campaign-header, .campaign-footer {
+    flex-shrink: 0;      /* Prevents the bars from squishing */
 }
 
 .footer-item {
