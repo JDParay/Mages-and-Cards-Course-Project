@@ -280,33 +280,30 @@ body {
 
 /* --- CHAPTER SELECT GRID --- */
 .chapter-grid {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: row;       /* Forces horizontal alignment */
-    justify-content: center;   /* Centers the group horizontally */
-    align-items: center;       /* Centers the group vertically */
+    display: flex !important;   /* Force flex mode */
+    flex-direction: row !important; /* Force horizontal */
+    flex-wrap: nowrap;          /* Absolutely prevent stacking */
+    justify-content: center;    /* Center them if they fit */
+    align-items: center;        /* Center them vertically */
     gap: 30px;
-    width: 100%;
     
-    /* PREVENTS WRAPPING */
-    flex-wrap: nowrap;         
-    overflow-x: auto;          /* Adds a scrollbar if they don't fit the screen */
-    padding: 20px 50px;
-    box-sizing: border-box;
-}
-
-.chapter-grid::-webkit-scrollbar {
-    display: none;
+    width: 100%;
+    flex-grow: 1;
+    overflow-x: auto;           /* Allow scrolling if they go off-screen */
+    padding: 0 50px;
 }
 
 .chapter-card {
-    width: 350px;
+    /* THIS IS THE FIX: Prevents the card from taking over the row */
+    flex: 0 0 260px;            
+    
+    height: 400px;              /* Fixed height for the card */
     background: #130626;
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: pointer;
 }
 
 .chapter-card img {
