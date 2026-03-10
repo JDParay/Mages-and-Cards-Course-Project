@@ -34,7 +34,7 @@ body {
 }
 
 /* LAYER 1: Large, very sparse stars */
-body::before {
+.waterfall-bg {
   content: '';
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
