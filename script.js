@@ -72,20 +72,31 @@ document.querySelectorAll('.custom-slider').forEach(slider => {
 
 // 4. Navigation & Modals
 function openOptions() {
-    playSFX('button'); // Added sound feedback!
+    playSFX('button');
+    // 1. Show the modal and overlay
     document.getElementById('modal-overlay').style.display = 'block';
     document.getElementById('options-modal').style.display = 'block';
+    
+    // 2. Add blur to the background
+    document.querySelector('.menu-screen').classList.add('is-blurred');
 }
 
 function openCredits() {
     playSFX('button');
     document.getElementById('modal-overlay').style.display = 'block';
     document.getElementById('credits-modal').style.display = 'block';
+    
+    // 2. Add blur to the background
+    document.querySelector('.menu-screen').classList.add('is-blurred');
 }
 
 function closeModals() {
+    // 1. Hide everything
     document.getElementById('modal-overlay').style.display = 'none';
     document.querySelectorAll('.modal-box').forEach(m => m.style.display = 'none');
+    
+    // 2. Remove the blur
+    document.querySelector('.menu-screen').classList.remove('is-blurred');
 }
 
 // Start Menu Music on first click
