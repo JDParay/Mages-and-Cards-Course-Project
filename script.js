@@ -108,7 +108,7 @@ function handleMenu(destination) {
         
         // 1. Hide Menu, Show Campaign
         document.getElementById('main-menu-screen').style.display = 'none';
-        document.getElementById('campaign-screen').style.display = 'block';
+        document.getElementById('campaign-screen').style.display = 'flex';
         
         // 2. Change the Background Vibe
         document.querySelector('.waterfall-bg').classList.add('bg-campaign');
