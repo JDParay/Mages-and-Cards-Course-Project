@@ -40,6 +40,16 @@ body::before {
   background-size: 120px 120px; 
   background-repeat: repeat;
   z-index: -1;
+  animation: waterfall 20s linear infinite;
+}
+
+@keyframes waterfall {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 1200px; 
+  }
 }
 
 .menu-screen {
