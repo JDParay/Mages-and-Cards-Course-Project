@@ -77,7 +77,7 @@ function openOptions() {
     document.getElementById('modal-overlay').style.display = 'block';
     document.getElementById('options-modal').style.display = 'block';
     
-    document.querySelector('.menu-screen').classList.add('is-blurred');
+    document.querySelector('.screen').classList.add('is-blurred');
     document.querySelector('.waterfall-bg').classList.add('is-blurred');
 }
 
@@ -86,7 +86,7 @@ function openCredits() {
     document.getElementById('modal-overlay').style.display = 'block';
     document.getElementById('credits-modal').style.display = 'block';
     
-    document.querySelector('.menu-screen').classList.add('is-blurred');
+    document.querySelector('.screen').classList.add('is-blurred');
     document.querySelector('.waterfall-bg').classList.add('is-blurred');
 }
 
@@ -95,7 +95,7 @@ function closeModals() {
     document.getElementById('modal-overlay').style.display = 'none';
     document.querySelectorAll('.modal-box').forEach(m => m.style.display = 'none');
     
-    document.querySelector('.menu-screen').classList.remove('is-blurred');
+    document.querySelector('.screen').classList.remove('is-blurred');
     document.querySelector('.waterfall-bg').classList.remove('is-blurred');
 }
 
