@@ -147,13 +147,33 @@ body {
 }
 
 .modal-box {
-    background: #8b5cf6; /* Matches the vibrant purple in your images */
-    border-radius: 40px; /* Highly rounded corners */
-    padding: 30px 50px;
+    background: #8b5cf6;
+    border-radius: 40px;
+    padding: 50px;
     color: white;
-    width: 600px;
-    border: none;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    
+    /* FIX THE SIZE HERE */
+    width: 600px;         /* Keeps width consistent */
+    min-height: 450px;    /* Prevents it from getting too thin */
+    
+    /* CENTER THE CONTENT VERTICALLY */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Keeps title at the top */
+    align-items: stretch;        /* Makes sliders fill the width */
+    
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+}
+
+.settings-container {
+    margin-top: 40px; /* Adds space under the "Options" title */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Adds consistent breathing room between BGM and SFX */
 }
 
 .modal-title {
