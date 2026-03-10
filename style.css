@@ -337,48 +337,6 @@ body {
     justify-content: flex-start; 
     align-items: stretch;
 }
-/* The background of the bar (the dark groove) */
-.progress-container {
-    width: 90%;          /* Don't touch the edges of the card */
-    height: 6px;         /* Match the thin look in your mockup */
-    background: #2a124a; /* Dark purple/black background */
-    border-radius: 10px;
-    margin: 0 auto 15px auto; /* Center it and add space at the bottom */
-    overflow: hidden;    /* Clips the fill to the rounded corners */
-    position: relative;
-}
-
-.progress-container.segmented {
-    display: grid;
-    grid-auto-flow: column; /* Lays segments out side-by-side */
-    gap: 12px;               /* This creates the "cut" look between segments */
-    background: transparent; /* No background needed, the segments handle it */
-    height: 8px;
-    width: 90%;
-    margin: 10px auto;
-}
-
-.segment {
-    height: 100%;
-    background: #331a5e;    /* Default "Empty/Locked" color */
-    border-radius: 2px;
-    transition: all 0.3s ease;
-}
-
-/* The "Filled/Complete" state */
-.segment.filled {
-    background: var(--neon-pink);
-    box-shadow: 0 0 10px var(--neon-pink);
-}
-
-/* Optional: Sub-text like "Level 3/3 • Complete" */
-.progress-text {
-    font-size: 0.7rem;
-    color: #888;
-    padding: 0 15px 5px 15px;
-    text-align: left;
-    text-transform: uppercase;
-}
 /* --- CAMPAIGN UI SHELL --- */
 #campaign-screen {
     display: none; /* Flex when active */
