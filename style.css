@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Magica';
+    src: url('fonts/Magica.otf');
+}
+
+/* Then use it anywhere like this: */
+.main-logo-img { /* If you still have text logo elements */
+    font-family: 'Magica';
+}
+
 :root {
   /* Color Palette */
   --bg-gradient-top: #3d1c6f; /* Deep Purple */
