@@ -372,15 +372,25 @@ body {
     background: transparent; /* Waterfall shows through */
 }
 
-/* 1. Header takes only the space it needs */
-.campaign-header {
-    flex-shrink: 0;
+.header-left {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Keeps button and text perfectly centered vertically */
+    gap: 20px;           /* Adjust this to change how far the title is from the button */
+}
+
+.campaign-header {
+    width: 100%;
     padding: 20px 40px;
-    background: rgba(20, 10, 40, 0.9);
-    border-bottom: 2px solid rgba(255, 179, 255, 0.1);
+    display: flex;
+    justify-content: space-between; /* Pushes .header-left to left, .user-profile-area to right */
+    align-items: center;
+    background: rgba(30, 13, 51, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid rgba(255, 179, 255, 0.2);
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    z-index: 50; /* Ensure it stays above the cards */
 }
 
 .campaign-title {
