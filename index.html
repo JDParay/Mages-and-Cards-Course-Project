@@ -10,12 +10,11 @@
 <body>
     <div id="bg-layer" class="waterfall-bg"></div>
 
-    <div class="menu-screen">
+    <div id="main-menu-screen" class="screen">
         <div class="menu-content">
-    <img src="MaCLogo.png" alt="Mages and Cards Logo" class="main-logo-img">
-
+            <img src="MaCLogo.png" alt="Mages and Cards Logo" class="main-logo-img">
             <nav class="button-stack">
-                <button class="game-btn">
+                <button class="game-btn" onclick="handleMenu('START')">
                     <span class="icon">►</span> Play
                 </button>
                 <button class="game-btn">
@@ -35,6 +34,30 @@
             <div class="footer-right studio-tag">Instinction Games</div>
         </footer>
     </div>
+
+<div id="campaign-screen" class="screen" style="display: none;">
+    <header class="campaign-header">
+        <button class="back-btn" onclick="showMainMenu()">Menu</button>
+        <h1 class="campaign-title">✨ Campaign Mode</h1>
+        <div class="user-stats">
+             <span>GuardianEarth277</span>
+        </div>
+    </header>
+
+    <div class="chapter-grid">
+        <div class="chapter-card">
+            <img src="antakin.jpg" alt="Antakin">
+            <h3>Antakin the Protector</h3>
+            <div class="progress-bar"><div class="fill" style="width: 100%"></div></div>
+        </div>
+        </div>
+
+    <footer class="campaign-footer">
+        <button class="footer-item">Friends</button>
+        <button class="footer-item active" onclick="openDeckEditor()">Edit Deck</button>
+        <button class="footer-item">Buy Pack</button>
+    </footer>
+</div>
 
 <div id="modal-overlay" class="modal-overlay" onclick="closeModals()"></div>
 
