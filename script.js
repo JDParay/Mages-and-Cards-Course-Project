@@ -1,5 +1,4 @@
 const GameAudio = {
-    // Background Music Tracks
     music: {
         current: null,
         tracks: {
@@ -10,80 +9,84 @@ const GameAudio = {
             world1Boss: new Audio('audio/CorruptBGM.m4a')
         }
     },
-    // Sound Effects
     sfx: {
-        button: new Audio('audio/sfx_button.mp3'),
-        cardDrag: new Audio('audio/sfx_drag.mp3'),
-        tap: new Audio('audio/sfx_tap.mp3')
+        volume: 0.5, // Default volume stored here
+        tracks: {
+            button: new Audio('audio/sfx_button.mp3'),
+            cardDrag: new Audio('audio/sfx_drag.mp3'),
+            tap: new Audio('audio/sfx_tap.mp3')
+        }
     }
 };
 
-// Set all music to loop
-Object.values(GameAudio.music.tracks).forEach(track => track.loop = true);
+// 1. Unified Initialization
+Object.values(GameAudio.music.tracks).forEach(track => {
+    track.loop = true;
+    track.volume = 0.5; // Set a default starting volume
+});
 
-// Function to change music
+// 2. Optimized Audio Functions
 function playMusic(trackName) {
+    const nextTrack = GameAudio.music.tracks[trackName];
+    if (GameAudio.music.current === nextTrack) return; // Don't restart if already playing
+
     if (GameAudio.music.current) {
         GameAudio.music.current.pause();
         GameAudio.music.current.currentTime = 0;
     }
-    GameAudio.music.current = GameAudio.music.tracks[trackName];
-    GameAudio.music.current.play().catch(() => {
-        console.log("Autoplay blocked. Music will start after first click.");
-    });
+    
+    GameAudio.music.current = nextTrack;
+    GameAudio.music.current.play().catch(() => console.log("Waiting for user interaction..."));
 }
 
-// Function to play SFX
 function playSFX(sfxName) {
-    const sound = GameAudio.sfx[sfxName].cloneNode(); // Allows overlapping sounds
+    const sound = GameAudio.sfx.tracks[sfxName].cloneNode();
     sound.volume = GameAudio.sfx.volume;
     sound.play();
 }
 
+// 3. Consolidated Slider & Volume Logic
+function updateSlider(slider) {
+    // Handle the Visual Fill
+    const val = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+    slider.style.background = `linear-gradient(to right, #4c1d95 ${val}%, #ede9fe ${val}%)`;
 
-function handleMenu(destination) {
-  console.log("Navigating to: " + destination);
-  
-  if(destination === 'START') {
-    alert("Loading Chapter Select...");
-    // This is where you'd swap the HTML to show your Chapter Select screen
-  }
+    // Handle the Actual Volume
+    const vol = slider.value / 100;
+    if (slider.id === 'bgm-slider') {
+        Object.values(GameAudio.music.tracks).forEach(t => t.volume = vol);
+    } else if (slider.id === 'sfx-slider') {
+        GameAudio.sfx.volume = vol;
+    }
 }
 
+// Attach listeners to all sliders once
+document.querySelectorAll('.custom-slider').forEach(slider => {
+    slider.min = 0;
+    slider.max = 100;
+    slider.value = 50; // Default center
+    
+    updateSlider(slider); // Run once to set visual state
+    slider.addEventListener('input', () => updateSlider(slider));
+});
+
+// 4. Navigation & Modals
 function openOptions() {
+    playSFX('button'); // Added sound feedback!
     document.getElementById('modal-overlay').style.display = 'block';
     document.getElementById('options-modal').style.display = 'block';
 }
 
 function openCredits() {
+    playSFX('button');
     document.getElementById('modal-overlay').style.display = 'block';
     document.getElementById('credits-modal').style.display = 'block';
 }
 
 function closeModals() {
     document.getElementById('modal-overlay').style.display = 'none';
-    document.getElementById('options-modal').style.display = 'none';
-    document.getElementById('credits-modal').style.display = 'none';
+    document.querySelectorAll('.modal-box').forEach(m => m.style.display = 'none');
 }
 
-document.querySelectorAll('input[name="gfx"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        const pattern = document.querySelector('.body-before-selector'); // your background class
-        if (e.target.value === 'low') {
-            pattern.style.display = 'none'; // Save performance
-        } else {
-            pattern.style.display = 'block';
-        }
-    });
-});
-
-function updateSliderFill(slider) {
-    const val = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-    slider.style.background = `linear-gradient(to right, #4c1d95 ${val}%, #ede9fe ${val}%)`;
-}
-
-// Initialize sliders on load
-document.querySelectorAll('.custom-slider').forEach(slider => {
-    updateSliderFill(slider);
-    slider.addEventListener('input', () => updateSliderFill(slider));
-});
+// Start Menu Music on first click
+window.addEventListener('click', () => playMusic('menu'), { once: true });
