@@ -78,7 +78,7 @@ function openOptions() {
     document.getElementById('options-modal').style.display = 'block';
     
     // 2. Add blur to the background
-    document.querySelector('.menu-screen').classList.add('is-blurred');
+    document.querySelector('.body').classList.add('is-blurred');
 }
 
 function openCredits() {
@@ -87,7 +87,7 @@ function openCredits() {
     document.getElementById('credits-modal').style.display = 'block';
     
     // 2. Add blur to the background
-    document.querySelector('.menu-screen').classList.add('is-blurred');
+    document.querySelector('.body').classList.add('is-blurred');
 }
 
 function closeModals() {
@@ -96,7 +96,7 @@ function closeModals() {
     document.querySelectorAll('.modal-box').forEach(m => m.style.display = 'none');
     
     // 2. Remove the blur
-    document.querySelector('.menu-screen').classList.remove('is-blurred');
+    document.querySelector('.body').classList.remove('is-blurred');
 }
 
 // Start Menu Music on first click
