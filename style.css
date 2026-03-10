@@ -135,6 +135,12 @@ body::before {
   transform: scale(0.97); /* Small "push" animation */
 }
 
+.modal-overlay, .modal-box {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+}
+
 .modal-box {
     background: #8b5cf6; /* Matches the vibrant purple in your images */
     border-radius: 40px; /* Highly rounded corners */
