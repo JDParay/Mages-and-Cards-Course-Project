@@ -135,56 +135,91 @@ body::before {
   transform: scale(0.97); /* Small "push" animation */
 }
 
-/* The Dimmer Layer */
-.modal-overlay {
-    display: none; /* Hidden by default */
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px); /* This blurs the background! */
-    z-index: 100;
-}
-
-/* The Popup Box */
 .modal-box {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--btn-bg);
-    border: 2px solid var(--neon-pink);
-    box-shadow: 0 0 30px var(--neon-glow);
-    padding: 40px;
-    border-radius: 15px;
-    z-index: 101;
-    text-align: center;
-    width: 400px;
+    background: #8b5cf6; /* Matches the vibrant purple in your images */
+    border-radius: 40px; /* Highly rounded corners */
+    padding: 30px 50px;
+    color: white;
+    width: 600px;
+    border: none;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
-.modal-box h2, .modal-box p {
-    font-family: 'Magica', sans-serif;
+.modal-title {
+    font-size: 3.5rem;
+    margin: 0 0 20px 0;
+    text-shadow: 0 0 20px rgba(255,255,255,0.6);
+    text-align: left;
 }
 
-/* Show classes */
-.modal-active .modal-overlay,
-.modal-active .modal-box.show {
-    display: block;
+.close-x {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.8;
 }
 
-.setting-row {
-    margin: 20px 0;
+/* --- CUSTOM SLIDERS --- */
+.custom-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to right, #4c1d95 50%, #ede9fe 50%); /* The "Split" effect */
+    border-radius: 5px;
+    outline: none;
+}
+
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 4px;
+    height: 30px;
+    background: #4c1d95; /* The vertical line thumb */
+    cursor: pointer;
+    border: 1px solid white;
+}
+
+/* --- GRAPHICS RADIO BUTTONS --- */
+.radio-group {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.radio-item input[type="radio"] {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #a78bfa;
+    vertical-align: middle;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.radio-item input[type="radio"]:checked {
+    background: #1e1b4b; /* Dark center when selected */
+    border: 4px solid #a78bfa;
+}
+
+/* --- CREDITS LIST --- */
+.credits-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+    margin-top: 30px;
+}
+
+.credit-entry {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 5px;
 }
-
-/* Customizing the slider to match your neon theme */
-input[type=range] {
-    accent-color: var(--neon-pink);
-    cursor: pointer;
-}
-
 /* --- Footer Info --- */
 .menu-footer {
   position: absolute;
