@@ -407,14 +407,68 @@ body {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100px;
+    width: 100vw;
+    height: 120px; /* Slightly taller for the "blocky" feel */
+    background: rgba(10, 5, 20, 0.95);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Three equal columns */
+    border-top: 2px solid rgba(255, 179, 255, 0.1);
     z-index: 100;
-    background: rgba(15, 5, 25, 0.9);
+}
+
+.footer-btn {
+    background: transparent;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.05); /* Separator lines */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 60px;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #888;
+}
+
+/* Remove the last border line on the right */
+.footer-btn:last-child {
+    border-right: none;
+}
+
+/* THE "RECTANGLE SHIT" / ACTIVE STATE */
+.footer-btn.active {
+    background: rgba(139, 92, 246, 0.1); /* Subtle purple tint */
+    color: white;
+    position: relative;
+}
+
+/* The neon glow line on the active button */
+.footer-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background: var(--neon-pink);
+    box-shadow: 0 0 15px var(--neon-pink);
+    border-radius: 10px 10px 0 0;
+}
+
+.footer-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.03);
+    color: #ccc;
+}
+
+.btn-icon {
+    font-size: 1.5rem;
+}
+
+.btn-text {
+    font-family: 'Magica', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .campaign-header, .campaign-footer {
@@ -526,21 +580,6 @@ body {
     font-size: 0.75rem;
     color: var(--neon-pink);
     font-weight: bold;
-}
-
-.footer-item {
-    background: none;
-    border: none;
-    color: #888;
-    font-family: 'Magica', sans-serif;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.footer-item.active {
-    color: white;
-    text-shadow: 0 0 10px var(--neon-glow);
 }
 
 .footer-left, .footer-right {
