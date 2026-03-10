@@ -125,6 +125,52 @@ body::before {
   transform: scale(0.97); /* Small "push" animation */
 }
 
+/* The Dimmer Layer */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px); /* This blurs the background! */
+    z-index: 100;
+}
+
+/* The Popup Box */
+.modal-box {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--btn-bg);
+    border: 2px solid var(--neon-pink);
+    box-shadow: 0 0 30px var(--neon-glow);
+    padding: 40px;
+    border-radius: 15px;
+    z-index: 101;
+    text-align: center;
+    width: 400px;
+}
+
+/* Show classes */
+.modal-active .modal-overlay,
+.modal-active .modal-box.show {
+    display: block;
+}
+
+.setting-row {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Customizing the slider to match your neon theme */
+input[type=range] {
+    accent-color: var(--neon-pink);
+    cursor: pointer;
+}
+
 /* --- Footer Info --- */
 .menu-footer {
   position: absolute;
