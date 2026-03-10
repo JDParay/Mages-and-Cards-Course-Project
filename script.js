@@ -112,9 +112,6 @@ function handleMenu(destination) {
         
         // 2. Change the Background Vibe
         document.querySelector('.waterfall-bg').classList.add('bg-campaign');
-        
-        // 3. Swap Music
-        playMusic('tutorial'); 
     }
 }
 
