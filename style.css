@@ -405,6 +405,110 @@ body {
     flex-shrink: 0;      /* Prevents the bars from squishing */
 }
 
+.user-profile-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Currency Pills */
+.currency-pill {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 4px 4px 4px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 30px;
+}
+
+.currency-pill .amount {
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.add-btn {
+    background: #facc15; /* Gold/Yellow */
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* User & Avatar */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username {
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.avatar-circle {
+    width: 45px;
+    height: 45px;
+    background: #ddd; /* Replace with an image later */
+    border-radius: 50%;
+    border: 2px solid var(--neon-pink);
+    position: relative;
+}
+
+.lvl-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: #8b5cf6;
+    font-size: 0.7rem;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: white;
+}
+
+/* XP Bar */
+.xp-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.xp-bar-bg {
+    width: 180px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(to right, #a855f7, #ec4899);
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+}
+
+.xp-text {
+    font-size: 0.75rem;
+    color: var(--neon-pink);
+    font-weight: bold;
+}
+
 .footer-item {
     background: none;
     border: none;
