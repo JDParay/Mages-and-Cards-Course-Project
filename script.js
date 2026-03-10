@@ -102,13 +102,26 @@ function closeModals() {
 // Start Menu Music on first click
 window.addEventListener('click', () => playMusic('menu'), { once: true });
 
-document.querySelectorAll('input[name="gfx"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        const pattern = document.querySelector('.body-before-selector'); // your background class
-        if (e.target.value === 'low') {
-            pattern.style.display = 'none'; // Save performance
-        } else {
-            pattern.style.display = 'block';
-        }
-    });
-});
+function handleMenu(destination) {
+    if (destination === 'START') {
+        playSFX('button');
+        
+        // 1. Hide Menu, Show Campaign
+        document.getElementById('main-menu-screen').style.display = 'none';
+        document.getElementById('campaign-screen').style.display = 'block';
+        
+        // 2. Change the Background Vibe
+        document.querySelector('.waterfall-bg').classList.add('bg-campaign');
+        
+        // 3. Swap Music
+        playMusic('tutorial'); 
+    }
+}
+
+function showMainMenu() {
+    playSFX('button');
+    document.getElementById('main-menu-screen').style.display = 'block';
+    document.getElementById('campaign-screen').style.display = 'none';
+    document.querySelector('.waterfall-bg').classList.remove('bg-campaign');
+    playMusic('menu');
+}
