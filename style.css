@@ -247,10 +247,15 @@ body {
 
 /* Screen Management */
 .screen {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    width: 100vw;
+    height: 100vh;
+    position: fixed; /* Changed from absolute to fixed */
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.4s ease;
+    z-index: 10;
 }
 
 /* Background Color Shift */
@@ -280,35 +285,34 @@ body {
 
 /* --- CHAPTER SELECT GRID --- */
 .chapter-grid {
-    display: flex !important;   /* Force flex mode */
-    flex-direction: row !important; /* Force horizontal */
-    flex-wrap: nowrap;          /* Absolutely prevent stacking */
-    justify-content: center;    /* Center them if they fit */
-    align-items: center;        /* Center them vertically */
+    flex: 1; /* Takes up all space between header and footer */
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
     gap: 30px;
-    
     width: 100%;
-    flex-grow: 1;
-    overflow-x: auto;           /* Allow scrolling if they go off-screen */
     padding: 0 50px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .chapter-card {
-    /* THIS IS THE FIX: Prevents the card from taking over the row */
-    flex: 0 0 260px;            
-    
-    height: 400px;              /* Fixed height for the card */
+    flex: 0 0 280px; /* Force cards to be exactly 280px wide, no shrinking */
+    height: 480px;   /* Increased height to fit your 430px image + text */
     background: #130626;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
 .chapter-card img {
     width: 100%;
-    height: 430px;
+    height: 350px; /* Reduced image height so there is room for the bar and title */
     object-fit: cover;
     display: block;
 }
@@ -329,6 +333,10 @@ body {
     box-shadow: 0 0 30px rgba(255, 179, 255, 0.4);
 }
 
+#main-menu-screen, #campaign-screen {
+    justify-content: flex-start; 
+    align-items: stretch;
+}
 /* The background of the bar (the dark groove) */
 .progress-container {
     width: 90%;          /* Don't touch the edges of the card */
