@@ -73,9 +73,6 @@ body::before {
   max-width: 800px;
   height: auto;
   margin-bottom: 10px;
-  
-  /* This adds a glow around your PNG to match the aesthetic */
-  filter: drop-shadow(0 0 15px var(--neon-glow));
 }
 
 @keyframes logo-float {
