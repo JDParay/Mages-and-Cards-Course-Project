@@ -27,25 +27,19 @@ body {
 body::before {
   content: '';
   position: absolute;
-  inset: 0;
-  opacity: 0.1;
-  /* Increased size to 200px makes them much more "spacious" */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><circle cx="30" cy="40" r="1.5" fill="white"/><circle cx="150" cy="120" r="1" fill="white"/></svg>');
-  background-size: 250px 250px;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0.15;
+  
+  /* We define two stars in one 'tile'. 
+     Star 1: Top Left (0,0)
+     Star 2: Middle Center (50, 50) - this creates the 'low' in the high-low pattern
+  */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50 0 L53 17 L70 20 L53 23 L50 40 L47 23 L30 20 L47 17 Z" fill="white" transform="translate(-30, -10)"/><path d="M50 0 L53 17 L70 20 L53 23 L50 40 L47 23 L30 20 L47 17 Z" fill="white" transform="translate(20, 40)"/></svg>');
+  
+  /* background-size controls the 'spaciousness' */
+  background-size: 120px 120px; 
+  background-repeat: repeat;
   z-index: -1;
-}
-
-/* LAYER 2: Smaller, offset stars to create "irregularity" */
-body::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.08;
-  /* Different tile size (137px is a prime number, helps prevent visible patterns) */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="137" height="137"><circle cx="10" cy="10" r="0.8" fill="white"/><circle cx="80" cy="60" r="1.2" fill="white"/></svg>');
-  background-size: 183px 183px;
-  z-index: -1;
-  transform: rotate(15deg); /* Rotating one layer hides the "grid" feel */
 }
 
 .menu-screen {
