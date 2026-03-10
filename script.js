@@ -8,18 +8,19 @@ function handleMenu(destination) {
 }
 
 function openOptions() {
-    document.body.classList.add('modal-active');
-    document.getElementById('options-modal').classList.add('show');
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('options-modal').style.display = 'block';
 }
 
 function openCredits() {
-    document.body.classList.add('modal-active');
-    document.getElementById('credits-modal').classList.add('show');
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('credits-modal').style.display = 'block';
 }
 
 function closeModals() {
-    document.body.classList.remove('modal-active');
-    document.querySelectorAll('.modal-box').forEach(m => m.classList.remove('show'));
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('options-modal').style.display = 'none';
+    document.getElementById('credits-modal').style.display = 'none';
 }
 
 document.querySelectorAll('input[name="gfx"]').forEach(radio => {
