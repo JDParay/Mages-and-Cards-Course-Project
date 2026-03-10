@@ -1,0 +1,84 @@
+:root {
+  --primary-color: #ffcc00;
+  --secondary-color: #2c3e50;
+  --accent-color: #e74c3c;
+  --text-light: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: #1a1a1a; /* Dark background so the UI pops */
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.main-menu {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  border-radius: 15px;
+  border: 2px solid var(--secondary-color);
+}
+
+.game-title {
+  color: var(--primary-color);
+  font-size: 3rem;
+  margin-bottom: 30px;
+  text-shadow: 3px 3px #000;
+}
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* --- THE BUTTON TEMPLATE --- */
+.menu-btn {
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background: var(--secondary-color);
+  color: var(--text-light);
+  box-shadow: 0 6px #1a252f; /* The "3D" depth */
+  transition: all 0.1s;
+}
+
+.menu-btn:hover {
+  background: #34495e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px #1a252f;
+}
+
+.menu-btn:active {
+  transform: translateY(4px); /* Pushes the button down */
+  box-shadow: 0 2px #1a252f;
+}
+
+/* Special styling for the Start button */
+.menu-btn.primary {
+  background: var(--primary-color);
+  color: #000;
+  box-shadow: 0 6px #c49c00;
+}
+
+.menu-btn.quit {
+  background: var(--accent-color);
+  box-shadow: 0 6px #c0392b;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: #444;
+  margin: 10px 0;
+}
