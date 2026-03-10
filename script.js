@@ -22,7 +22,7 @@ const GameAudio = {
 // 1. Unified Initialization
 Object.values(GameAudio.music.tracks).forEach(track => {
     track.loop = true;
-    track.volume = 0.5; // Set a default starting volume
+    track.volume = 0.8; // Set a default starting volume
 });
 
 // 2. Optimized Audio Functions
