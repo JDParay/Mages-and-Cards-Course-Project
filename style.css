@@ -14,28 +14,38 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
-  font-family: 'Roboto', sans-serif;
-  color: var(--neon-pink);
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  /* The Gradient Background */
-  background: radial-gradient(circle at center, var(--bg-gradient-top) 0%, var(--bg-gradient-bottom) 100%);
+  /* THE GRADIENT: Adjusted to be deeper at the edges for more "space" */
+  background: radial-gradient(circle at center, #3d1c6f 0%, #1a0a2e 100%);
 }
 
-/* --- The Tiled Star Pattern (Using a repeating SVG background) --- */
+/* LAYER 1: Large, very sparse stars */
 body::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  opacity: 0.15; /* Subtle texture overlay */
-  /* This is a small, 8-pointed star tile */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 0 L33 27 L60 30 L33 33 L30 60 L27 33 L0 30 L27 27 Z" fill="%23ffffff"/></svg>');
-  background-repeat: repeat;
-  background-size: 60px 60px;
+  inset: 0;
+  opacity: 0.1;
+  /* Increased size to 200px makes them much more "spacious" */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><circle cx="30" cy="40" r="1.5" fill="white"/><circle cx="150" cy="120" r="1" fill="white"/></svg>');
+  background-size: 250px 250px;
   z-index: -1;
+}
+
+/* LAYER 2: Smaller, offset stars to create "irregularity" */
+body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  /* Different tile size (137px is a prime number, helps prevent visible patterns) */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="137" height="137"><circle cx="10" cy="10" r="0.8" fill="white"/><circle cx="80" cy="60" r="1.2" fill="white"/></svg>');
+  background-size: 183px 183px;
+  z-index: -1;
+  transform: rotate(15deg); /* Rotating one layer hides the "grid" feel */
 }
 
 .menu-screen {
