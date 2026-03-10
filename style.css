@@ -332,13 +332,27 @@ body {
     position: relative;
 }
 
-/* The glowing pink part */
-.progress-fill {
+.progress-container.segmented {
+    display: grid;
+    grid-auto-flow: column; /* Lays segments out side-by-side */
+    gap: 4px;               /* This creates the "cut" look between segments */
+    background: transparent; /* No background needed, the segments handle it */
+    height: 8px;
+    width: 90%;
+    margin: 10px auto;
+}
+
+.segment {
     height: 100%;
+    background: #331a5e;    /* Default "Empty/Locked" color */
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* The "Filled/Complete" state */
+.segment.filled {
     background: var(--neon-pink);
-    box-shadow: 0 0 10px var(--neon-pink); /* Adds that neon glow */
-    border-radius: 10px;
-    transition: width 0.5s ease-out; /* Smoothly grows if updated */
+    box-shadow: 0 0 10px var(--neon-pink);
 }
 
 /* Optional: Sub-text like "Level 3/3 • Complete" */
