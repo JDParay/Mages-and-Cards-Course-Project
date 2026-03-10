@@ -45,10 +45,6 @@ body {
   top: 0; left: 0; width: 100%; height: 100%;
   opacity: 0.15;
   
-  /* We define two stars in one 'tile'. 
-     Star 1: Top Left (0,0)
-     Star 2: Middle Center (50, 50) - this creates the 'low' in the high-low pattern
-  */
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50 0 L53 17 L70 20 L53 23 L50 40 L47 23 L30 20 L47 17 Z" fill="white" transform="translate(-30, -10)"/><path d="M50 0 L53 17 L70 20 L53 23 L50 40 L47 23 L30 20 L47 17 Z" fill="white" transform="translate(20, 40)"/></svg>');
   
   /* background-size controls the 'spaciousness' */
@@ -287,6 +283,56 @@ body {
 .chapter-card:hover {
     transform: translateY(-10px);
     border: 2px solid var(--neon-pink);
+}
+
+/* --- CAMPAIGN UI SHELL --- */
+.campaign-header {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 13, 51, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid rgba(255, 179, 255, 0.2);
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+}
+
+.campaign-title {
+    font-family: 'Magica', sans-serif;
+    color: white;
+    text-shadow: 0 0 15px var(--neon-glow);
+    margin: 0;
+}
+
+.campaign-footer {
+    width: 100%;
+    height: 100px;
+    background: rgba(20, 10, 40, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    position: absolute;
+    bottom: 0;
+    border-top: 2px solid rgba(255, 179, 255, 0.1);
+}
+
+.footer-item {
+    background: none;
+    border: none;
+    color: #888;
+    font-family: 'Magica', sans-serif;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer-item.active {
+    color: white;
+    text-shadow: 0 0 10px var(--neon-glow);
 }
 
 .footer-left, .footer-right {
