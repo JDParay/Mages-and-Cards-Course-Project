@@ -21,3 +21,14 @@ function closeModals() {
     document.body.classList.remove('modal-active');
     document.querySelectorAll('.modal-box').forEach(m => m.classList.remove('show'));
 }
+
+document.querySelectorAll('input[name="gfx"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const pattern = document.querySelector('.body-before-selector'); // your background class
+        if (e.target.value === 'low') {
+            pattern.style.display = 'none'; // Save performance
+        } else {
+            pattern.style.display = 'block';
+        }
+    });
+});
