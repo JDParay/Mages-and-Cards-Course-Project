@@ -431,6 +431,7 @@ body {
 }
 
 .currency-pill .amount {
+    font-family: 'Magica';
     color: white;
     font-weight: bold;
     font-size: 0.9rem;
@@ -451,6 +452,7 @@ body {
 
 /* User & Avatar */
 .user-info {
+    font-family: 'Magica';
     display: flex;
     align-items: center;
     gap: 10px;
@@ -465,7 +467,7 @@ body {
 .avatar-circle {
     width: 45px;
     height: 45px;
-    background: #ddd; /* Replace with an image later */
+    background: #ddd;
     border-radius: 50%;
     border: 2px solid var(--neon-pink);
     position: relative;
@@ -504,6 +506,7 @@ body {
 }
 
 .xp-text {
+    font-family: 'Magica';
     font-size: 0.75rem;
     color: var(--neon-pink);
     font-weight: bold;
