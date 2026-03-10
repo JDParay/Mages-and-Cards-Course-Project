@@ -351,7 +351,7 @@ body {
 .progress-container.segmented {
     display: grid;
     grid-auto-flow: column; /* Lays segments out side-by-side */
-    gap: 4px;               /* This creates the "cut" look between segments */
+    gap: 12px;               /* This creates the "cut" look between segments */
     background: transparent; /* No background needed, the segments handle it */
     height: 8px;
     width: 90%;
