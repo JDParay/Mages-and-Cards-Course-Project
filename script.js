@@ -101,3 +101,14 @@ function closeModals() {
 
 // Start Menu Music on first click
 window.addEventListener('click', () => playMusic('menu'), { once: true });
+
+document.querySelectorAll('input[name="gfx"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const pattern = document.querySelector('.body-before-selector'); // your background class
+        if (e.target.value === 'low') {
+            pattern.style.display = 'none'; // Save performance
+        } else {
+            pattern.style.display = 'block';
+        }
+    });
+});
