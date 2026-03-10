@@ -249,6 +249,46 @@ body {
   opacity: 0.6;
 }
 
+/* Screen Management */
+.screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Background Color Shift */
+.waterfall-bg {
+    transition: background-color 1s ease; /* Smoothly change the purple hue */
+}
+
+/* Class to apply when in Campaign Mode */
+.bg-campaign {
+    background-color: #1a0a2e; /* Slightly darker/different purple than menu */
+}
+
+/* Campaign Layout (Matching your image) */
+.chapter-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 100px;
+}
+
+.chapter-card {
+    background: #1e0d33;
+    border-radius: 10px;
+    padding: 10px;
+    width: 220px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.chapter-card:hover {
+    transform: translateY(-10px);
+    border: 2px solid var(--neon-pink);
+}
+
 .footer-left, .footer-right {
   color: var(--neon-pink);
 }
