@@ -160,7 +160,6 @@ body::before {
 
 .is-blurred {
     filter: blur(10px);
-    transition: filter 0.3s ease; /* Makes the blur "fade in" smoothly */
 }
 
 /* The dark overlay that sits between the menu and the popup */
