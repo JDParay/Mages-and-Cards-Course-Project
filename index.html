@@ -35,26 +35,39 @@
         </footer>
     </div>
 
-    <div id="modal-overlay" class="modal-overlay" onclick="closeModals()"></div>
-
 <div id="options-modal" class="modal-box">
-    <h2>OPTIONS</h2>
-    <div class="setting-row">
-        <label>BGM</label>
-        <input type="range" id="bgm-slider" min="0" max="1" step="0.1" value="0.5">
+    <span class="close-x" onclick="closeModals()">✧</span>
+    <h2 class="modal-title">Options</h2>
+    
+    <div class="settings-container">
+        <div class="slider-row">
+            <label>BGM</label>
+            <input type="range" class="custom-slider" id="bgm-slider">
+        </div>
+        <div class="slider-row">
+            <label>SFX</label>
+            <input type="range" class="custom-slider" id="sfx-slider">
+        </div>
     </div>
-    <div class="setting-row">
-        <label>SFX</label>
-        <input type="range" id="sfx-slider" min="0" max="1" step="0.1" value="0.5">
+
+    <div class="graphics-section">
+        <h3>GRAPHICS</h3>
+        <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="gfx" value="low"> <span>Low</span></label>
+            <label class="radio-item"><input type="radio" name="gfx" value="med"> <span>Medium</span></label>
+            <label class="radio-item"><input type="radio" name="gfx" value="high" checked> <span>High</span></label>
+        </div>
     </div>
-    <button class="game-btn close-btn" onclick="closeModals()">Back</button>
 </div>
 
 <div id="credits-modal" class="modal-box">
-    <h2>CREDITS</h2>
-    <p><strong>Developer</strong><br>Jeko Damiel Paray</p>
-    <p><strong>Music & Sound</strong><br>BGM: Artist Name<br>SFX: Library Name</p>
-    <button class="game-btn close-btn" onclick="closeModals()">Back</button>
+    <span class="close-x" onclick="closeModals()">✧</span>
+    <h2 class="modal-title">Credits</h2>
+    <div class="credits-grid">
+        <div class="credit-entry"><span>Jeko Damiel Paray</span> <span>Full-Stack Developer</span></div>
+        <div class="credit-entry"><span>[BGM used by BGM Maker]</span> <span>BGM</span></div>
+        <div class="credit-entry"><span>[SFX used by SFX Maker]</span> <span>SFX</span></div>
+    </div>
 </div>
 <script src="script.js"></script>
 </body>
