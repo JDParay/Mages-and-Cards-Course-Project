@@ -240,7 +240,7 @@ function showReadyPopup() {
 // Opens the "Are you sure?" Modal
 function openQuitModal() {
     playSFX('button');
-    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('modal-overlay').style.display = 'flex';
     document.getElementById('quit-modal').style.display = 'flex';
 }
 
