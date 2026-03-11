@@ -157,27 +157,29 @@ function showMainMenu() {
 const chapterData = {
     'antakin': {
         title: "Antakin the Protector",
-        levels: [{name: "1-1: The Ritual"}, {name: "1-2: Ambush"}, {name: "1-3: Final Stand"}]
+        levels: [{name: "1-1: Antakin's Help"}, {name: "1-2: Antakin's Request"}, {name: "1-3: The Fate of Antakin"}]
     },
     'aelthred': {
         title: "Aelthred the Grey",
-        levels: [{name: "2-1: Frozen Path"}, {name: "2-2: Cave of Echoes"}]
+        levels: [{name: "2-1: Aelthred's Reply"}, {name: "2-2: Aelthred's Solution"}]
     }
 };
 
 function openLevelSelect(chapterKey) {
     const data = chapterData[chapterKey];
-    
-    // Hide Chapters, Show Levels
-    document.querySelector('.chapter-grid').style.display = 'none';
-    document.getElementById('level-grid').style.display = 'flex';
-    
-    // UI Swap: Show "Back to Chapters" button, hide "Back to Menu"
-    document.getElementById('campaign-back-btn').style.display = 'block';
-    document.getElementById('menu-back-btn').style.display = 'none';
-    document.getElementById('chapter-subtitle').innerText = data.title;
-    
+    const chapterGrid = document.querySelector('.chapter-grid');
     const levelGrid = document.getElementById('level-grid');
+
+    // 1. THE SWAP: Hide chapters, show levels
+    chapterGrid.style.setProperty('display', 'none', 'important');
+    levelGrid.style.display = 'flex';
+
+    // 2. Update Header
+    document.getElementById('menu-back-btn').style.display = 'none';
+    document.getElementById('campaign-back-btn').style.display = 'block';
+    document.getElementById('chapter-subtitle').innerText = data.title;
+
+    // 3. Render Levels
     levelGrid.innerHTML = ''; 
     data.levels.forEach((lvl, index) => {
         const card = document.createElement('div');
@@ -194,11 +196,15 @@ function openLevelSelect(chapterKey) {
 }
 
 function goBackToChapters() {
-    document.querySelector('.chapter-grid').style.display = 'flex';
-    document.getElementById('level-grid').style.display = 'none';
-    
-    // UI Swap: Show "Menu" button, hide "Back to Chapters"
-    document.getElementById('campaign-back-btn').style.display = 'none';
+    const chapterGrid = document.querySelector('.chapter-grid');
+    const levelGrid = document.getElementById('level-grid');
+
+    // 1. THE SWAP BACK: Show chapters, hide levels
+    chapterGrid.style.setProperty('display', 'flex', 'important');
+    levelGrid.style.display = 'none';
+
+    // 2. Reset Header
     document.getElementById('menu-back-btn').style.display = 'block';
+    document.getElementById('campaign-back-btn').style.display = 'none';
     document.getElementById('chapter-subtitle').innerText = "Select a Chapter";
 }
