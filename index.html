@@ -117,12 +117,12 @@
     </div>
 </div>
 
-<div id="quit-modal" class="modal-box" style="display: none;">
+<div id="quit-modal" class="modal-box modal-centered" style="display: none;">
     <h2 class="modal-title">Quit Level?</h2>
-    <p>Your progress in this conversation will be lost.</p>
+    <p class="modal-desc">Progress in this conversation will be lost.</p>
     <div class="button-stack">
-        <button class="game-btn" onclick="confirmQuit()">Yes, Quit</button>
-        <button class="game-btn" onclick="closeModals()">Cancel</button>
+        <button class="game-btn primary-btn" onclick="confirmQuit()">Yes, Return to Map</button>
+        <button class="game-btn" onclick="closeModals()">Resume</button>
     </div>
 </div>
 
@@ -156,7 +156,7 @@
     </div>
 </div>
 
-    <div id="ready-modal" class="modal-box" style="display: none;">
+    <div id="ready-modal" class="modal-box modal-centered" style="display: none;">
     <div class="modal-header">
         <span class="icon">⚔️</span>
         <h2 class="modal-title">Battle Ready?</h2>
