@@ -334,6 +334,7 @@ body {
 }
 
 .progress-container {
+    font-family: 'Magica';
     width: 90%;
     height: 8px;
     background: rgba(42, 18, 74, 0.8); /* Dark purple */
