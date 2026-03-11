@@ -139,6 +139,23 @@
 
     <div id="battle-log" class="battle-log">The air grows cold... Prepare to fight!</div>
 
+    <div class="player-stats">
+    <div class="hp-bar-container">
+        <div id="player-hp-fill" class="hp-fill"></div>
+        <span class="hp-text">YOUR HP: <span id="player-hp-val">50</span></span>
+    </div>
+
+    <div class="resource-bar">
+        <div class="res-pill forest">🌲 <span id="res-forest">2</span></div>
+        <div class="res-pill ocean">💧 <span id="res-ocean">2</span></div>
+        <div class="res-pill land">⛰️ <span id="res-land">2</span></div>
+    </div>
+</div>
+
+<button id="end-turn-btn" class="game-btn end-turn-btn" onclick="startEnemyTurn()">
+    END TURN
+</button>
+    
     <div class="battle-ui-bottom">
         <div class="player-stats">
             <div class="hp-bar-container">
