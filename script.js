@@ -485,20 +485,14 @@ function showReadyPopup() {
 }
 
 function startGameplay() {
-    closeModals();
-    
-    // 1. Hide the VN Screen
+    closeModals(); // Close the "Ready?" popup
     document.getElementById('vn-screen').style.display = 'none';
     
-    // 2. Unlock the next level (The "Pattern")
-    // If we just finished 1-1, unlock 1-2
-    userProgress.unlockedLevels++;
+    const battleScreen = document.getElementById('battle-screen');
+    battleScreen.style.setProperty('display', 'flex', 'important'); 
     
-    // 3. Trigger the Battle Gameplay
-    console.log("Initializing Battle Engine...");
-    initBattle(); // This is what we will build next!
+    initBattle();
 }
-
 let battleData = {
     playerHP: 50,
     enemyHP: 50,
