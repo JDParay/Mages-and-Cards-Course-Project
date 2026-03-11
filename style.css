@@ -490,6 +490,15 @@ body {
     font-family: 'Magica';
 }
 
+.chapter-grid, .level-grid {
+    width: 100%;
+    max-width: 1200px;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    /* Removed margin-top/bottom to keep it centered */
+}
+
 .footer-btn {
     background: transparent;
     border: none;
