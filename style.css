@@ -1053,3 +1053,26 @@ body {
 .cost-forest { background: #059669; }
 .cost-ocean { background: #3b82f6; }
 .cost-land { background: #d97706; }
+
+.cost-container {
+    position: absolute;
+    top: -5px;
+    left: 5px;
+    display: flex;
+    gap: 3px;
+}
+
+.mini-cost {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+    color: white;
+    font-weight: bold;
+}
+
+.cost-mana { background: #a855f7; } /* Purple for Mana */
