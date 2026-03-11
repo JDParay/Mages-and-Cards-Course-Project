@@ -93,6 +93,8 @@
         </footer>
     </div>
 
+    <!-- MODAL SECTION -->
+
     <div id="modal-overlay" class="modal-overlay" onclick="closeModals()"></div>
 
 <div id="options-modal" class="modal-box">
@@ -120,6 +122,37 @@
         <div class="credit-entry"><span>SFX used from</span> <a href="https://pixabay.com/sound-effects/">Pixabay</a></div>
     </div>
 </div>
+
+    <div id="mission-modal" class="modal-box mission-start-box" style="display: none;">
+    <span class="close-x" onclick="closeMissionModal()">✧</span>
+    
+    <div class="mission-header">
+        <h2 id="mission-title" class="modal-title">MISSION 0-1</h2>
+        <p id="mission-subtitle">The Ritual of Shadows</p>
+    </div>
+
+    <div class="mission-body">
+        <div class="mission-section">
+            <h4>OBJECTIVES</h4>
+            <ul class="objective-list">
+                <li>Defeat the Corrupted Guard</li>
+                <li>Finish with more than 50% HP</li>
+            </ul>
+        </div>
+
+        <div class="mission-section">
+            <h4>REWARDS</h4>
+            <div class="reward-icons">
+                <div class="reward-item">🪙 500</div>
+                <div class="reward-item">💎 5</div>
+                <div class="reward-item">🎴 Rare Card</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="start-game-btn" onclick="launchLevel()">START BATTLE</button>
+</div>
+    
 <script src="script.js"></script>
 </body>
 </html>
