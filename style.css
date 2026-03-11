@@ -852,6 +852,8 @@ body {
 }
 
 #ready-modal {
+    display: none; /* Force hide by default */
+    position: fixed;
     background: linear-gradient(135deg, #2d134d 0%, #11051a 100%);
     border: 2px solid var(--neon-pink);
     box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
