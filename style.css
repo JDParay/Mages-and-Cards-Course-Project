@@ -345,6 +345,11 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.progress-text {
+    font-family: 'Magica';
+    font-size: 20px;
+    text-align: right;
+
 /* The actual moving part */
 .progress-fill {
     height: 100%;
