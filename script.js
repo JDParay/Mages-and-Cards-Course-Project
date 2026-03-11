@@ -102,6 +102,36 @@ function closeModals() {
 // Start Menu Music on first click
 window.addEventListener('click', () => playMusic('menu'), { once: true });
 
+function setChapterProgress(fillId, statusId, current, total) {
+    const fillElement = document.getElementById(fillId);
+    const statusElement = document.getElementById(statusId);
+    
+    if (!fillElement) return;
+
+    // The Math: (current / total) * 100
+    const percentage = (current / total) * 100;
+    
+    // Apply the width to the CSS
+    fillElement.style.width = percentage + "%";
+    
+    // Update the text (e.g., "2/3 Levels")
+    if (statusElement) {
+        statusElement.innerText = `${current}/${total} Levels ${percentage === 100 ? '• Complete' : ''}`;
+    }
+}
+
+// Inside your handleMenu function:
+function handleMenu(destination) {
+    if (destination === 'START') {
+        // ... (your existing screen swap code) ...
+
+        // Card 1: Finished 1 level out of 3 (33%)
+        setChapterProgress('antakin-fill', 'antakin-status', 1, 3);
+        
+        // Card 2: Finished 3 levels out of 3 (100%)
+        setChapterProgress('aelthred-fill', 'aelthred-status', 0, 3);
+    }
+}
 function handleMenu(destination) {
     if (destination === 'START') {
         playSFX('button');
