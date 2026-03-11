@@ -349,7 +349,7 @@ body {
     color: white;
     font-size: 20px;
     text-align: right;
-    margin: 15px auto;
+    padding-right: 15px auto;
 }
 
 /* The actual moving part */
