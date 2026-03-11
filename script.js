@@ -166,30 +166,32 @@ const chapterData = {
 };
 
 function openLevelSelect(chapterKey) {
+    playSFX('button');
     const data = chapterData[chapterKey];
     const chapterGrid = document.querySelector('.chapter-grid');
     const levelGrid = document.getElementById('level-grid');
 
-    // Use classList for smoother transitions
-    chapterGrid.classList.add('hidden');
-    levelGrid.classList.remove('hidden');
+    // 1. Swap visibility
+    chapterGrid.style.display = 'none';
     levelGrid.style.display = 'flex';
 
-    // 2. Update Header
+    // 2. Update Header UI
     document.getElementById('menu-back-btn').style.display = 'none';
     document.getElementById('campaign-back-btn').style.display = 'block';
     document.getElementById('chapter-subtitle').innerText = data.title;
 
-    // 3. Render Levels
+    // 3. Generate the cards
     levelGrid.innerHTML = ''; 
     data.levels.forEach((lvl, index) => {
         const card = document.createElement('div');
         card.className = 'level-card';
+        
+        // We embed the startLevel function directly into the play-node-btn
         card.innerHTML = `
             <img src="assets/star-bg.png">
             <div class="level-card-footer">
                 <div class="level-badge">0 - ${index + 1}</div>
-                <div class="play-node-btn" onclick="startLevel('${lvl.name}')">▶</div>
+                <div class="play-node-btn" onclick="console.log('Starting:', '${lvl.name}'); startLevel('${lvl.name}')">▶</div>
             </div>
         `;
         levelGrid.appendChild(card);
@@ -198,20 +200,22 @@ function openLevelSelect(chapterKey) {
 
 // Switches from Campaign to VN
 function startLevel(levelName) {
-    playSFX('button');
+    console.log("Entering VN Mode for:", levelName);
     
-    // 1. Hide Campaign, Show VN
+    // 1. Hide the Campaign Map
     document.getElementById('campaign-screen').style.display = 'none';
-    document.getElementById('vn-screen').style.display = 'flex';
     
-    // 2. Set the Title in the VN Header
+    // 2. Show the VN Screen
+    const vnScreen = document.getElementById('vn-screen');
+    vnScreen.style.display = 'flex';
+    
+    // 3. Set the Level Title in the header
     document.getElementById('vn-level-title').innerText = levelName;
-    
-    // 3. Reset the VN state and start dialogue
-    currentScene = storyData[levelName];
-    step = 0;
-    document.getElementById('dialogue-container').innerHTML = ''; 
-    advanceDialogue();
+
+    // 4. Start the story logic (if you have the storyData object ready)
+    if (typeof startDialogue === "function") {
+        startDialogue(levelName);
+    }
 }
 
 // Opens the "Are you sure?" Modal
