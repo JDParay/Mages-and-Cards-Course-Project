@@ -879,6 +879,22 @@ body {
     line-height: 1.5;
 }
 
+.modal-centered {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.modal-centered .modal-title {
+    text-align: center !important;
+    width: 100%;
+}
+
+.modal-centered .button-stack {
+    margin: 0 auto;
+}
+
 .primary-btn {
     background: var(--neon-pink) !important;
     color: #1e0d33 !important;
