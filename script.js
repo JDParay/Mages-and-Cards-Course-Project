@@ -196,6 +196,39 @@ function openLevelSelect(chapterKey) {
     });
 }
 
+// Switches from Campaign to VN
+function startLevel(levelName) {
+    playSFX('button');
+    
+    // 1. Hide Campaign, Show VN
+    document.getElementById('campaign-screen').style.display = 'none';
+    document.getElementById('vn-screen').style.display = 'flex';
+    
+    // 2. Set the Title in the VN Header
+    document.getElementById('vn-level-title').innerText = levelName;
+    
+    // 3. Reset the VN state and start dialogue
+    currentScene = storyData[levelName];
+    step = 0;
+    document.getElementById('dialogue-container').innerHTML = ''; 
+    advanceDialogue();
+}
+
+// Opens the "Are you sure?" Modal
+function openQuitModal() {
+    playSFX('button');
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('quit-modal').style.display = 'block';
+}
+
+// Confirms quit and goes back to Campaign
+function confirmQuit() {
+    closeModals();
+    document.getElementById('vn-screen').style.display = 'none';
+    document.getElementById('campaign-screen').style.display = 'flex';
+    // Optional: playMusic('menu'); 
+}
+
 function goBackToChapters() {
     const chapterGrid = document.querySelector('.chapter-grid');
     const levelGrid = document.getElementById('level-grid');
