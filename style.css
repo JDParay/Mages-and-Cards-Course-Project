@@ -346,8 +346,10 @@ body {
 
 .progress-text {
     font-family: 'Magica';
+    color: white;
     font-size: 20px;
     text-align: right;
+    margin: 15px auto;
 
 /* The actual moving part */
 .progress-fill {
