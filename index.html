@@ -126,6 +126,32 @@
     </div>
 </div>
 
+    <div id="battle-screen" class="screen" style="display: none;">
+    <div class="battle-ui-top">
+        <div class="enemy-area">
+            <div class="hp-bar-container">
+                <div id="enemy-hp-fill" class="hp-fill"></div>
+                <span class="hp-text">ENEMY HP: <span id="enemy-hp-val">50</span></span>
+            </div>
+            <img src="assets/antakinPFP.png" class="battle-boss-img" id="enemy-sprite">
+        </div>
+    </div>
+
+    <div id="battle-log" class="battle-log">Welcome to the Arena!</div>
+
+    <div class="battle-ui-bottom">
+        <div class="player-stats">
+            <div class="hp-bar-container">
+                <div id="player-hp-fill" class="hp-fill"></div>
+                <span class="hp-text">YOUR HP: <span id="player-hp-val">50</span></span>
+            </div>
+        </div>
+        
+        <div id="player-hand" class="hand-container">
+            </div>
+    </div>
+</div>
+
     <!-- MODAL SECTION -->
 
     <div id="modal-overlay" class="modal-overlay" onclick="closeModals()"></div>
