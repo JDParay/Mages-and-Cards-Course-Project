@@ -268,8 +268,8 @@ const storyData = {
             type: "choice", 
             options: ["Who are you?", "You know me?"],
             responses: [
-                { type: "char", name: "Antakin", text: "Oh, I should've introduced myself first.", avatar: "assets/antakinPFP.png" },
-                { type: "char", name: "Antakin", text: "Why of course, little mage. I'm no stranger to a colleague's apprentice.", avatar: "assets/antakinPFP.png" }
+                { type: "char", name: "???", text: "Oh, I should've introduced myself first.", avatar: "assets/antakinPFP.png" },
+                { type: "char", name: "???", text: "Why of course, little mage. I'm no stranger to a colleague's apprentice.", avatar: "assets/antakinPFP.png" }
             ]
         },
         { type: "char", name: "Antakin", text: "I'm Antakin the Protector, but the woods call me Antakin.", avatar: "assets/antakinPFP.png" },
@@ -277,9 +277,10 @@ const storyData = {
         { type: "narrator", text: "You can't help but shiver as she mentions your deceased senior..." },
         { 
             type: "choice", 
-            options: ["Yes I am."],
+            options: ["Yes I am.","I think so."],
             responses: [
                 { type: "char", name: "Antakin", text: "Sigh, it is such a shame for her to pass so soon.", avatar: "assets/antakinPFP.png" },
+                { type: "char", name: "Antakin", text: "Sigh, it is such a shame for her to pass so soon.", avatar: "assets/antakinPFP.png" }
             ]
         },
         { type: "char", name: "Antakin", text: "And now I have to fulfill her wishes, as a very good friend of hers.", avatar: "assets/antakinPFP.png" },
@@ -296,13 +297,6 @@ const storyData = {
         { type: "narrator", text: "Without a beat, Antakin reveals a pack of cards right in front of you, urging you to take it." },
         { type: "char", name: "Antakin", text: "The best way to learn is to experience it, so shall we?", avatar: "assets/antakinPFP.png" },
         { type: "char", name: "Antakin", text: "Now don't you worry, dear. This should be easy as warts pie.", avatar: "assets/antakinPFP.png" },
-        { 
-            type: "choice", 
-            options: ["Here goes nothing..."],
-            responses: [
-                { type: "narrator", text: "And the thus, your first battle begins." },
-            ]
-        },
         { type: "end" }
     ]
 };
