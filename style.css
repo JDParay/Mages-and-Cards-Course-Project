@@ -333,6 +333,27 @@ body {
     box-shadow: 0 0 30px rgba(255, 179, 255, 0.4);
 }
 
+.progress-container {
+    width: 90%;
+    height: 8px;
+    background: rgba(42, 18, 74, 0.8); /* Dark purple */
+    border-radius: 10px;
+    margin: 10px auto;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* The actual moving part */
+.progress-fill {
+    height: 100%;
+    width: 0%; /* Starts at 0, changed by JS */
+    background: linear-gradient(90deg, #ffb3ff, #ec4899);
+    box-shadow: 0 0 10px var(--neon-pink);
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth sliding animation */
+}
+
 #main-menu-screen, #campaign-screen {
     justify-content: flex-start; 
     align-items: stretch;
