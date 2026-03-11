@@ -496,13 +496,36 @@ function startGameplay() {
 let battleData = {
     playerHP: 50,
     enemyHP: 50,
-    maxHP: 50
+    maxHP: 50,
+    resources: {
+        forest: 10,
+        ocean: 10,
+        land: 10
+    }
 };
 
 const cardTypes = [
-    { name: "Mana Bolt", type: "attack", power: 10, cost: 1, icon: "✨" },
-    { name: "Fireball", type: "attack", power: 15, cost: 2, icon: "🔥" },
-    { name: "Heal", type: "heal", power: 12, cost: 1, icon: "💚" }
+    // --- OFFENSIVE CARDS ---
+    { name: "Gust", type: "attack", power: 10, icon: "🍃", costs: { ocean: 1, forest: 1 } },
+    { name: "Tsunami", type: "attack", power: 18, icon: "🌊", costs: { ocean: 5, forest: 2 } }, // Multi-cost
+    { name: "Earthquake", type: "attack", power: 25, icon: "🌍", costs: { land: 3 } },
+    
+    // --- HEALING / UTILITY ---
+    { name: "Biodiversity", type: "heal", power: 15, icon: "🌸", costs: { forest: 2, mana: 30 } },
+    
+    // --- RESOURCE GENERATORS (Uses Mana to grant Land/Ocean/Forest) ---
+    { 
+        name: "Cultivate", type: "gen", resTarget: "forest", amount: 2, 
+        icon: "🌲", costs: { mana: 2 }, desc: "Gain 2 Forest" 
+    },
+    { 
+        name: "Dredge", type: "gen", resTarget: "ocean", amount: 2, 
+        icon: "⚓", costs: { mana: 2 }, desc: "Gain 2 Ocean" 
+    },
+    { 
+        name: "Terraform", type: "gen", resTarget: "land", amount: 2, 
+        icon: "⚒️", costs: { mana: 2 }, desc: "Gain 2 Land" 
+    }
 ];
 
 function startGameplay() {
@@ -524,62 +547,105 @@ function initBattle() {
 function updateBattleUI() {
     document.getElementById('player-hp-val').innerText = battleData.playerHP;
     document.getElementById('enemy-hp-val').innerText = battleData.enemyHP;
+    
+    // Update Resource Counters
+    document.getElementById('res-forest').innerText = battleData.resources.forest;
+    document.getElementById('res-ocean').innerText = battleData.resources.ocean;
+    document.getElementById('res-land').innerText = battleData.resources.land;
+
     document.getElementById('player-hp-fill').style.width = (battleData.playerHP / battleData.maxHP * 100) + "%";
     document.getElementById('enemy-hp-fill').style.width = (battleData.enemyHP / battleData.maxHP * 100) + "%";
+
+    checkAffordability();
 }
 
 function drawHand() {
     const hand = document.getElementById('player-hand');
-    hand.innerHTML = '';
-    for(let i = 0; i < 4; i++) {
+    while (hand.children.length < 3) {
         const randomCard = cardTypes[Math.floor(Math.random() * cardTypes.length)];
         const cardEl = document.createElement('div');
         cardEl.className = 'card';
+        cardEl.dataset.cost = randomCard.cost;
+        cardEl.dataset.resType = randomCard.resType;
+
         cardEl.innerHTML = `
+            <div class="card-cost cost-${randomCard.resType}">${randomCard.cost}</div>
             <span>${randomCard.icon}</span>
-            <strong style="font-size: 0.8rem">${randomCard.name}</strong>
+            <strong style="font-size: 0.75rem">${randomCard.name}</strong>
             <span style="color: #fbbf24">${randomCard.power} pts</span>
         `;
-        cardEl.onclick = () => playCard(randomCard, cardEl);
+        
+        cardEl.onclick = () => {
+            if (battleData.resources[randomCard.resType] >= randomCard.cost) {
+                playCard(randomCard, cardEl);
+            } else {
+                logBattle(`Not enough ${randomCard.resType} energy!`);
+            }
+        };
         hand.appendChild(cardEl);
     }
 }
 
+function checkAffordability() {
+    document.querySelectorAll('.card').forEach(cardEl => {
+        const cost = parseInt(cardEl.dataset.cost);
+        const resType = cardEl.dataset.resType;
+        if (battleData.resources[resType] < cost) {
+            cardEl.classList.add('unaffordable');
+        } else {
+            cardEl.classList.remove('unaffordable');
+        }
+    });
+}
+
 function playCard(card, element) {
-    playSFX('cardDrag');
-    element.style.pointerEvents = 'none';
-    element.style.opacity = '0.5';
+    battleData.resources[card.resType] -= card.cost;
+    element.remove();
 
     if(card.type === 'attack') {
         battleData.enemyHP -= card.power;
-        logBattle(`You used ${card.name} for ${card.power} damage!`);
+        logBattle(`Cast ${card.name}! ${card.power} DMG.`);
     } else {
         battleData.playerHP = Math.min(battleData.maxHP, battleData.playerHP + card.power);
-        logBattle(`You healed for ${card.power}!`);
+        logBattle(`Nature's grace restores ${card.power} HP.`);
     }
 
     updateBattleUI();
-    
-    if(battleData.enemyHP <= 0) {
-        logBattle("VICTORY!");
-        setTimeout(() => { alert("Boss Defeated!"); confirmQuit(); }, 1000);
-    } else {
-        setTimeout(enemyTurn, 800);
-    }
+    if(battleData.enemyHP <= 0) winBattle();
 }
 
-function enemyTurn() {
-    const dmg = 8 + Math.floor(Math.random() * 5);
-    battleData.playerHP -= dmg;
-    logBattle(`Enemy attacks for ${dmg} damage!`);
-    updateBattleUI();
-    
-    if(battleData.playerHP <= 0) {
-        alert("Defeat...");
-        confirmQuit();
-    }
-}
+function startEnemyTurn() {
+    // Disable button during enemy move
+    const btn = document.getElementById('end-turn-btn');
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
 
+    logBattle("Enemy is preparing...");
+
+    setTimeout(() => {
+        const dmg = 10 + Math.floor(Math.random() * 5);
+        battleData.playerHP -= dmg;
+        logBattle(`Enemy strikes for ${dmg} damage!`);
+        
+        // REGEN RESOURCES: Gain 1 of each every turn
+        battleData.resources.forest += 1;
+        battleData.resources.ocean += 1;
+        battleData.resources.land += 1;
+
+        updateBattleUI();
+        drawHand(); // Draw back up to 4 cards
+
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        
+        if(battleData.playerHP <= 0) {
+            alert("Defeated in battle...");
+            confirmQuit();
+        }
+    }, 1000);
+}
 function logBattle(msg) {
     document.getElementById('battle-log').innerText = msg;
 }
+
+
