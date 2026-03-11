@@ -170,8 +170,9 @@ function openLevelSelect(chapterKey) {
     const chapterGrid = document.querySelector('.chapter-grid');
     const levelGrid = document.getElementById('level-grid');
 
-    // 1. THE SWAP: Hide chapters, show levels
-    chapterGrid.style.setProperty('display', 'none', 'important');
+    // Use classList for smoother transitions
+    chapterGrid.classList.add('hidden');
+    levelGrid.classList.remove('hidden');
     levelGrid.style.display = 'flex';
 
     // 2. Update Header
@@ -199,12 +200,6 @@ function goBackToChapters() {
     const chapterGrid = document.querySelector('.chapter-grid');
     const levelGrid = document.getElementById('level-grid');
 
-    // 1. THE SWAP BACK: Show chapters, hide levels
-    chapterGrid.style.setProperty('display', 'flex', 'important');
-    levelGrid.style.display = 'none';
-
-    // 2. Reset Header
-    document.getElementById('menu-back-btn').style.display = 'block';
-    document.getElementById('campaign-back-btn').style.display = 'none';
-    document.getElementById('chapter-subtitle').innerText = "Select a Chapter";
+    chapterGrid.classList.remove('hidden');
+    levelGrid.classList.add('hidden');
 }
