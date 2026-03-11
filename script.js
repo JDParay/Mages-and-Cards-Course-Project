@@ -153,18 +153,30 @@ function showMainMenu() {
     playMusic('menu');
 }
 
+// Add this data object if you haven't yet!
+const chapterData = {
+    'antakin': {
+        title: "Antakin the Protector",
+        levels: [{name: "1-1: The Ritual"}, {name: "1-2: Ambush"}, {name: "1-3: Final Stand"}]
+    },
+    'aelthred': {
+        title: "Aelthred the Grey",
+        levels: [{name: "2-1: Frozen Path"}, {name: "2-2: Cave of Echoes"}]
+    }
+};
+
 function openLevelSelect(chapterKey) {
     const data = chapterData[chapterKey];
     
-    // Toggle Grids
+    // Hide Chapters, Show Levels
     document.querySelector('.chapter-grid').style.display = 'none';
     document.getElementById('level-grid').style.display = 'flex';
     
-    // Toggle Header UI
+    // UI Swap: Show "Back to Chapters" button, hide "Back to Menu"
     document.getElementById('campaign-back-btn').style.display = 'block';
+    document.getElementById('menu-back-btn').style.display = 'none';
     document.getElementById('chapter-subtitle').innerText = data.title;
     
-    // Inject Levels
     const levelGrid = document.getElementById('level-grid');
     levelGrid.innerHTML = ''; 
     data.levels.forEach((lvl, index) => {
@@ -185,7 +197,8 @@ function goBackToChapters() {
     document.querySelector('.chapter-grid').style.display = 'flex';
     document.getElementById('level-grid').style.display = 'none';
     
-    // Reset Header UI
+    // UI Swap: Show "Menu" button, hide "Back to Chapters"
     document.getElementById('campaign-back-btn').style.display = 'none';
+    document.getElementById('menu-back-btn').style.display = 'block';
     document.getElementById('chapter-subtitle').innerText = "Select a Chapter";
 }
