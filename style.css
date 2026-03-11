@@ -491,6 +491,7 @@ body {
     justify-content: center;  /* Horizontal center for cards */
     align-items: flex-start;  /* Fix them to the top of the container */
     padding-top: 50px;        /* Consistent gap from the header */
+    gap: 50px;
 }
 
 .footer-btn {
