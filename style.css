@@ -851,6 +851,47 @@ body {
     50% { transform: translateY(5px); }
 }
 
+#ready-modal {
+    background: linear-gradient(135deg, #2d134d 0%, #11051a 100%);
+    border: 2px solid var(--neon-pink);
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+    text-align: center;
+    padding: 30px;
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-header .icon {
+    font-size: 3rem;
+    filter: drop-shadow(0 0 10px var(--neon-pink));
+}
+
+.modal-desc {
+    color: #cbd5e1;
+    font-family: 'Magica', sans-serif;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.primary-btn {
+    background: var(--neon-pink) !important;
+    color: #1e0d33 !important;
+    font-weight: bold;
+    font-size: 1.2rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0px rgba(255, 0, 255, 0.7); }
+    70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(255, 0, 255, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0px rgba(255, 0, 255, 0); }
+}
 /* Make sure the VN screen covers everything */
 #vn-screen {
     background: radial-gradient(circle, #2d134d 0%, #11051a 100%);
