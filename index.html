@@ -93,6 +93,40 @@
         </footer>
     </div>
 
+    <div id="vn-screen" class="screen" style="display: none;">
+    <header class="vn-header">
+        <div class="header-left">
+            <button class="back-btn" onclick="openQuitModal()">↩</button>
+            <span id="vn-level-title" class="vn-level-title">0-1 Antakin's Help</span>
+        </div>
+        <button class="settings-btn" onclick="openOptions()">⚙</button>
+    </header>
+
+    <div id="dialogue-container" class="dialogue-scroll-area">
+        </div>
+
+    <div id="choice-container" class="choice-row" style="display: none;">
+        <button class="choice-btn" onclick="makeChoice(0)"></button>
+        <button class="choice-btn" onclick="makeChoice(1)"></button>
+    </div>
+
+    <div class="vn-footer">
+        <p id="narrator-text" class="narrator-prose"></p>
+        <div class="next-indicator" onclick="advanceDialogue()">
+            <span>▼</span>
+        </div>
+    </div>
+</div>
+
+<div id="quit-modal" class="modal-box" style="display: none;">
+    <h2 class="modal-title">Quit Level?</h2>
+    <p>Your progress in this conversation will be lost.</p>
+    <div class="button-stack">
+        <button class="game-btn" onclick="confirmQuit()">Yes, Quit</button>
+        <button class="game-btn" onclick="closeModals()">Cancel</button>
+    </div>
+</div>
+
     <!-- MODAL SECTION -->
 
     <div id="modal-overlay" class="modal-overlay" onclick="closeModals()"></div>
