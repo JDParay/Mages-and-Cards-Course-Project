@@ -91,19 +91,16 @@ function openCredits() {
 }
 
 function closeModals() {
-    // Hide the overlay
     document.getElementById('modal-overlay').style.display = 'none';
     
-    // Hide EVERY modal box specifically
+    // Hide ALL modal boxes
     const allModals = document.querySelectorAll('.modal-box');
-    allModals.forEach(modal => {
-        modal.style.display = 'none';
+    allModals.forEach(m => {
+        m.style.setProperty('display', 'none', 'important');
     });
     
-    // Remove blur effects
-    const screens = document.querySelectorAll('.screen');
-    screens.forEach(s => s.classList.remove('is-blurred'));
-    document.querySelector('.waterfall-bg').classList.remove('is-blurred');
+    // Remove blur
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('is-blurred'));
 }
 
 // Start Menu Music on first click
@@ -240,10 +237,15 @@ function showReadyPopup() {
 // Opens the "Are you sure?" Modal
 function openQuitModal() {
     playSFX('button');
-    document.getElementById('modal-overlay').style.display = 'flex';
-    document.getElementById('quit-modal').style.display = 'flex';
+    document.getElementById('modal-overlay').style.display = 'block';
+    
+    const quitModal = document.getElementById('quit-modal');
+    // Switch from 'none' to 'flex'
+    quitModal.style.setProperty('display', 'flex', 'important');
+    
+    // Add blur to background
+    document.querySelector('.screen').classList.add('is-blurred');
 }
-
 // Confirms quit and goes back to Campaign
 function confirmQuit() {
     closeModals();
