@@ -472,6 +472,16 @@ body {
     color: white;
     cursor: pointer;
     box-shadow: 0 0 15px var(--neon-glow);
+    pointer-events: auto !important; /* Forces it to accept clicks */
+    z-index: 10
+}
+
+.level-card-footer {
+    pointer-events: none; /* Let clicks pass through the footer... */
+}
+
+.level-badge, .play-node-btn {
+    pointer-events: auto; /* ...but NOT the actual buttons inside it */
 }
 
 .chapter-subtitle {
