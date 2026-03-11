@@ -203,3 +203,109 @@ function goBackToChapters() {
     chapterGrid.classList.remove('hidden');
     levelGrid.classList.add('hidden');
 }
+
+const storyData = {
+    "1-1: Antakin's Help": [
+        { type: "char", name: "???", text: "I've heard good things about you.", avatar: "assets/antakinPFP.png" },
+        { 
+            type: "choice", 
+            options: ["Who are you?", "You know me?"],
+            responses: [
+                { type: "char", name: "Antakin", text: "Oh, I should've introduced myself first. Antakin the Protector.", avatar: "assets/antakinPFP.png" },
+                { type: "char", name: "Antakin", text: "News travels fast in these woods, little mage.", avatar: "assets/antakinPFP.png" }
+            ]
+        },
+        { type: "char", name: "Antakin", text: "If I’m not mistaken, you’re Heraconda’s disciple, are you not?", avatar: "assets/antakinPFP.png" },
+        { type: "narrator", text: "You can't help but shiver as she mentions your deceased senior..." },
+        { type: "end" }
+    ]
+};
+
+let currentScene = [];
+let step = 0;
+let isTyping = false;
+let typeSpeed = 30; // ms per character
+
+function startLevel(levelName) {
+    document.getElementById('campaign-screen').style.display = 'none';
+    document.getElementById('vn-screen').style.display = 'flex';
+    document.getElementById('vn-level-title').innerText = levelName;
+    
+    currentScene = storyData[levelName];
+    step = 0;
+    document.getElementById('dialogue-container').innerHTML = ''; // Clear old chat
+    advanceDialogue();
+}
+
+function advanceDialogue() {
+    if (isTyping) {
+        fastForward();
+        return;
+    }
+
+    const line = currentScene[step];
+    if (!line) return;
+
+    if (line.type === "char") {
+        createDialogueBox(line);
+        step++;
+    } else if (line.type === "narrator") {
+        showNarrator(line.text);
+        step++;
+    } else if (line.type === "choice") {
+        showChoices(line);
+    } else if (line.type === "end") {
+        showReadyPopup();
+    }
+}
+
+function createDialogueBox(data) {
+    const container = document.getElementById('dialogue-container');
+    const box = document.createElement('div');
+    box.className = 'dialogue-box animate-in';
+    box.innerHTML = `
+        <img src="${data.avatar}" class="vn-portrait">
+        <div class="vn-text-content">
+            <span class="vn-name">${data.name}</span>
+            <p class="vn-text"></p>
+        </div>
+    `;
+    container.appendChild(box);
+    typeWriter(box.querySelector('.vn-text'), data.text);
+    container.scrollTop = container.scrollHeight;
+}
+
+function typeWriter(element, text) {
+    isTyping = true;
+    let i = 0;
+    element.innerHTML = "";
+    
+    const interval = setInterval(() => {
+        element.innerHTML += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+            clearInterval(interval);
+            isTyping = false;
+        }
+    }, typeSpeed);
+    
+    // Simple Fast Forward storage
+    element.dataset.fullText = text;
+    element.dataset.intervalId = interval;
+}
+
+function fastForward() {
+    const texts = document.querySelectorAll('.vn-text');
+    const lastText = texts[texts.length - 1];
+    clearInterval(lastText.dataset.intervalId);
+    lastText.innerHTML = lastText.dataset.fullText;
+    isTyping = false;
+}
+
+// Level Progression Pattern
+function completeLevel(levelKey) {
+    // Logic to unlock the next index in your level array
+    // Example: userProgress.unlockedLevels++;
+    alert("Level Complete! Ready for Battle?");
+    showMainMenu(); 
+}
