@@ -461,3 +461,27 @@ function showNarrator(text) {
     
     container.scrollTop = container.scrollHeight;
 }
+
+function showReadyPopup() {
+    // Show the overlay and the specific Ready modal
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('ready-modal').style.display = 'block';
+    
+    // Optional: Play a "Level Clear" or "Victory" sound here
+    // playSFX('level_complete');
+}
+
+function startGameplay() {
+    closeModals();
+    
+    // 1. Hide the VN Screen
+    document.getElementById('vn-screen').style.display = 'none';
+    
+    // 2. Unlock the next level (The "Pattern")
+    // If we just finished 1-1, unlock 1-2
+    userProgress.unlockedLevels++;
+    
+    // 3. Trigger the Battle Gameplay
+    console.log("Initializing Battle Engine...");
+    initBattle(); // This is what we will build next!
+}
