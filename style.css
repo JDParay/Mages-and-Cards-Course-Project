@@ -675,29 +675,46 @@ body {
 }
 
 .dialogue-box {
-    background: rgba(30, 10, 50, 0.7);
+    width: 90%;
+    max-width: 800px; /* Compact width */
+    background: rgba(20, 5, 35, 0.85); /* Darker purple glass */
     border: 1px solid var(--neon-pink);
-    border-radius: 20px;
+    border-radius: 15px;
     display: flex;
-    padding: 15px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
+    align-items: flex-start;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease;
 }
 
 .vn-portrait {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-    margin-right: 20px;
+    width: 120px; /* Bigger picture */
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 179, 255, 0.3);
+    margin-right: 25px;
+}
+
+.vn-text-content {
+    flex: 1;
 }
 
 .vn-name {
-    font-family: 'Magica';
+    font-family: 'Magica', sans-serif;
     color: var(--neon-pink);
-    font-size: 1.2rem;
-    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px var(--neon-glow);
 }
 
+.vn-text {
+    font-family: 'Magica', sans-serif; /* Applied Magica here */
+    color: white; /* Font color white */
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin: 0;
+}
 .choice-row {
     position: absolute;
     bottom: 200px;
@@ -738,6 +755,16 @@ body {
     z-index: 100;
 }
 
+.vn-footer {
+    position: fixed;
+    bottom: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none; /* Let clicks pass through to the screen listener */
+}
+
 .vn-level-title {
     font-family: 'Magica', sans-serif;
     color: white;
@@ -746,14 +773,25 @@ body {
 }
 
 .dialogue-scroll-area {
-    flex-grow: 1;
-    margin-top: 80px; /* Space for header */
-    margin-bottom: 150px; /* Space for footer */
-    padding: 20px;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: center; /* Centers the boxes horizontally */
+    gap: 15px;
+    padding: 100px 20px; /* Space for header/footer */
+    overflow-y: auto;
+    height: 100%;
+}
+
+.next-indicator {
+    color: var(--neon-pink);
+    font-size: 1.5rem;
+    animation: bounce 1s infinite;
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
 }
 
 /* Make sure the VN screen covers everything */
