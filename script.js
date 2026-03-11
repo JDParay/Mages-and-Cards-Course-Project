@@ -220,6 +220,17 @@ function startLevel(levelName) {
     }
 }
 
+function showReadyPopup() {
+    // You can use a simple alert for now, or a nice modal
+    const proceed = confirm("Conversation ended. Are you ready for battle?");
+    if (proceed) {
+        // This is where you would trigger your Card Game logic
+        console.log("Transitioning to Battle...");
+        // For now, let's just go back to map and unlock next level
+        userProgress.unlockedLevels++; 
+        confirmQuit(); 
+    }
+}
 // Opens the "Are you sure?" Modal
 function openQuitModal() {
     playSFX('button');
