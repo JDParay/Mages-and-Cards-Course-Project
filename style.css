@@ -940,10 +940,14 @@ body {
 .battle-ui-top, .battle-ui-bottom { padding: 20px; width: 100%; }
 
 .battle-ui-bottom {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.85);
     border-top: 2px solid #4c1d95;
-    padding: 20px 0;
-    width: 100%;
+    padding: 15px;
+    height: 320px; /* Give enough room for stats + cards */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 
 .hp-bar-container {
@@ -1035,16 +1039,17 @@ body {
     text-align: center;
 }
 
+.res-pill.mana { background: #7c3aed; box-shadow: 0 0 10px #a78bfa; }
+
 .forest { background: #065f46; box-shadow: 0 0 10px #059669; }
 .ocean { background: #1e40af; box-shadow: 0 0 10px #3b82f6; }
 .land { background: #92400e; box-shadow: 0 0 10px #d97706; }
 
 .end-turn-btn {
     position: absolute;
-    right: 30px;
-    bottom: 100px;
-    background: #7f1d1d !important;
-    border-color: #f87171 !important;
+    right: 40px;
+    top: 20px; /* Moved up so it's away from cards */
+    padding: 10px 25px;
 }
 
 .end-turn-btn:hover { background: #b91c1c !important; }
@@ -1056,22 +1061,30 @@ body {
 
 .cost-container {
     position: absolute;
-    top: -5px;
-    left: 5px;
+    top: -8px;
+    left: -8px;
     display: flex;
-    gap: 3px;
+    flex-wrap: wrap;
+    max-width: 50px;
+    gap: 2px;
 }
 
 .mini-cost {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     font-size: 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid white;
-    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.card-power {
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: #fbbf24;
     font-weight: bold;
 }
 
