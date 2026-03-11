@@ -268,12 +268,41 @@ const storyData = {
             type: "choice", 
             options: ["Who are you?", "You know me?"],
             responses: [
-                { type: "char", name: "Antakin", text: "Oh, I should've introduced myself first. Antakin the Protector.", avatar: "assets/antakinPFP.png" },
-                { type: "char", name: "Antakin", text: "News travels fast in these woods, little mage.", avatar: "assets/antakinPFP.png" }
+                { type: "char", name: "Antakin", text: "Oh, I should've introduced myself first.", avatar: "assets/antakinPFP.png" },
+                { type: "char", name: "Antakin", text: "Why of course, little mage. I'm no stranger to a colleague's apprentice.", avatar: "assets/antakinPFP.png" }
             ]
         },
+        { type: "char", name: "Antakin", text: "I'm Antakin the Protector, but the woods call me Antakin.", avatar: "assets/antakinPFP.png" },
         { type: "char", name: "Antakin", text: "If I’m not mistaken, you’re Heraconda’s disciple, are you not?", avatar: "assets/antakinPFP.png" },
         { type: "narrator", text: "You can't help but shiver as she mentions your deceased senior..." },
+        { 
+            type: "choice", 
+            options: ["Yes I am."],
+            responses: [
+                { type: "char", name: "Antakin", text: "Sigh, it is such a shame for her to pass so soon.", avatar: "assets/antakinPFP.png" },
+            ]
+        },
+        { type: "char", name: "Antakin", text: "And now I have to fulfill her wishes, as a very good friend of hers.", avatar: "assets/antakinPFP.png" },
+        { 
+            type: "choice", 
+            options: ["Wish?","What wish?"],
+            responses: [
+                { type: "char", name: "Antakin", text: "To make you, her predecessor!", avatar: "assets/antakinPFP.png" },
+                { type: "char", name: "Antakin", text: "To make you, her predecessor!", avatar: "assets/antakinPFP.png" },
+            ]
+        },
+        { type: "char", name: "Antakin", text: "A bit of a challenge, if you ask me... She did share you're a bit... unexperienced.", avatar: "assets/antakinPFP.png" },
+        { type: "narrator", text: "She's not wrong, you are still learning about the practive of Mana Cards." },
+        { type: "narrator", text: "Without a beat, Antakin reveals a pack of cards right in front of you, urging you to take it." },
+        { type: "char", name: "Antakin", text: "The best way to learn is to experience it, so shall we?", avatar: "assets/antakinPFP.png" },
+        { type: "char", name: "Antakin", text: "Now don't you worry, dear. This should be easy as warts pie.", avatar: "assets/antakinPFP.png" },
+        { 
+            type: "choice", 
+            options: ["Here goes nothing..."],
+            responses: [
+                { type: "narrator", text: "And the thus, your first battle begins." },
+            ]
+        },
         { type: "end" }
     ]
 };
