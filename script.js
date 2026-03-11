@@ -221,6 +221,9 @@ function startLevel(levelName) {
 }
 
 function showReadyPopup() {
+    document.getElementById('modal-overlay').style.display = 'block';
+    // Use flex instead of block so the centering works!
+    document.getElementById('ready-modal').style.display = 'flex';
     // You can use a simple alert for now, or a nice modal
     const proceed = confirm("Conversation ended. Are you ready for battle?");
     if (proceed) {
@@ -235,7 +238,7 @@ function showReadyPopup() {
 function openQuitModal() {
     playSFX('button');
     document.getElementById('modal-overlay').style.display = 'block';
-    document.getElementById('quit-modal').style.display = 'block';
+    document.getElementById('quit-modal').style.display = 'flex';
 }
 
 // Confirms quit and goes back to Campaign
