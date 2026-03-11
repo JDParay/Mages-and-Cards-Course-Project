@@ -663,3 +663,52 @@ body {
 .footer-left, .footer-right {
   color: var(--neon-pink);
 }
+
+.dialogue-box {
+    background: rgba(30, 10, 50, 0.7);
+    border: 1px solid var(--neon-pink);
+    border-radius: 20px;
+    display: flex;
+    padding: 15px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.vn-portrait {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.vn-name {
+    font-family: 'Magica';
+    color: var(--neon-pink);
+    font-size: 1.2rem;
+    display: block;
+}
+
+.choice-row {
+    position: absolute;
+    bottom: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.choice-btn {
+    background: rgba(139, 92, 246, 0.5);
+    border: 2px solid var(--neon-pink);
+    color: white;
+    padding: 10px 40px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Magica';
+    transition: 0.3s;
+}
+
+.choice-btn:hover {
+    background: var(--neon-pink);
+    color: black;
+}
