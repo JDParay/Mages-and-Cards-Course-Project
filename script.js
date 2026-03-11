@@ -152,3 +152,38 @@ function showMainMenu() {
     document.querySelector('.waterfall-bg').classList.remove('bg-campaign');
     playMusic('menu');
 }
+
+function openLevelSelect(chapterKey) {
+    const data = chapterData[chapterKey];
+    const chapterGrid = document.querySelector('.chapter-grid');
+    const levelGrid = document.getElementById('level-grid');
+    const subtitle = document.getElementById('chapter-subtitle');
+
+    // 1. Update UI Text
+    subtitle.innerText = data.title;
+
+    // 2. Hide Chapter Grid, Show Level Grid
+    chapterGrid.style.display = 'none';
+    levelGrid.style.display = 'flex';
+    levelGrid.innerHTML = ''; // Clear previous
+
+    // 3. Create Level Cards
+    data.levels.forEach((lvl, index) => {
+        const card = document.createElement('div');
+        card.className = 'level-card';
+        card.innerHTML = `
+            <img src="assets/star-bg.png">
+            <div class="level-card-footer">
+                <div class="level-badge">0 - ${index + 1}</div>
+                <div class="play-node-btn" onclick="startLevel('${lvl.name}')">▶</div>
+            </div>
+        `;
+        levelGrid.appendChild(card);
+    });
+}
+
+function goBackToChapters() {
+    document.querySelector('.chapter-grid').style.display = 'flex';
+    document.getElementById('level-grid').style.display = 'none';
+    document.getElementById('chapter-subtitle').innerText = "Select a Chapter";
+}
