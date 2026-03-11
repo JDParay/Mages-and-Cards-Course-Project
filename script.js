@@ -376,37 +376,43 @@ function showChoices(data) {
 
 function makeChoice(index) {
     const choiceContainer = document.getElementById('choice-container');
-    const buttons = choiceContainer.querySelectorAll('.choice-btn');
-    const choiceData = currentScene[step];
+    const choiceData = currentScene[step]; // The choice object from storyData
+    const selectedText = choiceData.options[index];
 
-    // 1. Visual Feedback: Highlight the clicked button
-    buttons[index].classList.add('selected');
-    buttons[1 - index]?.classList.add('dimmed'); // Dim the other one
+    // 1. Hide the interactive buttons
+    choiceContainer.style.display = 'none';
 
-    // 2. Wait a split second, then add the character response
+    // 2. Inject the PLAYER'S choice into the conversation log
+    const container = document.getElementById('dialogue-container');
+    const playerBox = document.createElement('div');
+    playerBox.className = 'dialogue-box player-choice-box animate-in';
+    playerBox.innerHTML = `
+        <div class="vn-text-content">
+            <span class="vn-name">You</span>
+            <p class="vn-text">${selectedText}</p>
+        </div>
+    `;
+    container.appendChild(playerBox);
+    
+    // 3. Auto-scroll to show your choice
+    container.scrollTop = container.scrollHeight;
+
+    // 4. Delay the NPC's response slightly for a natural feel
+    isTyping = true; // Block clicking during the "thinking" pause
     setTimeout(() => {
-        choiceContainer.style.display = 'none';
-        
-        // Show the character's reaction
+        isTyping = false;
         createDialogueBox(choiceData.responses[index]);
-        
-        step++; // Move past the choice object
-    }, 400); 
+        step++; 
+    }, 600); 
 }
 
 // Global listener for progression
-window.addEventListener('keydown', (e) => {
-    if (document.getElementById('vn-screen').style.display === 'flex') {
-        advanceDialogue();
-    }
-});
-
 window.addEventListener('mousedown', (e) => {
-    // Prevent clicking if a choice is active or if clicking the settings gear
+    const vnVisible = document.getElementById('vn-screen').style.display === 'flex';
     const choiceVisible = document.getElementById('choice-container').style.display === 'flex';
-    const isButton = e.target.tagName === 'BUTTON' || e.target.closest('button');
     
-    if (document.getElementById('vn-screen').style.display === 'flex' && !choiceVisible && !isButton) {
+    // Ensure we aren't clicking a button or an active choice menu
+    if (vnVisible && !choiceVisible && !e.target.closest('button') && !e.target.closest('.choice-btn')) {
         advanceDialogue();
     }
 });
