@@ -365,27 +365,33 @@ function showChoices(data) {
     const buttons = choiceContainer.querySelectorAll('.choice-btn');
     
     choiceContainer.style.display = 'flex';
-    
+    isTyping = false; // Stop any accidental fast-forwarding
+
     data.options.forEach((opt, i) => {
         buttons[i].innerText = opt;
         buttons[i].style.display = 'block';
+        buttons[i].classList.remove('selected', 'dimmed'); // Reset states
     });
-    
-    // Hide the 'Next' indicator so they MUST choose
-    document.querySelector('.next-indicator').style.display = 'none';
 }
 
 function makeChoice(index) {
-    playSFX('button');
     const choiceContainer = document.getElementById('choice-container');
-    choiceContainer.style.display = 'none';
-    document.querySelector('.next-indicator').style.display = 'block';
-    
-    // Inject the specific response from the data
-    const choiceData = currentScene[step]; // This is the 'choice' object
-    createDialogueBox(choiceData.responses[index]);
-    
-    step++; // Move to the next line in the story
+    const buttons = choiceContainer.querySelectorAll('.choice-btn');
+    const choiceData = currentScene[step];
+
+    // 1. Visual Feedback: Highlight the clicked button
+    buttons[index].classList.add('selected');
+    buttons[1 - index]?.classList.add('dimmed'); // Dim the other one
+
+    // 2. Wait a split second, then add the character response
+    setTimeout(() => {
+        choiceContainer.style.display = 'none';
+        
+        // Show the character's reaction
+        createDialogueBox(choiceData.responses[index]);
+        
+        step++; // Move past the choice object
+    }, 400); 
 }
 
 // Global listener for progression
@@ -404,3 +410,18 @@ window.addEventListener('mousedown', (e) => {
         advanceDialogue();
     }
 });
+
+function showNarrator(text) {
+    const container = document.getElementById('dialogue-container');
+    const narratorDiv = document.createElement('div');
+    narratorDiv.className = 'narrator-entry animate-in';
+    narratorDiv.innerHTML = `<p class="vn-narrator-text"></p>`;
+    
+    container.appendChild(narratorDiv);
+    
+    // Use the typewriter on the narrator text
+    const textElement = narratorDiv.querySelector('.vn-narrator-text');
+    typeWriter(textElement, text);
+    
+    container.scrollTop = container.scrollHeight;
+}
