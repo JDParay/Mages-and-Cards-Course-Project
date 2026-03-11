@@ -789,6 +789,43 @@ body {
     margin-top: 10px;
 }
 
+/* Narrator: No Box, Centered in the scroll list */
+.narrator-entry {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.vn-narrator-text {
+    font-family: 'Magica', sans-serif;
+    color: #cbd5e1; /* Soft white/grey */
+    font-style: italic;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 0 0 8px rgba(0,0,0,0.8);
+}
+
+/* Choice Button Highlights */
+.choice-btn.selected {
+    background: var(--neon-pink) !important;
+    color: #1e0d33 !important;
+    box-shadow: 0 0 20px var(--neon-pink);
+    transform: scale(1.05);
+}
+
+.choice-btn.dimmed {
+    opacity: 0.3;
+    filter: grayscale(1);
+    pointer-events: none;
+}
+
+/* Ensure the scroll area doesn't hide the narrator */
+.dialogue-scroll-area {
+    padding-bottom: 200px; /* Extra space so the last line isn't cut off */
+}
+
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(5px); }
