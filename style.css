@@ -641,6 +641,78 @@ body {
     font-weight: bold;
 }
 
+.mission-start-box {
+    background: linear-gradient(135deg, rgba(61, 28, 111, 0.95), rgba(30, 13, 51, 0.95));
+    border: 2px solid var(--neon-pink);
+    box-shadow: 0 0 40px rgba(255, 179, 255, 0.2);
+    text-align: center;
+    max-width: 450px;
+}
+
+.mission-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+#mission-subtitle {
+    font-family: 'Magica';
+    color: var(--neon-pink);
+    font-size: 1.2rem;
+    margin-top: -10px;
+}
+
+.mission-section {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.mission-section h4 {
+    font-family: 'Magica';
+    color: #a855f7;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.objective-list {
+    list-style: "✦ ";
+    padding-left: 20px;
+    color: #ddd;
+}
+
+.reward-icons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.reward-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.start-game-btn {
+    width: 100%;
+    background: linear-gradient(to right, #ec4899, #8b5cf6);
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Magica';
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.start-game-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px var(--neon-pink);
+}
+
 .footer-left, .footer-right {
   color: var(--neon-pink);
 }
