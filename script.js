@@ -342,3 +342,31 @@ function completeLevel(levelKey) {
     alert("Level Complete! Ready for Battle?");
     showMainMenu(); 
 }
+
+function showChoices(data) {
+    const choiceContainer = document.getElementById('choice-container');
+    const buttons = choiceContainer.querySelectorAll('.choice-btn');
+    
+    choiceContainer.style.display = 'flex';
+    
+    data.options.forEach((opt, i) => {
+        buttons[i].innerText = opt;
+        buttons[i].style.display = 'block';
+    });
+    
+    // Hide the 'Next' indicator so they MUST choose
+    document.querySelector('.next-indicator').style.display = 'none';
+}
+
+function makeChoice(index) {
+    playSFX('button');
+    const choiceContainer = document.getElementById('choice-container');
+    choiceContainer.style.display = 'none';
+    document.querySelector('.next-indicator').style.display = 'block';
+    
+    // Inject the specific response from the data
+    const choiceData = currentScene[step]; // This is the 'choice' object
+    createDialogueBox(choiceData.responses[index]);
+    
+    step++; // Move to the next line in the story
+}
