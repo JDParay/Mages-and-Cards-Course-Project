@@ -715,6 +715,26 @@ body {
     line-height: 1.4;
     margin: 0;
 }
+
+/* Styling the choice when it becomes a permanent part of the log */
+.player-choice-box {
+    align-self: flex-end; /* Moves your choice to the right side */
+    background: rgba(139, 92, 246, 0.3); /* Purple tint to distinguish it */
+    border: 1px solid #ffb3ff;
+    width: fit-content; /* Makes it look like a chat bubble */
+    max-width: 60%;
+    margin-right: 5%;
+}
+
+.player-choice-box .vn-name {
+    color: #facc15; /* Gold name for "You" */
+    text-align: right;
+}
+
+.player-choice-box .vn-text {
+    text-align: right;
+}
+
 .choice-row {
     position: absolute;
     bottom: 200px;
