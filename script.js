@@ -498,3 +498,94 @@ function startGameplay() {
     console.log("Initializing Battle Engine...");
     initBattle(); // This is what we will build next!
 }
+
+let battleData = {
+    playerHP: 50,
+    enemyHP: 50,
+    maxHP: 50
+};
+
+const cardTypes = [
+    { name: "Mana Bolt", type: "attack", power: 10, cost: 1, icon: "✨" },
+    { name: "Fireball", type: "attack", power: 15, cost: 2, icon: "🔥" },
+    { name: "Heal", type: "heal", power: 12, cost: 1, icon: "💚" }
+];
+
+function startGameplay() {
+    // Switch Screens
+    document.getElementById('vn-screen').style.display = 'none';
+    document.getElementById('battle-screen').style.display = 'flex';
+    
+    playMusic('tutorialBoss');
+    initBattle();
+}
+
+function initBattle() {
+    battleData.playerHP = 50;
+    battleData.enemyHP = 50;
+    updateBattleUI();
+    drawHand();
+}
+
+function updateBattleUI() {
+    document.getElementById('player-hp-val').innerText = battleData.playerHP;
+    document.getElementById('enemy-hp-val').innerText = battleData.enemyHP;
+    document.getElementById('player-hp-fill').style.width = (battleData.playerHP / battleData.maxHP * 100) + "%";
+    document.getElementById('enemy-hp-fill').style.width = (battleData.enemyHP / battleData.maxHP * 100) + "%";
+}
+
+function drawHand() {
+    const hand = document.getElementById('player-hand');
+    hand.innerHTML = '';
+    for(let i = 0; i < 4; i++) {
+        const randomCard = cardTypes[Math.floor(Math.random() * cardTypes.length)];
+        const cardEl = document.createElement('div');
+        cardEl.className = 'card';
+        cardEl.innerHTML = `
+            <span>${randomCard.icon}</span>
+            <strong style="font-size: 0.8rem">${randomCard.name}</strong>
+            <span style="color: #fbbf24">${randomCard.power} pts</span>
+        `;
+        cardEl.onclick = () => playCard(randomCard, cardEl);
+        hand.appendChild(cardEl);
+    }
+}
+
+function playCard(card, element) {
+    playSFX('cardDrag');
+    element.style.pointerEvents = 'none';
+    element.style.opacity = '0.5';
+
+    if(card.type === 'attack') {
+        battleData.enemyHP -= card.power;
+        logBattle(`You used ${card.name} for ${card.power} damage!`);
+    } else {
+        battleData.playerHP = Math.min(battleData.maxHP, battleData.playerHP + card.power);
+        logBattle(`You healed for ${card.power}!`);
+    }
+
+    updateBattleUI();
+    
+    if(battleData.enemyHP <= 0) {
+        logBattle("VICTORY!");
+        setTimeout(() => { alert("Boss Defeated!"); confirmQuit(); }, 1000);
+    } else {
+        setTimeout(enemyTurn, 800);
+    }
+}
+
+function enemyTurn() {
+    const dmg = 8 + Math.floor(Math.random() * 5);
+    battleData.playerHP -= dmg;
+    logBattle(`Enemy attacks for ${dmg} damage!`);
+    updateBattleUI();
+    
+    if(battleData.playerHP <= 0) {
+        alert("Defeat...");
+        confirmQuit();
+    }
+}
+
+function logBattle(msg) {
+    document.getElementById('battle-log').innerText = msg;
+}
