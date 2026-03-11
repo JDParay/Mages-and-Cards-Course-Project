@@ -186,12 +186,14 @@ function openLevelSelect(chapterKey) {
         const card = document.createElement('div');
         card.className = 'level-card';
         
-        // We embed the startLevel function directly into the play-node-btn
+        // This line "escapes" the name so "Antakin's" becomes "Antakin\'s"
+        const safeName = lvl.name.replace(/'/g, "\\'"); 
+
         card.innerHTML = `
             <img src="assets/star-bg.png">
             <div class="level-card-footer">
                 <div class="level-badge">0 - ${index + 1}</div>
-                <div class="play-node-btn" onclick="console.log('Starting:', '${lvl.name}'); startLevel('${lvl.name}')">▶</div>
+                <div class="play-node-btn" onclick="startLevel('${safeName}')">▶</div>
             </div>
         `;
         levelGrid.appendChild(card);
