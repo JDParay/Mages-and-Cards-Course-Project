@@ -159,6 +159,8 @@ body {
 }
 
 .modal-box {
+    display: none;
+    position: fixed;
     background: #8b5cf6;
     border-radius: 40px;
     padding: 40px;
