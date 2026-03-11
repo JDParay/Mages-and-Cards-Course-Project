@@ -91,11 +91,18 @@ function openCredits() {
 }
 
 function closeModals() {
-    // 1. Hide everything
+    // Hide the overlay
     document.getElementById('modal-overlay').style.display = 'none';
-    document.querySelectorAll('.modal-box').forEach(m => m.style.display = 'none');
     
-    document.querySelector('.screen').classList.remove('is-blurred');
+    // Hide EVERY modal box specifically
+    const allModals = document.querySelectorAll('.modal-box');
+    allModals.forEach(modal => {
+        modal.style.display = 'none';
+    });
+    
+    // Remove blur effects
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(s => s.classList.remove('is-blurred'));
     document.querySelector('.waterfall-bg').classList.remove('is-blurred');
 }
 
