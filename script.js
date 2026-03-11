@@ -469,12 +469,17 @@ function showNarrator(text) {
 }
 
 function showReadyPopup() {
-    // Show the overlay and the specific Ready modal
-    document.getElementById('modal-overlay').style.display = 'block';
-    document.getElementById('ready-modal').style.display = 'block';
+    // Standard browser popup
+    const proceed = confirm("Conversation ended. Are you ready for battle?");
     
-    // Optional: Play a "Level Clear" or "Victory" sound here
-    // playSFX('level_complete');
+    if (proceed) {
+        // Trigger the battle logic
+        startGameplay(); 
+    } else {
+        // If they hit cancel, they just stay on the VN screen 
+        // Or you can use confirmQuit() if you want them to go back to map
+        console.log("User canceled battle.");
+    }
 }
 
 function startGameplay() {
