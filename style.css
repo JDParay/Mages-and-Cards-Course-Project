@@ -166,7 +166,6 @@ body {
     padding: 40px;
     color: white;
     
-    /* Back to being sized by content */
     width: 90%;
     max-width: 500px;
     
@@ -176,7 +175,6 @@ body {
     transform: translate(-50%, -50%);
     z-index: 101;
     
-    /* Box shadow for that "floating" look */
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
@@ -884,7 +882,7 @@ body {
 }
 
 .modal-centered {
-    display: flex !important;
+    display: none !important;
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
