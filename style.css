@@ -12,6 +12,10 @@
     display: none !important;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root {
   /* Color Palette */
   --bg-gradient-top: #3d1c6f; /* Deep Purple */
