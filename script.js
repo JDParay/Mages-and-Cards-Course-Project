@@ -497,6 +497,8 @@ let battleData = {
     playerHP: 50,
     enemyHP: 50,
     maxHP: 50,
+    mana: 100,         // Added Mana back in
+    maxMana: 100,
     resources: {
         forest: 10,
         ocean: 10,
@@ -505,27 +507,15 @@ let battleData = {
 };
 
 const cardTypes = [
-    // --- OFFENSIVE CARDS ---
     { name: "Gust", type: "attack", power: 10, icon: "🍃", costs: { ocean: 1, forest: 1 } },
-    { name: "Tsunami", type: "attack", power: 18, icon: "🌊", costs: { ocean: 5, forest: 2 } }, // Multi-cost
-    { name: "Earthquake", type: "attack", power: 25, icon: "🌍", costs: { land: 3 } },
+    { name: "Tsunami", type: "attack", power: 18, icon: "🌊", costs: { ocean: 2, forest: 1 } },
+    { name: "Earthquake", type: "attack", power: 25, icon: "🌍", costs: { land: 4 } },
+    { name: "Nature's Cure", type: "heal", power: 15, icon: "🌸", costs: { forest: 2, mana: 20 } },
     
-    // --- HEALING / UTILITY ---
-    { name: "Biodiversity", type: "heal", power: 15, icon: "🌸", costs: { forest: 2, mana: 30 } },
-    
-    // --- RESOURCE GENERATORS (Uses Mana to grant Land/Ocean/Forest) ---
-    { 
-        name: "Cultivate", type: "gen", resTarget: "forest", amount: 2, 
-        icon: "🌲", costs: { mana: 2 }, desc: "Gain 2 Forest" 
-    },
-    { 
-        name: "Dredge", type: "gen", resTarget: "ocean", amount: 2, 
-        icon: "⚓", costs: { mana: 2 }, desc: "Gain 2 Ocean" 
-    },
-    { 
-        name: "Terraform", type: "gen", resTarget: "land", amount: 2, 
-        icon: "⚒️", costs: { mana: 2 }, desc: "Gain 2 Land" 
-    }
+    // Resource Generators
+    { name: "Cultivate", type: "gen", resTarget: "forest", amount: 2, icon: "🌲", costs: { mana: 30 }, desc: "+2 Forest" },
+    { name: "Dredge", type: "gen", resTarget: "ocean", amount: 2, icon: "⚓", costs: { mana: 30 }, desc: "+2 Ocean" },
+    { name: "Terraform", type: "gen", resTarget: "land", amount: 2, icon: "⚒️", costs: { mana: 30 }, desc: "+2 Land" }
 ];
 
 function startGameplay() {
@@ -540,21 +530,26 @@ function startGameplay() {
 function initBattle() {
     battleData.playerHP = 50;
     battleData.enemyHP = 50;
+    battleData.mana = 5;
+    battleData.resources = { forest: 2, ocean: 2, land: 2 };
+    
+    document.getElementById('player-hand').innerHTML = ''; // Reset hand
     updateBattleUI();
     drawHand();
 }
 
 function updateBattleUI() {
+    // Health
     document.getElementById('player-hp-val').innerText = battleData.playerHP;
     document.getElementById('enemy-hp-val').innerText = battleData.enemyHP;
-    
-    // Update Resource Counters
+    document.getElementById('player-hp-fill').style.width = (battleData.playerHP / battleData.maxHP * 100) + "%";
+    document.getElementById('enemy-hp-fill').style.width = (battleData.enemyHP / battleData.maxHP * 100) + "%";
+
+    // Resources
     document.getElementById('res-forest').innerText = battleData.resources.forest;
     document.getElementById('res-ocean').innerText = battleData.resources.ocean;
     document.getElementById('res-land').innerText = battleData.resources.land;
-
-    document.getElementById('player-hp-fill').style.width = (battleData.playerHP / battleData.maxHP * 100) + "%";
-    document.getElementById('enemy-hp-fill').style.width = (battleData.enemyHP / battleData.maxHP * 100) + "%";
+    document.getElementById('res-mana').innerText = battleData.mana;
 
     checkAffordability();
 }
@@ -587,10 +582,10 @@ function drawHand() {
 
 function canAfford(card) {
     for (const [res, amount] of Object.entries(card.costs)) {
-        if ((battleData.resources[res] || 0) < amount && (res !== 'mana' || battleData.mana < amount)) {
-            // Note: Ensure battleData.mana exists in your state!
-            if (res === 'mana' && battleData.mana < amount) return false;
-            if (res !== 'mana' && battleData.resources[res] < amount) return false;
+        if (res === 'mana') {
+            if (battleData.mana < amount) return false;
+        } else {
+            if ((battleData.resources[res] || 0) < amount) return false;
         }
     }
     return true;
@@ -598,63 +593,58 @@ function canAfford(card) {
 
 function playCard(card, element) {
     if (!canAfford(card)) {
-        logBattle("Not enough resources!");
+        logBattle("Insufficient resources!");
         return;
     }
 
-    // Deduct all costs
+    // Deduct Costs
     for (const [res, amount] of Object.entries(card.costs)) {
         if (res === 'mana') battleData.mana -= amount;
         else battleData.resources[res] -= amount;
     }
 
-    // Execute card effect
+    // Effects
     if (card.type === 'attack') {
         battleData.enemyHP -= card.power;
-        logBattle(`Cast ${card.name}! dealt ${card.power} damage.`);
+        logBattle(`Used ${card.name}! Dealt ${card.power} DMG.`);
     } else if (card.type === 'heal') {
         battleData.playerHP = Math.min(battleData.maxHP, battleData.playerHP + card.power);
-        logBattle(`Healed for ${card.power} HP.`);
+        logBattle(`Used ${card.name}! Healed ${card.power} HP.`);
     } else if (card.type === 'gen') {
         battleData.resources[card.resTarget] += card.amount;
-        logBattle(`Used ${card.name}: +${card.amount} ${card.resTarget}!`);
+        logBattle(`Gained ${card.amount} ${card.resTarget}!`);
     }
 
     element.remove();
     updateBattleUI();
-    if(battleData.enemyHP <= 0) winBattle();
+    if (battleData.enemyHP <= 0) winBattle();
 }
 
 function startEnemyTurn() {
-    // Disable button during enemy move
     const btn = document.getElementById('end-turn-btn');
     btn.disabled = true;
-    btn.style.opacity = "0.5";
-
-    logBattle("Enemy is preparing...");
+    
+    logBattle("Enemy's turn...");
 
     setTimeout(() => {
-        const dmg = 10 + Math.floor(Math.random() * 5);
+        const dmg = 8 + Math.floor(Math.random() * 5);
         battleData.playerHP -= dmg;
-        logBattle(`Enemy strikes for ${dmg} damage!`);
+        logBattle(`Enemy deals ${dmg} damage!`);
         
-        // REGEN RESOURCES: Gain 1 of each every turn
-        battleData.resources.forest += 1;
-        battleData.resources.ocean += 1;
-        battleData.resources.land += 1;
+        // Regen
+        battleData.mana = Math.min(battleData.maxMana, battleData.mana + 2);
+        battleData.resources.forest++;
+        battleData.resources.ocean++;
+        battleData.resources.land++;
 
         updateBattleUI();
-        drawHand(); // Draw back up to 4 cards
-
-        btn.disabled = false;
-        btn.style.opacity = "1";
+        drawHand();
         
-        if(battleData.playerHP <= 0) {
-            alert("Defeated in battle...");
-            confirmQuit();
-        }
+        btn.disabled = false;
+        if(battleData.playerHP <= 0) confirmQuit();
     }, 1000);
 }
+
 function logBattle(msg) {
     document.getElementById('battle-log').innerText = msg;
 }
