@@ -1017,3 +1017,39 @@ body {
     border-top: 1px solid #4c1d95;
     border-bottom: 1px solid #4c1d95;
 }
+
+.resource-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.res-pill {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-family: 'Unica One';
+    font-size: 1.1rem;
+    border: 2px solid rgba(255,255,255,0.3);
+    min-width: 60px;
+    text-align: center;
+}
+
+.forest { background: #065f46; box-shadow: 0 0 10px #059669; }
+.ocean { background: #1e40af; box-shadow: 0 0 10px #3b82f6; }
+.land { background: #92400e; box-shadow: 0 0 10px #d97706; }
+
+.end-turn-btn {
+    position: absolute;
+    right: 30px;
+    bottom: 100px;
+    background: #7f1d1d !important;
+    border-color: #f87171 !important;
+}
+
+.end-turn-btn:hover { background: #b91c1c !important; }
+
+/* Cost badges on cards for specific types */
+.cost-forest { background: #059669; }
+.cost-ocean { background: #3b82f6; }
+.cost-land { background: #d97706; }
