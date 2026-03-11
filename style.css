@@ -8,6 +8,10 @@
     font-family: 'Magica';
 }
 
+.hidden {
+    display: none !important;
+}
+
 :root {
   /* Color Palette */
   --bg-gradient-top: #3d1c6f; /* Deep Purple */
@@ -467,12 +471,14 @@ body {
 }
 
 .chapter-grid, .level-grid {
+    display: flex; /* Ensure they are flex */
+    flex-wrap: wrap; /* Allow wrapping if many cards */
     width: 100%;
     max-width: 1200px;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    /* Removed margin-top/bottom to keep it centered */
+    margin: 0 auto;           /* Horizontal center */
+    justify-content: center;  /* Horizontal center for cards */
+    align-items: flex-start;  /* Fix them to the top of the container */
+    padding-top: 50px;        /* Consistent gap from the header */
 }
 
 .footer-btn {
