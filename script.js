@@ -376,3 +376,20 @@ function makeChoice(index) {
     
     step++; // Move to the next line in the story
 }
+
+// Global listener for progression
+window.addEventListener('keydown', (e) => {
+    if (document.getElementById('vn-screen').style.display === 'flex') {
+        advanceDialogue();
+    }
+});
+
+window.addEventListener('mousedown', (e) => {
+    // Prevent clicking if a choice is active or if clicking the settings gear
+    const choiceVisible = document.getElementById('choice-container').style.display === 'flex';
+    const isButton = e.target.tagName === 'BUTTON' || e.target.closest('button');
+    
+    if (document.getElementById('vn-screen').style.display === 'flex' && !choiceVisible && !isButton) {
+        advanceDialogue();
+    }
+});
