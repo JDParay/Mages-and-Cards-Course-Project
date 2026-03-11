@@ -283,21 +283,6 @@ body {
     color: var(--btn-bg);
 }
 
-/* --- CHAPTER SELECT GRID --- */
-.chapter-grid {
-    flex: 1; /* Takes up all space between header and footer */
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center;
-    align-items: center;
-    gap: 60px;
-    width: 100%;
-    padding: 0 50px;
-    box-sizing: border-box;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
 .chapter-card {
     flex: 0 0 280px; /* Force cards to be exactly 280px wide, no shrinking */
     height: 480px;   /* Increased height to fit your 430px image + text */
@@ -417,15 +402,6 @@ body {
     grid-template-columns: 1fr 1fr 1fr; /* Three equal columns */
     border-top: 2px solid rgba(255, 179, 255, 0.1);
     z-index: 100;
-}
-
-.level-grid {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    padding: 0 50px;
 }
 
 .level-card {
