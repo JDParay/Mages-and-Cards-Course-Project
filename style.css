@@ -308,6 +308,8 @@ body {
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
+    text-align: right;
+    padding-right: 15px;
 }
 
 .chapter-card img {
@@ -348,8 +350,6 @@ body {
     font-family: 'Magica';
     color: white;
     font-size: 20px;
-    text-align: right;
-    padding-right: 15px auto;
 }
 
 /* The actual moving part */
