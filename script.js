@@ -561,55 +561,66 @@ function updateBattleUI() {
 
 function drawHand() {
     const hand = document.getElementById('player-hand');
-    while (hand.children.length < 3) {
-        const randomCard = cardTypes[Math.floor(Math.random() * cardTypes.length)];
+    while (hand.children.length < 4) {
+        const card = cardTypes[Math.floor(Math.random() * cardTypes.length)];
         const cardEl = document.createElement('div');
         cardEl.className = 'card';
-        cardEl.dataset.cost = randomCard.cost;
-        cardEl.dataset.resType = randomCard.resType;
+        
+        // Generate cost badges for every cost in the object
+        let costHTML = '<div class="cost-container">';
+        for (const [res, amt] of Object.entries(card.costs)) {
+            costHTML += `<div class="mini-cost cost-${res}">${amt}</div>`;
+        }
+        costHTML += '</div>';
 
         cardEl.innerHTML = `
-            <div class="card-cost cost-${randomCard.resType}">${randomCard.cost}</div>
-            <span>${randomCard.icon}</span>
-            <strong style="font-size: 0.75rem">${randomCard.name}</strong>
-            <span style="color: #fbbf24">${randomCard.power} pts</span>
+            ${costHTML}
+            <span class="card-icon">${card.icon}</span>
+            <strong class="card-name">${card.name}</strong>
+            <span class="card-power">${card.desc || card.power + ' ATK'}</span>
         `;
         
-        cardEl.onclick = () => {
-            if (battleData.resources[randomCard.resType] >= randomCard.cost) {
-                playCard(randomCard, cardEl);
-            } else {
-                logBattle(`Not enough ${randomCard.resType} energy!`);
-            }
-        };
+        cardEl.onclick = () => playCard(card, cardEl);
         hand.appendChild(cardEl);
     }
 }
 
-function checkAffordability() {
-    document.querySelectorAll('.card').forEach(cardEl => {
-        const cost = parseInt(cardEl.dataset.cost);
-        const resType = cardEl.dataset.resType;
-        if (battleData.resources[resType] < cost) {
-            cardEl.classList.add('unaffordable');
-        } else {
-            cardEl.classList.remove('unaffordable');
+function canAfford(card) {
+    for (const [res, amount] of Object.entries(card.costs)) {
+        if ((battleData.resources[res] || 0) < amount && (res !== 'mana' || battleData.mana < amount)) {
+            // Note: Ensure battleData.mana exists in your state!
+            if (res === 'mana' && battleData.mana < amount) return false;
+            if (res !== 'mana' && battleData.resources[res] < amount) return false;
         }
-    });
+    }
+    return true;
 }
 
 function playCard(card, element) {
-    battleData.resources[card.resType] -= card.cost;
-    element.remove();
-
-    if(card.type === 'attack') {
-        battleData.enemyHP -= card.power;
-        logBattle(`Cast ${card.name}! ${card.power} DMG.`);
-    } else {
-        battleData.playerHP = Math.min(battleData.maxHP, battleData.playerHP + card.power);
-        logBattle(`Nature's grace restores ${card.power} HP.`);
+    if (!canAfford(card)) {
+        logBattle("Not enough resources!");
+        return;
     }
 
+    // Deduct all costs
+    for (const [res, amount] of Object.entries(card.costs)) {
+        if (res === 'mana') battleData.mana -= amount;
+        else battleData.resources[res] -= amount;
+    }
+
+    // Execute card effect
+    if (card.type === 'attack') {
+        battleData.enemyHP -= card.power;
+        logBattle(`Cast ${card.name}! dealt ${card.power} damage.`);
+    } else if (card.type === 'heal') {
+        battleData.playerHP = Math.min(battleData.maxHP, battleData.playerHP + card.power);
+        logBattle(`Healed for ${card.power} HP.`);
+    } else if (card.type === 'gen') {
+        battleData.resources[card.resTarget] += card.amount;
+        logBattle(`Used ${card.name}: +${card.amount} ${card.resTarget}!`);
+    }
+
+    element.remove();
     updateBattleUI();
     if(battleData.enemyHP <= 0) winBattle();
 }
