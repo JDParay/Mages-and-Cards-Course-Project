@@ -1,6 +1,8 @@
 @font-face {
     font-family: 'Magica';
-    src: url('fonts/Magica.otf');
+    src: url('../fonts/Magica.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 
@@ -1918,7 +1920,7 @@ body {
 
     font-weight: bold;
 
-    font-family: 'Unica One';
+    font-family: 'Magica';
 
     line-height: 25px;
 
@@ -1993,7 +1995,7 @@ body {
 
     text-align: center;
 
-    font-family: 'Roboto';
+    font-family: 'Magica';
 
     border-top: 1px solid #4c1d95;
 
@@ -2023,7 +2025,7 @@ body {
 
     border-radius: 20px;
 
-    font-family: 'Unica One';
+    font-family: 'Magica';
 
     font-size: 1.1rem;
 
