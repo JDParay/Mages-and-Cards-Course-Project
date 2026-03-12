@@ -209,18 +209,26 @@ function openLevelSelect(chapterKey) {
 
 // Switches from Campaign to VN
 function startLevel(levelName) {
+    // 1. Switch screens
     document.getElementById('campaign-screen').style.display = 'none';
-    document.getElementById('vn-screen').style.display = 'flex';
+    const vnScreen = document.getElementById('vn-screen');
+    vnScreen.style.display = 'flex';
+    
+    // 2. Hide the header until the first line is ready
+    const vnHeader = document.getElementById('vn-header');
+    vnHeader.style.opacity = "0";
+
+    // 3. Reset Level Data
     document.getElementById('vn-level-title').innerText = levelName;
-    
-    // Reset UI states
-    document.getElementById('skip-btn').style.display = 'block';
-    document.getElementById('battle-start-container').style.display = 'none';
-    
     currentScene = storyData[levelName];
     step = 0;
     document.getElementById('dialogue-container').innerHTML = ''; 
-    advanceDialogue();
+    
+    // 4. Fade in the UI and start dialogue
+    setTimeout(() => {
+        vnHeader.style.opacity = "1";
+        advanceDialogue();
+    }, 300); 
 }
 
 function showReadyPopup() {
