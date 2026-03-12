@@ -1844,7 +1844,7 @@ animation:bossPulse 3s infinite ease-in-out;
 
 
 
-.battle-ui-top { padding: 20px; width: 100%; transform: translateY(-200px);}
+.battle-ui-top { padding: 20px; width: 100%; transform: translateY(-50px);}
 
 
 
@@ -2027,6 +2027,10 @@ animation:bossPulse 3s infinite ease-in-out;
 
     border-bottom: 1px solid #4c1d95;
 
+    position: absolute;
+    /* position relative to nearest positioned ancestor */
+    top: 0; 
+
 }
 
 
@@ -2089,7 +2093,7 @@ box-shadow:0 0 20px #a78bfa;
 
     right: 40px;
 
-    top: 20px; /* Moved up so it's away from cards */
+    bottom: 20px; /* Moved up so it's away from cards */
 
     padding: 10px 25px;
 
