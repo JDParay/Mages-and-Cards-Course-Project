@@ -1943,12 +1943,13 @@ animation:bossPulse 3s infinite ease-in-out;
     justify-content:center;
     
     align-items:flex-end;
+
+    position: relative;
 }
 
-.hand-container .card:nth-child(1){transform:rotate(-8deg);}
-.hand-container .card:nth-child(2){transform:rotate(-3deg);}
-.hand-container .card:nth-child(3){transform:rotate(3deg);}
-.hand-container .card:nth-child(4){transform:rotate(8deg);}
+.hand-container .card:nth-child(1){transform:rotate(-5deg);}
+.hand-container .card:nth-child(2){transform:rotate(0deg);}
+.hand-container .card:nth-child(3){transform:rotate(5deg);}
 
 .card {
 
@@ -1976,6 +1977,8 @@ animation:bossPulse 3s infinite ease-in-out;
 
     color: white;
 
+    transform-origin: bottom center;
+
 }
 
 .card-hover-desc {
@@ -1991,11 +1994,11 @@ animation:bossPulse 3s infinite ease-in-out;
 
 .card:hover {
     
-    transform:translateY(-15px) scale(1.05);
+    ttransform: translateY(-25px) scale(1.1);
     
-box-shadow:0 10px 30px rgba(139,92,246,0.6);
+    box-shadow: 0 15px 40px rgba(139,92,246,0.7);
     
-z-index:5;
+    z-index: 10;
 }
 
 .card:hover .card-hover-desc {
