@@ -209,22 +209,18 @@ function openLevelSelect(chapterKey) {
 
 // Switches from Campaign to VN
 function startLevel(levelName) {
-    console.log("Entering VN Mode for:", levelName);
-    
-    // 1. Hide the Campaign Map
     document.getElementById('campaign-screen').style.display = 'none';
-    
-    // 2. Show the VN Screen
-    const vnScreen = document.getElementById('vn-screen');
-    vnScreen.style.display = 'flex';
-    
-    // 3. Set the Level Title in the header
+    document.getElementById('vn-screen').style.display = 'flex';
     document.getElementById('vn-level-title').innerText = levelName;
-
-    // 4. Start the story logic (if you have the storyData object ready)
-    if (typeof startDialogue === "function") {
-        startDialogue(levelName);
-    }
+    
+    // Reset UI states
+    document.getElementById('skip-btn').style.display = 'block';
+    document.getElementById('battle-start-container').style.display = 'none';
+    
+    currentScene = storyData[levelName];
+    step = 0;
+    document.getElementById('dialogue-container').innerHTML = ''; 
+    advanceDialogue();
 }
 
 function showReadyPopup() {
@@ -236,6 +232,57 @@ function showReadyPopup() {
         userProgress.unlockedLevels++; 
         confirmQuit(); 
     }
+}
+
+function skipDialogue() {
+    // If text is currently typing, finish the line instantly
+    if (isTyping) {
+        fastForward();
+    }
+
+    // Loop through the scene until we hit a choice or the end
+    while (step < currentScene.length) {
+        const nextLine = currentScene[step];
+
+        // STOP skipping if we hit a choice or the end of the scene
+        if (nextLine.type === "choice" || nextLine.type === "end") {
+            advanceDialogue(); 
+            break; 
+        }
+
+        // Render line instantly without typewriter effects
+        if (nextLine.type === "char") {
+            renderInstantDialogue(nextLine);
+        } else if (nextLine.type === "narrator") {
+            renderInstantNarrator(nextLine.text);
+        }
+        
+        step++;
+    }
+}
+
+function renderInstantDialogue(data) {
+    const container = document.getElementById('dialogue-container');
+    const box = document.createElement('div');
+    box.className = 'dialogue-box animate-in';
+    box.innerHTML = `
+        <img src="${data.avatar}" class="vn-portrait">
+        <div class="vn-text-content">
+            <span class="vn-name">${data.name}</span>
+            <p class="vn-text">${data.text}</p>
+        </div>
+    `;
+    container.appendChild(box);
+    container.scrollTop = container.scrollHeight;
+}
+
+function renderInstantNarrator(text) {
+    const container = document.getElementById('dialogue-container');
+    const narratorDiv = document.createElement('div');
+    narratorDiv.className = 'narrator-entry animate-in';
+    narratorDiv.innerHTML = `<p class="vn-narrator-text">${text}</p>`;
+    container.appendChild(narratorDiv);
+    container.scrollTop = container.scrollHeight;
 }
 // Opens the "Are you sure?" Modal
 function openQuitModal() {
@@ -347,7 +394,13 @@ function advanceDialogue() {
     } else if (line.type === "choice") {
         showChoices(line);
     } else if (line.type === "end") {
-        showReadyPopup();
+        // Instead of a browser confirm(), show the Battle Button and hide Skip
+        document.getElementById('skip-btn').style.display = 'none';
+        document.getElementById('battle-start-container').style.display = 'flex';
+        
+        // Optional: Auto-scroll to ensure button is visible
+        const container = document.getElementById('dialogue-container');
+        container.scrollTop = container.scrollHeight;
     }
 }
 
