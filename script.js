@@ -592,6 +592,18 @@ function endTurn() {
 function endEnemyTurn() {
     logBattle("Your turn!");
     isPlayerTurn = true;
+    discardUsed = false;
+
+    battleData.playerMana = Math.min(
+        battleData.maxMana,
+        battleData.playerMana + 5
+        )
+    
+        battleData.enemyMana = Math.min(
+        battleData.maxMana,
+        battleData.enemyMana + 5
+        )
+    
     drawHand(); // Draw new cards for player
     updateBattleUI();
 }
