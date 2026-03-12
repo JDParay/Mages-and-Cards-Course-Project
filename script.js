@@ -560,6 +560,11 @@ function startGameplay() {
     // Switch Screens
     document.getElementById('vn-screen').style.display = 'none';
     document.getElementById('battle-screen').style.display = 'flex';
+
+    enemyHand = [
+        wrathCards[0], 
+        wrathCards[1]
+    ];
     
     playMusic('tutorial');
     initBattle();
@@ -733,11 +738,8 @@ function playCard(card, element) {
 
     // Effects
     if (card.type === 'attack') {
-        battleData.enemyMana -= card.power;
-        logBattle(`Used ${card.name}! Dealt ${card.power} DMG.`);
-    } else if (card.type === 'heal') {
-        battleData.playerMana = Math.min(battleData.maxMana, battleData.playerMana + card.power);
-        logBattle(`Used ${card.name}! Healed ${card.power} HP.`);
+        battleData.enemyMana -= card.damage;
+        logBattle(`Used ${card.name}! Dealt ${card.damage} DMG.`);
     } else if (card.type === 'gen') {
         battleData.resources[card.resTarget] += card.amount;
         logBattle(`Gained ${card.amount} ${card.resTarget}!`);
@@ -748,43 +750,25 @@ function playCard(card, element) {
     if (battleData.enemyMana <= 0) winBattle();
 }
 
-function startEnemyTurn(){
+function startEnemyTurn() {
+    logBattle("Enemy thinking...");
 
-discardUsed = false
+    setTimeout(() => {
+        // 1. Find a card the enemy can afford
+        let cardToPlay = enemyHand.find(c => canAfford(c));
 
-logBattle("Enemy thinking...")
+        if (cardToPlay) {
+            playEnemyCard(cardToPlay);
+        } else {
+            enemyHarmonyRecovery();
+        }
 
-setTimeout(()=>{
-
-let playable = enemyHand.find(c=>canAfford(c))
-
-if(playable){
-
-playEnemyCard(playable)
-
-}else{
-
-enemyHarmonyRecovery()
-
+        setTimeout(() => {
+            endEnemyTurn();
+        }, 1000);
+        
+    }, 1500);
 }
-discardUsed = false
-    
-endEnemyTurn()
-
-},1000)
-
-        battleData.playerMana = Math.min(
-        battleData.maxMana,
-        battleData.playerMana + 5
-        )
-    
-        battleData.enemyMana = Math.min(
-        battleData.maxMana,
-        battleData.enemyMana + 5
-        )
-
-}
-
 function enemyHarmonyRecovery(){
 
 if(battleData.enemyMana >= 30){
@@ -799,6 +783,19 @@ logBattle("Enemy restores the world balance.")
 
 }
 
+}
+
+function playEnemyCard(card) {
+    // Deduct Costs from Enemy
+    for (const [res, amount] of Object.entries(card.costs)) {
+        if (res === 'mana') battleData.enemyMana -= amount;
+        else battleData.resources[res] -= amount;
+    }
+
+    battleData.playerMana -= card.power;
+    logBattle(`Enemy used ${card.name}! You took ${card.power} DMG.`);
+    
+    updateBattleUI();
 }
 
 function logBattle(msg) {
