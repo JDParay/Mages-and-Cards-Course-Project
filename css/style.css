@@ -1975,14 +1975,22 @@ body {
 
 }
 
+.card-hover-desc {
+    
+    opacity: 0;
+    
+    transform: translateY(5px);
+    
+    transition: 0.2s ease;
+    
+    font-size: 12px;
+}
 
-
-.card:hover {
-
-    transform: translateY(-20px) scale(1.1);
-
-    box-shadow: 0 0 20px #8b5cf6;
-
+.card:hover .card-hover-desc {
+    
+    opacity: 1;
+    
+    transform: translateY(0);
 }
 
 
