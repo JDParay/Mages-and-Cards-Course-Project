@@ -551,7 +551,6 @@ function updateBattleUI() {
     document.getElementById('res-forest').innerText = battleData.resources.forest;
     document.getElementById('res-ocean').innerText = battleData.resources.ocean;
     document.getElementById('res-land').innerText = battleData.resources.land;
-    document.getElementById('res-mana').innerText = battleData.playerMana;
 
     checkAffordability();
 }
