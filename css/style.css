@@ -1825,6 +1825,8 @@ body {
 width: 70px;
 height: auto;
 object-fit: contain;
+position: relative;
+transform: translateY(200px);
 
 animation:bossPulse 3s infinite ease-in-out;
 
@@ -1842,29 +1844,7 @@ animation:bossPulse 3s infinite ease-in-out;
 
 
 
-.battle-ui-top, .battle-ui-bottom { padding: 20px; width: 100%; }
-
-
-
-.battle-ui-bottom {
-
-    background: rgba(0, 0, 0, 0.85);
-
-    border-top: 2px solid #4c1d95;
-
-    padding: 15px;
-
-    height: 320px; /* Give enough room for stats + cards */
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    position: relative;
-
-}
+.battle-ui-top { padding: 20px; width: 100%; }
 
 
 
@@ -1881,6 +1861,8 @@ animation:bossPulse 3s infinite ease-in-out;
     position: relative;
 
     margin: 10px auto;
+
+    transform: translateY(300px);
 
 }
 
