@@ -1826,7 +1826,7 @@ width: 70px;
 height: auto;
 object-fit: contain;
 position: relative;
-transform: translateY(200px);
+transform: translateY(-200px);
 
 animation:bossPulse 3s infinite ease-in-out;
 
@@ -1844,11 +1844,11 @@ animation:bossPulse 3s infinite ease-in-out;
 
 
 
-.battle-ui-top { padding: 20px; width: 100%; }
+.battle-ui-top { padding: 20px; width: 100%; transform: translateY(-200px);}
 
 
 
-.hp-bar-container {
+.hp-bar-container-player {
 
     width: 300px;
 
@@ -1865,6 +1865,25 @@ animation:bossPulse 3s infinite ease-in-out;
     transform: translateY(300px);
 
 }
+
+.hp-bar-container-enemy {
+
+    width: 300px;
+
+    height: 25px;
+
+    background: #333;
+
+    border: 2px solid #fff;
+
+    position: relative;
+
+    margin: 10px auto;
+
+    transform: translateY(-300px);
+
+}
+
 
 
 
