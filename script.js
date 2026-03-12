@@ -127,12 +127,9 @@ function setChapterProgress(fillId, statusId, current, total) {
 // Inside your handleMenu function:
 function handleMenu(destination) {
     if (destination === 'START') {
-        // ... (your existing screen swap code) ...
 
-        // Card 1: Finished 1 level out of 3 (33%)
         setChapterProgress('antakin-fill', 'antakin-status', 1, 3);
-        
-        // Card 2: Finished 3 levels out of 3 (100%)
+
         setChapterProgress('aelthred-fill', 'aelthred-status', 0, 3);
     }
 }
