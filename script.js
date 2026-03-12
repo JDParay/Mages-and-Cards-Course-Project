@@ -594,18 +594,13 @@ function endEnemyTurn() {
     isPlayerTurn = true;
     discardUsed = false;
 
-    battleData.playerMana = Math.min(
-        battleData.maxMana,
-        battleData.playerMana + 5
-    );
-
-    battleData.enemyMana = Math.min(
-        battleData.maxMana,
-        battleData.enemyMana + 5
-    );
+    // Player Regen
+    battleData.playerMana = Math.min(battleData.maxMana, battleData.playerMana + 5);
+    // Enemy Regen
+    battleData.enemyMana = Math.min(battleData.maxMana, battleData.enemyMana + 5);
     
-    drawHand(); // Draw new cards for player
-    updateBattleUI();
+    drawHand(); 
+    updateBattleUI(); // <--- Ensure this is here to refresh the bars and numbers
 }
 
 function updateBattleUI() {
@@ -711,7 +706,7 @@ function drawHand() {
         // 2. SMART DESCRIPTION LOGIC
         let description = "";
         if (card.type === 'attack') {
-            description = `${card.power} DMG`;
+            description = `${card.damage} DMG`;
         } else if (card.type === 'gen') {
             // This turns {forest: 2} into "Gains 2 forest"
             const resName = Object.keys(card.effect)[0];
@@ -769,6 +764,9 @@ function playCard(card, element) {
     for (const [res, amt] of Object.entries(card.effect)) {
         battleData.resources[res] += amt;
         logBattle(`Gained ${amt} ${res}!`);
+    } else if (card.type === 'mana-gen') {
+        battleData.playerMana = Math.min(battleData.maxMana, battleData.playerMana + card.amount);
+        logBattle(`Used ${card.name}! Restored ${card.amount} Mana.`);
     }
 }
 
@@ -920,13 +918,22 @@ effect:{land:2}
 },
 
 {
-name:"Preserve",
-type:"protect",
-icon:"🛡",
-costs:{mana:50},
-effect:{shield:1}
-}
-
+name: "Glintful Serum",
+type: "mana-gen",
+icon: "✨",
+costs: { land: 2, ocean: 1, forest: 3 },
+amount: 20,
+desc: "Restore 20 Mana"
+},
+    
+{
+name: "Nature's Gift",
+type: "mana-gen",
+icon: "🔯",
+costs: { land: 4, ocean: 2, forest: 2 },
+amount: 100, // This will act as "Back to Full"
+desc: "Full Mana Restore"
+    }
 ];
 
 const cardTypes = [...wrathCards, ...harmonyCards];
