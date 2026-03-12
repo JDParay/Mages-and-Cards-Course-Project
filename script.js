@@ -764,6 +764,7 @@ function playCard(card, element) {
     for (const [res, amt] of Object.entries(card.effect)) {
         battleData.resources[res] += amt;
         logBattle(`Gained ${amt} ${res}!`);
+    } 
     } else if (card.type === 'mana-gen') {
         battleData.playerMana = Math.min(battleData.maxMana, battleData.playerMana + card.amount);
         logBattle(`Used ${card.name}! Restored ${card.amount} Mana.`);
