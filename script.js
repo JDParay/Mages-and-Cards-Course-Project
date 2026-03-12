@@ -769,8 +769,6 @@ let j=Math.floor(Math.random()*(i+1))
 
 }
 
-const cardTypes = [...wrathCards, ...harmonyCards];
-
 const wrathCards = [
 {
 name:"Magma Shot",
@@ -840,3 +838,5 @@ effect:{shield:1}
 }
 
 ];
+
+const cardTypes = [...wrathCards, ...harmonyCards];
