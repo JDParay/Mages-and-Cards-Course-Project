@@ -524,6 +524,21 @@ function initBattle() {
     drawHand();
 }
 
+let isPlayerTurn = true;
+
+function endTurn() {
+    if (!isPlayerTurn) return; // prevent multiple clicks
+    isPlayerTurn = false;
+    startEnemyTurn();
+}
+
+function endEnemyTurn() {
+    logBattle("Your turn!");
+    isPlayerTurn = true;
+    drawHand(); // Draw new cards for player
+    updateBattleUI();
+}
+
 function updateBattleUI() {
     // Health
     document.getElementById('player-hp-val').innerText = battleData.playerMana;
