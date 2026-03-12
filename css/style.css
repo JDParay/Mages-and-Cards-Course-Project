@@ -1844,7 +1844,9 @@ animation:bossPulse 3s infinite ease-in-out;
 
 
 
-.battle-ui-top { padding: 20px; width: 100%; transform: translateY(-50px);}
+.battle-ui-top { padding: 20px; width: 100%;}
+
+.battle-ui-bottom { padding: 20px; width: 100%; transform: translateY(300px);}
 
 
 
@@ -1880,7 +1882,7 @@ animation:bossPulse 3s infinite ease-in-out;
 
     margin: 10px auto;
 
-    transform: translateY(-300px);
+    transform: translateY(-100px);
 
 }
 
