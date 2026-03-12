@@ -531,14 +531,14 @@ function updateBattleUI() {
     // Health
     document.getElementById('player-hp-val').innerText = battleData.playerMana;
     document.getElementById('enemy-hp-val').innerText = battleData.enemyMana;
-    document.getElementById('player-hp-fill').style.width = (battleData.playerMana / battleData.maxHP * 100) + "%";
-    document.getElementById('enemy-hp-fill').style.width = (battleData.enemyMana / battleData.maxHP * 100) + "%";
+    document.getElementById('player-hp-fill').style.width = (battleData.playerMana / battleData.maxMana * 100) + "%";
+    document.getElementById('enemy-hp-fill').style.width = (battleData.enemyMana / battleData.maxMana * 100) + "%";
 
     // Resources
     document.getElementById('res-forest').innerText = battleData.resources.forest;
     document.getElementById('res-ocean').innerText = battleData.resources.ocean;
     document.getElementById('res-land').innerText = battleData.resources.land;
-    document.getElementById('res-mana').innerText = battleData.mana;
+    document.getElementById('res-mana').innerText = battleData.playerMana;
 
     checkAffordability();
 }
@@ -641,7 +641,6 @@ function drawHand() {
         cardEl.onclick = () => playCard(card, cardEl);
         hand.appendChild(cardEl);
 
-        discardUsed=false
         cardEl.dataset.card = JSON.stringify(card)
     }
 }
@@ -649,7 +648,7 @@ function drawHand() {
 function canAfford(card) {
     for (const [res, amount] of Object.entries(card.costs)) {
         if (res === 'mana') {
-            if (battleData.mana < amount) return false;
+            if (battleData.playerMana < amount) return false;
         } else {
             if ((battleData.resources[res] || 0) < amount) return false;
         }
@@ -665,7 +664,7 @@ function playCard(card, element) {
 
     // Deduct Costs
     for (const [res, amount] of Object.entries(card.costs)) {
-        if (res === 'mana') battleData.mana -= amount;
+        if (res === 'mana') battleData.playerMana -= amount;
         else battleData.resources[res] -= amount;
     }
 
@@ -687,7 +686,8 @@ function playCard(card, element) {
 }
 
 function startEnemyTurn(){
-    
+
+discardUsed = false
 
 logBattle("Enemy thinking...")
 
@@ -710,11 +710,11 @@ endEnemyTurn()
 
 },1000)
 
-    battleData.mana = Math.min(battleData.maxMana, battleData.mana + 2);
         battleData.playerMana = Math.min(
         battleData.maxMana,
         battleData.playerMana + 5
         )
+    
         battleData.enemyMana = Math.min(
         battleData.maxMana,
         battleData.enemyMana + 5
@@ -772,7 +772,7 @@ let j=Math.floor(Math.random()*(i+1))
 
 }
 
-deck = [wrathCards, harmonyCards]
+const cardTypes = [...wrathCards, ...harmonyCards];
 
 const wrathCards = [
 {
@@ -788,7 +788,7 @@ name:"Tsunami",
 type:"attack",
 damage:18,
 icon:"🌊",
-costs:{ocean:2, mana:5}
+costs:{ocean:2, :5}
 },
 
 {
