@@ -597,12 +597,12 @@ function endEnemyTurn() {
     battleData.playerMana = Math.min(
         battleData.maxMana,
         battleData.playerMana + 5
-        )
-    
-        battleData.enemyMana = Math.min(
+    );
+
+    battleData.enemyMana = Math.min(
         battleData.maxMana,
         battleData.enemyMana + 5
-        )
+    );
     
     drawHand(); // Draw new cards for player
     updateBattleUI();
@@ -701,12 +701,25 @@ function drawHand() {
         const cardEl = document.createElement('div');
         cardEl.className = 'card';
         
-        // Generate cost badges for every cost in the object
+        // 1. Generate cost badges
         let costHTML = '<div class="cost-container">';
         for (const [res, amt] of Object.entries(card.costs)) {
             costHTML += `<div class="mini-cost cost-${res}">${amt}</div>`;
         }
         costHTML += '</div>';
+
+        // 2. SMART DESCRIPTION LOGIC
+        let description = "";
+        if (card.type === 'attack') {
+            description = `${card.power} DMG`;
+        } else if (card.type === 'gen') {
+            // This turns {forest: 2} into "Gains 2 forest"
+            const resName = Object.keys(card.effect)[0];
+            const amount = card.effect[resName];
+            description = `+${amount} ${resName}`;
+        } else {
+            description = card.desc || "Special";
+        }
 
         cardEl.innerHTML = `
             ${costHTML}
@@ -714,14 +727,14 @@ function drawHand() {
             <strong class="card-name">${card.name}</strong>
         
             <div class="card-hover-desc">
-                ${card.desc || card.damage + ' DMG'}
+                ${description}
             </div>
         `;
         
         cardEl.onclick = () => playCard(card, cardEl);
         hand.appendChild(cardEl);
 
-        cardEl.dataset.card = JSON.stringify(card)
+        cardEl.dataset.card = JSON.stringify(card);
     }
 }
 
@@ -753,9 +766,11 @@ function playCard(card, element) {
         battleData.enemyMana -= card.damage;
         logBattle(`Used ${card.name}! Dealt ${card.damage} DMG.`);
     } else if (card.type === 'gen') {
-        battleData.resources[card.resTarget] += card.amount;
-        logBattle(`Gained ${card.amount} ${card.resTarget}!`);
+    for (const [res, amt] of Object.entries(card.effect)) {
+        battleData.resources[res] += amt;
+        logBattle(`Gained ${amt} ${res}!`);
     }
+}
 
     element.remove();
     updateBattleUI();
