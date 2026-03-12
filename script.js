@@ -628,7 +628,7 @@ confirmQuit();
 
 function drawHand() {
     const hand = document.getElementById('player-hand');
-    while (hand.children.length < 4) {
+    while (hand.children.length < 3) {
         const card = cardTypes[Math.floor(Math.random() * cardTypes.length)];
         const cardEl = document.createElement('div');
         cardEl.className = 'card';
