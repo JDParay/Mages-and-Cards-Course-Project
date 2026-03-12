@@ -304,20 +304,6 @@ body {
 
 }
 
-
-
-.modal-overlay, .modal-box {
-
-    display: none; 
-
-    position: fixed;
-
-    z-index: 1000;
-
-}
-
-
-
 .modal-box {
 
     display: none;
@@ -1970,18 +1956,19 @@ body {
 
 
 
-.hand-container {
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: flex-end;
-
-    gap: 10px;
-
-    min-height: 190px;
-
+.hand-container{
+    
+    display:flex;
+    
+    justify-content:center;
+    
+    align-items:flex-end;
+    
+    gap:15px;
+    
+    width:100%;
+    
+    min-height:200px;
 }
 
 
