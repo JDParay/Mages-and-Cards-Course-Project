@@ -1822,6 +1822,10 @@ body {
 
 .battle-boss-img{
 
+width: 70px;
+height: auto;
+object-fit: contain;
+
 animation:bossPulse 3s infinite ease-in-out;
 
 }
