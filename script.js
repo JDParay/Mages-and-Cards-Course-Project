@@ -769,7 +769,6 @@ function playCard(card, element) {
         battleData.playerMana = Math.min(battleData.maxMana, battleData.playerMana + card.amount);
         logBattle(`Used ${card.name}! Restored ${card.amount} Mana.`);
     }
-}
 
     element.remove();
     updateBattleUI();
