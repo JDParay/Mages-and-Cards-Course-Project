@@ -554,6 +554,20 @@ function updateBattleUI() {
     checkAffordability();
 }
 
+function checkAffordability() {
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const cost = parseInt(card.dataset.cost);
+
+        if (cost > playerMana) {
+            card.classList.add("disabled");
+        } else {
+            card.classList.remove("disabled");
+        }
+    });
+}
+
 function drawHand() {
     const hand = document.getElementById('player-hand');
     while (hand.children.length < 4) {
