@@ -101,6 +101,7 @@ function closeModals() {
     
     // Remove blur
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('is-blurred'));
+    document.querySelector('.waterfall-bg').classList.remove('is-blurred');
 }
 
 // Start Menu Music on first click
