@@ -490,17 +490,6 @@ function showReadyPopup() {
     }
 }
 
-function startGameplay() {
-    closeModals();
-    playMusic('tutorial');
-    document.getElementById('vn-screen').style.display = 'none';
-    
-    const battleScreen = document.getElementById('battle-screen');
-    battleScreen.style.setProperty('display', 'flex', 'important'); 
-    
-    initBattle();
-}
-
 let enemyDeck=[]
 let enemyHand=[]
 let deck = [];
@@ -510,7 +499,6 @@ let battleData = {
     playerMana: 100,
     enemyMana: 100,
     maxMana: 100,
-    ,
     resources: {
         forest: 10,
         ocean: 10,
@@ -518,32 +506,21 @@ let battleData = {
     }
 };
 
-const cardTypes = [
-    { name: "Gust", type: "attack", power: 10, icon: "🍃", costs: { ocean: 1, forest: 1 } },
-    { name: "Tsunami", type: "attack", power: 18, icon: "🌊", costs: { ocean: 2, forest: 1 } },
-    { name: "Earthquake", type: "attack", power: 25, icon: "🌍", costs: { land: 4 } },
-    { name: "Nature's Cure", type: "heal", power: 15, icon: "🌸", costs: { forest: 2, mana: 20 } },
-    
-    // Resource Generators
-    { name: "Cultivate", type: "gen", resTarget: "forest", amount: 2, icon: "🌲", costs: { mana: 30 }, desc: "+2 Forest" },
-    { name: "Dredge", type: "gen", resTarget: "ocean", amount: 2, icon: "⚓", costs: { mana: 30 }, desc: "+2 Ocean" },
-    { name: "Terraform", type: "gen", resTarget: "land", amount: 2, icon: "⚒️", costs: { mana: 30 }, desc: "+2 Land" }
-];
 
 function startGameplay() {
     // Switch Screens
     document.getElementById('vn-screen').style.display = 'none';
     document.getElementById('battle-screen').style.display = 'flex';
     
-    playMusic('tutorialBoss');
+    playMusic('tutorial');
     initBattle();
 }
 
 function initBattle() {
-    battleData.playerHP = 50;
-    battleData.enemyHP = 50;
-    battleData.mana = 5;
-    battleData.resources = { forest: 2, ocean: 2, land: 2 };
+    battleData.playerMana = 100;
+    battleData.enemyMana = 100;
+    battleData.maxMana = 100;
+    battleData.resources = { forest: 10, ocean: 10, land: 10};
     
     document.getElementById('player-hand').innerHTML = ''; // Reset hand
     updateBattleUI();
@@ -552,10 +529,10 @@ function initBattle() {
 
 function updateBattleUI() {
     // Health
-    document.getElementById('player-hp-val').innerText = battleData.playerHP;
-    document.getElementById('enemy-hp-val').innerText = battleData.enemyHP;
-    document.getElementById('player-hp-fill').style.width = (battleData.playerHP / battleData.maxHP * 100) + "%";
-    document.getElementById('enemy-hp-fill').style.width = (battleData.enemyHP / battleData.maxHP * 100) + "%";
+    document.getElementById('player-hp-val').innerText = battleData.playerMana;
+    document.getElementById('enemy-hp-val').innerText = battleData.enemyMana;
+    document.getElementById('player-hp-fill').style.width = (battleData.playerMana / battleData.maxHP * 100) + "%";
+    document.getElementById('enemy-hp-fill').style.width = (battleData.enemyMana / battleData.maxHP * 100) + "%";
 
     // Resources
     document.getElementById('res-forest').innerText = battleData.resources.forest;
@@ -566,18 +543,22 @@ function updateBattleUI() {
     checkAffordability();
 }
 
-function checkAffordability() {
-    const cards = document.querySelectorAll('.card');
+function checkAffordability(){
 
-    cards.forEach(card => {
-        const cost = parseInt(card.dataset.cost);
+const cards=document.querySelectorAll('.card')
 
-        if (cost > playerMana) {
-            card.classList.add("disabled");
-        } else {
-            card.classList.remove("disabled");
-        }
-    });
+cards.forEach(cardEl=>{
+
+const card=JSON.parse(cardEl.dataset.card)
+
+if(!canAfford(card)){
+cardEl.classList.add("disabled")
+}else{
+cardEl.classList.remove("disabled")
+}
+
+})
+
 }
 
 function spendResources(costs){
@@ -661,6 +642,7 @@ function drawHand() {
         hand.appendChild(cardEl);
 
         discardUsed=false
+        cardEl.dataset.card = JSON.stringify(card)
     }
 }
 
@@ -689,10 +671,10 @@ function playCard(card, element) {
 
     // Effects
     if (card.type === 'attack') {
-        battleData.enemyHP -= card.power;
+        battleData.enemyMana -= card.power;
         logBattle(`Used ${card.name}! Dealt ${card.power} DMG.`);
     } else if (card.type === 'heal') {
-        battleData.playerHP = Math.min(battleData.maxHP, battleData.playerHP + card.power);
+        battleData.playerMana = Math.min(battleData.maxMana, battleData.playerMana + card.power);
         logBattle(`Used ${card.name}! Healed ${card.power} HP.`);
     } else if (card.type === 'gen') {
         battleData.resources[card.resTarget] += card.amount;
@@ -701,40 +683,11 @@ function playCard(card, element) {
 
     element.remove();
     updateBattleUI();
-    if (battleData.enemyHP <= 0) winBattle();
-}
-
-function startEnemyTurn() {
-    const btn = document.getElementById('end-turn-btn');
-    btn.disabled = true;
-    
-    logBattle("Enemy's turn...");
-
-    setTimeout(() => {
-        const dmg = 8 + Math.floor(Math.random() * 5);
-        battleData.playerHP -= dmg;
-        logBattle(`Enemy deals ${dmg} damage!`);
-        
-        // Regen
-        battleData.mana = Math.min(battleData.maxMana, battleData.mana + 2);
-        battleData.playerMana = Math.min(
-        battleData.maxMana,
-        battleData.playerMana + 5
-        )
-        battleData.enemyMana = Math.min(
-        battleData.maxMana,
-        battleData.enemyMana + 5
-        )
-
-        updateBattleUI();
-        drawHand();
-        
-        btn.disabled = false;
-        if(battleData.playerHP <= 0) confirmQuit();
-    }, 1000);
+    if (battleData.enemyMana <= 0) winBattle();
 }
 
 function startEnemyTurn(){
+    
 
 logBattle("Enemy thinking...")
 
@@ -751,10 +704,21 @@ playEnemyCard(playable)
 enemyHarmonyRecovery()
 
 }
-
+discardUsed = false
+    
 endEnemyTurn()
 
 },1000)
+
+    battleData.mana = Math.min(battleData.maxMana, battleData.mana + 2);
+        battleData.playerMana = Math.min(
+        battleData.maxMana,
+        battleData.playerMana + 5
+        )
+        battleData.enemyMana = Math.min(
+        battleData.maxMana,
+        battleData.enemyMana + 5
+        )
 
 }
 
@@ -795,6 +759,20 @@ shuffleDeck()
 logBattle("Deck reshuffled")
 
 }
+
+function shuffleDeck(){
+
+for(let i=deck.length-1;i>0;i--){
+
+let j=Math.floor(Math.random()*(i+1))
+
+[deck[i],deck[j]]=[deck[j],deck[i]]
+
+}
+
+}
+
+deck = [wrathCards, harmonyCards]
 
 const wrathCards = [
 {
