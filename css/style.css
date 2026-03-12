@@ -2138,4 +2138,10 @@ body {
 .cost-mana { background: #a855f7; } /* Purple for Mana */ 
 
 
-
+.card.disabled{
+    
+    opacity:0.5;
+    
+    pointer-events:none;
+    
+}
