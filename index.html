@@ -93,17 +93,25 @@
         </footer>
     </div>
 
-    <div id="vn-screen" class="screen" style="display: none;">
     <header class="vn-header">
-        <div class="header-left">
-            <button class="back-btn" onclick="openQuitModal()">↩</button>
-            <span id="vn-level-title" class="vn-level-title">0-1 Antakin's Help</span>
-        </div>
+    <div class="header-left">
+        <button class="back-btn" onclick="openQuitModal()">↩</button>
+        <span id="vn-level-title" class="vn-level-title">0-1 Antakin's Help</span>
+    </div>
+    <div class="header-right" style="display: flex; align-items: center; gap: 10px;">
+        <button id="skip-btn" class="back-btn" onclick="skipDialogue()" style="border-color: #facc15; color: #facc15;">SKIP</button>
         <button class="settings-btn" onclick="openOptions()">⚙</button>
-    </header>
+    </div>
+</header>
 
     <div id="dialogue-container" class="dialogue-scroll-area">
         </div>
+
+    <div id="battle-start-container" class="choice-row" style="display: none; position: absolute; bottom: 100px; width: 100%; justify-content: center;">
+    <button class="game-btn primary-btn" onclick="startGameplay()" style="padding: 15px 40px; font-size: 1.5rem;">
+        ENTER BATTLE
+    </button>
+</div>
 
     <div id="choice-container" class="choice-row" style="display: none;">
         <button class="choice-btn" onclick="makeChoice(0)"></button>
