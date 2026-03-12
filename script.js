@@ -714,7 +714,7 @@ function drawHand() {
             <strong class="card-name">${card.name}</strong>
         
             <div class="card-hover-desc">
-                ${card.desc || card.power + ' DMG'}
+                ${card.desc || card.damage + ' DMG'}
             </div>
         `;
         
@@ -804,8 +804,8 @@ function playEnemyCard(card) {
         else battleData.resources[res] -= amount;
     }
 
-    battleData.playerMana -= card.power;
-    logBattle(`Enemy used ${card.name}! You took ${card.power} DMG.`);
+    battleData.playerMana -= card.damage;
+    logBattle(`Enemy used ${card.name}! You took ${card.damage} DMG.`);
     
     updateBattleUI();
 }
