@@ -350,14 +350,15 @@ let typeSpeed = 30; // ms per character
 let discardUsed = false
 
 function startLevel(levelName) {
-    // 1. Switch screens
+    // 1. Switch screens immediately
     document.getElementById('campaign-screen').style.display = 'none';
     const vnScreen = document.getElementById('vn-screen');
     vnScreen.style.display = 'flex';
     
-    // 2. Hide the header and battle button initially
+    // 2. Ensure UI elements are visible and reset (No fade-in)
     const vnHeader = document.getElementById('vn-header');
-    vnHeader.style.opacity = "0";
+    vnHeader.style.opacity = "1"; // Set to 1 immediately
+    
     document.getElementById('skip-btn').style.display = 'block';
     document.getElementById('battle-start-container').style.display = 'none';
 
@@ -365,13 +366,12 @@ function startLevel(levelName) {
     document.getElementById('vn-level-title').innerText = levelName;
     currentScene = storyData[levelName];
     step = 0;
+    
+    // Clear old chat
     document.getElementById('dialogue-container').innerHTML = ''; 
     
-    // 4. Fade in the UI and start dialogue
-    setTimeout(() => {
-        vnHeader.style.opacity = "1";
-        advanceDialogue();
-    }, 300); 
+    // 4. Start dialogue immediately without delay
+    advanceDialogue();
 }
 
 function advanceDialogue() {
