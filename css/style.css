@@ -330,6 +330,29 @@ body {
 
 }
 
+.settings-btn {
+    
+    font-size: 1.8rem;
+    /* Increased size */
+    background: none;
+    
+    border: none;
+    
+    color: white;
+    
+    cursor: pointer;
+    
+    transition: transform 0.2s;
+    
+    padding: 5px;
+    
+    display: flex;
+    
+    align-items: center;
+    
+    justify-content: center;
+}
+
 
 
 .modal-title {
@@ -728,7 +751,25 @@ body {
 
 }
 
+.header-right {
+    
+    display: flex;
+    
+    align-items: center;
+    
+    gap: 15px; /* Adds space between Skip and Settings */
+    
+    margin-left: auto;
+}
 
+#skip-btn {
+    
+    padding: 5px 15px;
+    
+    font-size: 0.9rem;
+    
+    letter-spacing: 1px;
+}
 
 .campaign-title {
 
