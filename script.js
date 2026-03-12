@@ -151,10 +151,15 @@ function handleMenu(destination) {
 
 function showMainMenu() {
     playSFX('button');
+
     document.getElementById('main-menu-screen').style.display = 'block';
     document.getElementById('campaign-screen').style.display = 'none';
+
     document.querySelector('.waterfall-bg').classList.remove('bg-campaign');
-    playMusic('menu');
+
+    if (GameAudio.music.current !== GameAudio.music.tracks.menu) {
+        playMusic('menu');
+    }
 }
 
 // Add this data object if you haven't yet!
@@ -313,6 +318,7 @@ let currentScene = [];
 let step = 0;
 let isTyping = false;
 let typeSpeed = 30; // ms per character
+let discardUsed = false
 
 function startLevel(levelName) {
     document.getElementById('campaign-screen').style.display = 'none';
@@ -485,7 +491,8 @@ function showReadyPopup() {
 }
 
 function startGameplay() {
-    closeModals(); // Close the "Ready?" popup
+    closeModals();
+    playMusic('tutorial');
     document.getElementById('vn-screen').style.display = 'none';
     
     const battleScreen = document.getElementById('battle-screen');
@@ -493,12 +500,17 @@ function startGameplay() {
     
     initBattle();
 }
+
+let enemyDeck=[]
+let enemyHand=[]
+let deck = [];
+let discardPile = [];
+let handSize = 3;
 let battleData = {
-    playerHP: 50,
-    enemyHP: 50,
-    maxHP: 50,
-    mana: 100,         // Added Mana back in
+    playerMana: 100,
+    enemyMana: 100,
     maxMana: 100,
+    ,
     resources: {
         forest: 10,
         ocean: 10,
@@ -568,6 +580,59 @@ function checkAffordability() {
     });
 }
 
+function spendResources(costs){
+
+for(const [res,val] of Object.entries(costs)){
+
+if(res==="mana"){
+battleData.playerMana -= val
+}else{
+battleData.resources[res] -= val
+}
+
+}
+
+}
+
+function discardCard(card,element){
+
+if(discardUsed){
+logBattle("Discard already used this turn")
+return
+}
+
+discardUsed = true
+
+discardPile.push(card)
+element.remove()
+
+drawHand()
+
+}
+
+function checkGameState(){
+
+if(battleData.playerMana <= 0){
+alert("You lost!");
+confirmQuit();
+}
+
+if(battleData.enemyMana <= 0){
+alert("You win!");
+confirmQuit();
+}
+
+if(
+battleData.resources.forest <=0 &&
+battleData.resources.ocean <=0 &&
+battleData.resources.land <=0
+){
+alert("All resources depleted. You lose.");
+confirmQuit();
+}
+
+}
+
 function drawHand() {
     const hand = document.getElementById('player-hand');
     while (hand.children.length < 4) {
@@ -586,11 +651,16 @@ function drawHand() {
             ${costHTML}
             <span class="card-icon">${card.icon}</span>
             <strong class="card-name">${card.name}</strong>
-            <span class="card-power">${card.desc || card.power + ' ATK'}</span>
+        
+            <div class="card-hover-desc">
+                ${card.desc || card.power + ' DMG'}
+            </div>
         `;
         
         cardEl.onclick = () => playCard(card, cardEl);
         hand.appendChild(cardEl);
+
+        discardUsed=false
     }
 }
 
@@ -647,9 +717,14 @@ function startEnemyTurn() {
         
         // Regen
         battleData.mana = Math.min(battleData.maxMana, battleData.mana + 2);
-        battleData.resources.forest++;
-        battleData.resources.ocean++;
-        battleData.resources.land++;
+        battleData.playerMana = Math.min(
+        battleData.maxMana,
+        battleData.playerMana + 5
+        )
+        battleData.enemyMana = Math.min(
+        battleData.maxMana,
+        battleData.enemyMana + 5
+        )
 
         updateBattleUI();
         drawHand();
@@ -659,8 +734,134 @@ function startEnemyTurn() {
     }, 1000);
 }
 
+function startEnemyTurn(){
+
+logBattle("Enemy thinking...")
+
+setTimeout(()=>{
+
+let playable = enemyHand.find(c=>canAfford(c))
+
+if(playable){
+
+playEnemyCard(playable)
+
+}else{
+
+enemyHarmonyRecovery()
+
+}
+
+endEnemyTurn()
+
+},1000)
+
+}
+
+function enemyHarmonyRecovery(){
+
+if(battleData.enemyMana >= 30){
+
+battleData.enemyMana -= 30
+
+battleData.resources.forest++
+battleData.resources.ocean++
+battleData.resources.land++
+
+logBattle("Enemy restores the world balance.")
+
+}
+
+}
+
 function logBattle(msg) {
     document.getElementById('battle-log').innerText = msg;
 }
 
+function shuffleDeckCost(){
 
+if(battleData.playerMana < 10){
+logBattle("Not enough mana to shuffle")
+return
+}
+
+battleData.playerMana -= 10
+
+deck = deck.concat(discardPile)
+discardPile = []
+
+shuffleDeck()
+
+logBattle("Deck reshuffled")
+
+}
+
+const wrathCards = [
+{
+name:"Magma Shot",
+type:"attack",
+damage:12,
+icon:"🔥",
+costs:{land:2}
+},
+
+{
+name:"Tsunami",
+type:"attack",
+damage:18,
+icon:"🌊",
+costs:{ocean:2, mana:5}
+},
+
+{
+name:"Tempest Fury",
+type:"attack",
+damage:30,
+icon:"🌪",
+costs:{forest:1,ocean:2,land:2}
+},
+
+{
+name:"Cataclysm",
+type:"attack",
+damage:45,
+icon:"💀",
+costs:{forest:2,ocean:2,land:2,mana:20}
+}
+];
+
+const harmonyCards = [
+
+{
+name:"Cultivate",
+type:"gen",
+icon:"🌲",
+costs:{mana:30},
+effect:{forest:2}
+},
+
+{
+name:"Ocean Ritual",
+type:"gen",
+icon:"🌊",
+costs:{mana:35},
+effect:{ocean:2}
+},
+
+{
+name:"Terraform",
+type:"gen",
+icon:"🌍",
+costs:{mana:40},
+effect:{land:2}
+},
+
+{
+name:"Preserve",
+type:"protect",
+icon:"🛡",
+costs:{mana:50},
+effect:{shield:1}
+}
+
+];
