@@ -1820,17 +1820,19 @@ body {
 
 
 
-.battle-boss-img {
+.battle-boss-img{
 
-    height: 250px; /* Force a reasonable size */
+animation:bossPulse 3s infinite ease-in-out;
 
-    width: auto;
+}
 
-    object-fit: contain;
+@keyframes bossPulse{
 
-    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5));
-
-    margin-top: 10px;
+0%{filter:drop-shadow(0 0 15px #8b5cf6);}
+    
+50%{filter:drop-shadow(0 0 35px #ec4899);}
+    
+100%{filter:drop-shadow(0 0 15px #8b5cf6);}
 
 }
 
@@ -1937,15 +1939,12 @@ body {
     justify-content:center;
     
     align-items:flex-end;
-    
-    gap:15px;
-    
-    width:100%;
-    
-    min-height:200px;
 }
 
-
+.hand-container .card:nth-child(1){transform:rotate(-8deg);}
+.hand-container .card:nth-child(2){transform:rotate(-3deg);}
+.hand-container .card:nth-child(3){transform:rotate(3deg);}
+.hand-container .card:nth-child(4){transform:rotate(8deg);}
 
 .card {
 
@@ -1984,6 +1983,15 @@ body {
     transition: 0.2s ease;
     
     font-size: 12px;
+}
+
+.card:hover {
+    
+    transform:translateY(-15px) scale(1.05);
+    
+box-shadow:0 10px 30px rgba(139,92,246,0.6);
+    
+z-index:5;
 }
 
 .card:hover .card-hover-desc {
@@ -2049,7 +2057,13 @@ body {
 
 
 
-.res-pill.mana { background: #7c3aed; box-shadow: 0 0 10px #a78bfa; }
+.res-pill.mana{
+
+background:linear-gradient(45deg,#7c3aed,#c084fc);
+
+box-shadow:0 0 20px #a78bfa;
+
+}
 
 
 
