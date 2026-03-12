@@ -775,33 +775,33 @@ const wrathCards = [
 {
 name:"Magma Shot",
 type:"attack",
-damage:12,
+damage:25,
 icon:"🔥",
-costs:{land:2}
+costs:{land:2, ocean:1}
 },
 
 {
 name:"Tsunami",
 type:"attack",
-damage:18,
+damage:40,
 icon:"🌊",
-costs:{ocean:2, :5}
+costs:{ocean:5}
 },
 
 {
-name:"Tempest Fury",
+name:"Storm Cloud",
 type:"attack",
 damage:30,
 icon:"🌪",
-costs:{forest:1,ocean:2,land:2}
+costs:{ocean:3,land:1}
 },
 
 {
-name:"Cataclysm",
+name:"Canyon Former",
 type:"attack",
-damage:45,
+damage:50,
 icon:"💀",
-costs:{forest:2,ocean:2,land:2,mana:20}
+costs:{forest:3,ocean:3,land:3,mana:40}
 }
 ];
 
