@@ -895,16 +895,15 @@ function shuffleHandWithCost() {
     }
 }
 
-function shuffleDeck(){
+function shuffleDeck() {
+    // Check if deck exists and has more than 1 card
+    if (!deck || deck.length <= 1) return;
 
-for(let i=deck.length-1;i>0;i--){
-
-let j=Math.floor(Math.random()*(i+1))
-
-[deck[i],deck[j]]=[deck[j],deck[i]]
-
-}
-
+    for (let i = deck.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        // Swap elements
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
 }
 
 const wrathCards = [
