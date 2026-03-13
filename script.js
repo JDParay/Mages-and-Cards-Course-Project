@@ -652,12 +652,15 @@ battleData.resources[res] -= val
 }
 
 function toggleDiscardMode() {
+    // If it's not your turn, don't allow discard
+    if (!isPlayerTurn) return;
+
     isDiscardMode = !isDiscardMode;
     const btn = document.getElementById('discard-mode-btn');
     
     if (isDiscardMode) {
         btn.classList.add('active-discard');
-        logBattle("Select a card to discard.");
+        logBattle("Select 1 card to discard.");
     } else {
         btn.classList.remove('active-discard');
     }
@@ -742,6 +745,16 @@ function canAfford(card) {
 }
 
 function playCard(card, element) {
+    // NEW: If we are in discard mode, just delete the card and stop
+    if (isDiscardMode) {
+        element.remove();
+        isDiscardMode = false; // Disable mode after one use
+        document.getElementById('discard-mode-btn').classList.remove('active-discard');
+        logBattle("Card discarded.");
+        drawHand(); // Refill the slot
+        return; 
+    }
+
     if (!canAfford(card)) {
         logBattle("Insufficient resources!");
         return;
@@ -838,17 +851,19 @@ function logBattle(msg) {
 }
 
 function shuffleHandWithCost() {
+    // Check if player has 50 or more mana
     if (battleData.playerMana >= 50) {
         battleData.playerMana -= 50;
         
-        // Return current hand to deck
-        deck = deck.concat(playerHand);
-        playerHand = [];
+        // 1. Clear the physical cards from the screen
+        const handContainer = document.getElementById('player-hand');
+        handContainer.innerHTML = '';
         
-        shuffleDeck(); // Reuse your existing shuffle function
-        drawCards(3);  // Draw a fresh hand (adjust number as needed)
+        // 2. Draw 3 fresh cards
+        drawHand(); 
         
-        updateUI(); 
+        // 3. Update the UI bars and log it
+        updateBattleUI(); 
         logBattle("Hand reshuffled for 50 Mana!");
     } else {
         logBattle("Not enough mana to shuffle!");
