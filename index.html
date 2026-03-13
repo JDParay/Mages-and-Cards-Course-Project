@@ -163,6 +163,15 @@
         <div id="player-hand" class="hand-container">
             </div>
 
+        <div class="battle-actions">
+    <button class="game-btn shuffle-btn" onclick="shuffleHandWithCost()">
+        <span class="icon">🔄</span> Shuffle (50 Mana)
+    </button>
+    <button class="game-btn discard-btn" id="discard-mode-btn" onclick="toggleDiscardMode()">
+        <span class="icon">🗑️</span> Discard Card
+    </button>
+</div>
+
         <button id="end-turn-btn" class="game-btn end-turn-btn" onclick="endTurn()">END TURN</button>
     </div>
 </div>
