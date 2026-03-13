@@ -348,6 +348,7 @@ let step = 0;
 let isTyping = false;
 let typeSpeed = 30; // ms per character
 let discardUsed = false
+let isDiscardMode = false;
 
 function startLevel(levelName) {
     // 1. Switch screens immediately
@@ -650,20 +651,16 @@ battleData.resources[res] -= val
 
 }
 
-function discardCard(card,element){
-
-if(discardUsed){
-logBattle("Discard already used this turn")
-return
-}
-
-discardUsed = true
-
-discardPile.push(card)
-element.remove()
-
-drawHand()
-
+function toggleDiscardMode() {
+    isDiscardMode = !isDiscardMode;
+    const btn = document.getElementById('discard-mode-btn');
+    
+    if (isDiscardMode) {
+        btn.classList.add('active-discard');
+        logBattle("Select a card to discard.");
+    } else {
+        btn.classList.remove('active-discard');
+    }
 }
 
 function checkGameState(){
@@ -775,6 +772,19 @@ function playCard(card, element) {
     if (battleData.enemyMana <= 0) winBattle();
 }
 
+function handleCardClick(index) {
+    if (isDiscardMode) {
+        // Remove the card without playing its effect or spending resources
+        playerHand.splice(index, 1);
+        isDiscardMode = false; 
+        document.getElementById('discard-mode-btn').classList.remove('active-discard');
+        updateUI();
+        logBattle("Card discarded.");
+    } else {
+        playCard(index); // Your existing play function
+    }
+}
+
 function startEnemyTurn() {
     logBattle("Enemy thinking...");
 
@@ -827,22 +837,22 @@ function logBattle(msg) {
     document.getElementById('battle-log').innerText = msg;
 }
 
-function shuffleDeckCost(){
-
-if(battleData.playerMana < 10){
-logBattle("Not enough mana to shuffle")
-return
-}
-
-battleData.playerMana -= 10
-
-deck = deck.concat(discardPile)
-discardPile = []
-
-shuffleDeck()
-
-logBattle("Deck reshuffled")
-
+function shuffleHandWithCost() {
+    if (battleData.playerMana >= 50) {
+        battleData.playerMana -= 50;
+        
+        // Return current hand to deck
+        deck = deck.concat(playerHand);
+        playerHand = [];
+        
+        shuffleDeck(); // Reuse your existing shuffle function
+        drawCards(3);  // Draw a fresh hand (adjust number as needed)
+        
+        updateUI(); 
+        logBattle("Hand reshuffled for 50 Mana!");
+    } else {
+        logBattle("Not enough mana to shuffle!");
+    }
 }
 
 function shuffleDeck(){
