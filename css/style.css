@@ -2009,8 +2009,6 @@ animation:bossPulse 3s infinite ease-in-out;
 
     cursor: pointer;
 
-    transition: transform 0.2s, box-shadow 0.2s;
-
     display: flex;
 
     flex-direction: column;
@@ -2021,7 +2019,9 @@ animation:bossPulse 3s infinite ease-in-out;
 
     color: white;
 
-    transform-origin: bottom center;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+    
+    transform-origin: center bottom;
 
 }
 
@@ -2029,23 +2029,21 @@ animation:bossPulse 3s infinite ease-in-out;
     
     opacity: 0;
     
-    transform: translateY(5px);
-    
     transition: 0.2s ease;
     
     font-size: 12px;
+    
+    margin-top: 5px;
 }
 
 .card:hover {
-    /* Removed translateY(-25px) and corrected the double 't' typo */
-    transform: scale(1.05); 
-    /* Stronger neon glow based on your color palette */
-    box-shadow: 0 0 20px 5px rgba(255, 179, 255, 0.6), 
-                0 0 40px rgba(139, 92, 246, 0.4);
+    /transform: translateY(-30px) scale(1.02); 
+    
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 
+                0 0 15px rgba(255, 179, 255, 0.3);
     
     border-color: var(--neon-pink);
-    
-    z-index: 10;
+    z-index: 100;
 }
 
 .card:hover .card-hover-desc {
