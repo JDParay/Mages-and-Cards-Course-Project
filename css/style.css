@@ -2037,10 +2037,13 @@ animation:bossPulse 3s infinite ease-in-out;
 }
 
 .card:hover {
+    /* Removed translateY(-25px) and corrected the double 't' typo */
+    transform: scale(1.05); 
+    /* Stronger neon glow based on your color palette */
+    box-shadow: 0 0 20px 5px rgba(255, 179, 255, 0.6), 
+                0 0 40px rgba(139, 92, 246, 0.4);
     
-    ttransform: translateY(-25px) scale(1.1);
-    
-    box-shadow: 0 15px 40px rgba(139,92,246,0.7);
+    border-color: var(--neon-pink);
     
     z-index: 10;
 }
@@ -2076,7 +2079,29 @@ animation:bossPulse 3s infinite ease-in-out;
 
 }
 
+.battle-actions {
+    
+    position: absolute;
+   
+    left: 40px;
+    
+    bottom: 20px;
+    
+    display: flex;
+    
+    gap: 10px;
+}
 
+.active-discard {
+    
+    background: #ef4444 !important; /* Red alert */
+    
+    border-color: #fff !important;
+    
+    box-shadow: 0 0 15px #ef4444;
+    
+    animation: pulse 1s infinite;
+}
 
 .resource-bar {
 
