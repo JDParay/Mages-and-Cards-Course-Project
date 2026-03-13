@@ -350,6 +350,7 @@ let typeSpeed = 30; // ms per character
 let discardUsed = false
 let isDiscardMode = false;
 
+
 function startLevel(levelName) {
     // 1. Switch screens immediately
     document.getElementById('campaign-screen').style.display = 'none';
@@ -543,6 +544,7 @@ function showReadyPopup() {
 let enemyDeck=[]
 let enemyHand=[]
 let deck = [];
+let usedPileCount = 0;
 let discardPile = [];
 let handSize = 3;
 let battleData = {
@@ -572,6 +574,15 @@ function startGameplay() {
 }
 
 function initBattle() {
+    deck = [];
+    for (let i = 0; i < 15; i++) {
+        deck.push({...wrathCards[Math.floor(Math.random() * wrathCards.length)]});
+        deck.push({...harmonyCards[Math.floor(Math.random() * harmonyCards.length)]});
+    }
+    shuffleDeck();
+    usedPileCount = 0;
+
+    battleData.playerMana = 100;
     battleData.playerMana = 100;
     battleData.enemyMana = 100;
     battleData.maxMana = 100;
@@ -615,6 +626,9 @@ function updateBattleUI() {
     document.getElementById('res-forest').innerText = battleData.resources.forest;
     document.getElementById('res-ocean').innerText = battleData.resources.ocean;
     document.getElementById('res-land').innerText = battleData.resources.land;
+
+    document.getElementById('deck-count').innerText = deck.length;
+    document.getElementById('used-count').innerText = usedPileCount;
 
     checkAffordability();
 }
@@ -691,8 +705,9 @@ confirmQuit();
 
 function drawHand() {
     const hand = document.getElementById('player-hand');
-    while (hand.children.length < 3) {
-        const card = cardTypes[Math.floor(Math.random() * cardTypes.length)];
+    // Draw until 3 cards, provided deck isn't empty
+    while (hand.children.length < 3 && deck.length > 0) {
+        const card = deck.pop(); // Take from our actual deck
         const cardEl = document.createElement('div');
         cardEl.className = 'card';
         
@@ -726,11 +741,11 @@ function drawHand() {
             </div>
         `;
         
-        cardEl.onclick = () => playCard(card, cardEl);
-        hand.appendChild(cardEl);
-
+        cardEl.onclick = () => handleCardClick(card, cardEl);
         cardEl.dataset.card = JSON.stringify(card);
+        hand.appendChild(cardEl);
     }
+    updateBattleUI();
 }
 
 function canAfford(card) {
@@ -785,16 +800,26 @@ function playCard(card, element) {
     if (battleData.enemyMana <= 0) winBattle();
 }
 
-function handleCardClick(index) {
+function handleCardClick(card, element) {
     if (isDiscardMode) {
-        // Remove the card without playing its effect or spending resources
-        playerHand.splice(index, 1);
+        // Discard logic: Works on ANY card, even if disabled
+        element.remove();
+        usedPileCount++;
         isDiscardMode = false; 
         document.getElementById('discard-mode-btn').classList.remove('active-discard');
-        updateUI();
         logBattle("Card discarded.");
+        
+        drawHand(); // Refill from deck
+        updateBattleUI();
     } else {
-        playCard(index); // Your existing play function
+        // Normal play logic
+        if (canAfford(card)) {
+            playCard(card, element);
+            usedPileCount++;
+            drawHand(); 
+        } else {
+            logBattle("Not enough resources! Use Discard to remove this.");
+        }
     }
 }
 
@@ -851,20 +876,20 @@ function logBattle(msg) {
 }
 
 function shuffleHandWithCost() {
-    // Check if player has 50 or more mana
     if (battleData.playerMana >= 50) {
         battleData.playerMana -= 50;
         
-        // 1. Clear the physical cards from the screen
-        const handContainer = document.getElementById('player-hand');
-        handContainer.innerHTML = '';
+        const hand = document.getElementById('player-hand');
+        // Put cards back in deck before shuffling
+        const currentCards = hand.querySelectorAll('.card');
+        currentCards.forEach(el => {
+            deck.push(JSON.parse(el.dataset.card));
+        });
         
-        // 2. Draw 3 fresh cards
-        drawHand(); 
-        
-        // 3. Update the UI bars and log it
-        updateBattleUI(); 
-        logBattle("Hand reshuffled for 50 Mana!");
+        hand.innerHTML = '';
+        shuffleDeck();
+        drawHand();
+        logBattle("Hand reshuffled!");
     } else {
         logBattle("Not enough mana to shuffle!");
     }
