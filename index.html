@@ -25,6 +25,12 @@
         </footer>
     </div>
 
+    <div id="vn-resource-bar">
+        <div class="vn-res-item">Land: <span id="res-land">0</span></div>
+        <div class="vn-res-item">Ocean: <span id="res-ocean">0</span></div>
+        <div class="vn-res-item">Forest: <span id="res-forest">0</span></div>
+    </div>
+        
     <div id="campaign-screen" class="screen hidden">
     <header class="campaign-header">
         <div class="header-left">
@@ -34,7 +40,7 @@
     </header>
 
     <div class="chapter-grid">
-        <div class="chapter-card" onclick="startVN()">
+        <div class="chapter-card" onclick="showPathSelection(1)">
             <img src="chapter1_thumb.png" alt="Chapter 1">
             <div class="chapter-info">
                 <p class="chapter-subtitle">CHAPTER 01</p>
@@ -52,20 +58,61 @@
     </div>
 </div>
 
-    <div id="vn-game-screen" class="screen hidden" style="display: none;">
-        <div id="vn-resource-bar">
-            <div class="vn-res-item">Land: <span id="res-land">0</span></div>
-            <div class="vn-res-item">Ocean: <span id="res-ocean">0</span></div>
-            <div class="vn-res-item">Forest: <span id="res-forest">0</span></div>
+<div id="path-selection-screen" class="screen hidden">
+    <header class="campaign-header">
+        <div class="header-left">
+            <button class="back-btn" onclick="goBackToChapters()">◀ BACK</button>
+            <h1 class="campaign-title">STORYLINE MAP</h1>
         </div>
+    </header>
+
+    <div class="path-map-container">
+    <div class="node-group">
+        <div class="path-node start" onclick="startVN('ch1_start')">
+            <div class="node-icon">✦</div>
+        </div>
+        <div class="path-line-horizontal"></div> </div>
+
+    <div class="path-branches-container">
+        <div class="path-line-vertical"></div>
+
+        <div class="branch-options">
+            <div class="node-group branch-item">
+                <div class="path-node" onclick="startVN('ch1_scorched')">
+                    <div class="node-icon">🔥</div>
+                </div>
+            </div>
+            
+            <div class="node-group branch-item">
+                <div class="path-node" onclick="startVN('ch1_spring')">
+                    <div class="node-icon">💧</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+    <div id="vn-game-screen" class="screen hidden" onclick="handleGlobalClick()">
+        <button id="log-toggle" class="game-btn" onclick="toggleLog(event)">📜 LOG</button>
 
         <div class="vn-layout-container">
-            <div id="story-box" class="modal-box story-centered">
-                <p id="story-text">The world awaits your decision...</p>
-            </div>
+        <div id="story-box" class="modal-box">
+            <p id="story-text"></p> 
+        </div>
 
-            <div id="choice-container" class="hand-container">
-                </div>
+        <div id="mage-dialogue-box" class="mage-box hidden">
+            <div class="mage-name">MAGE</div>
+            <p id="mage-text"></p>
+        </div>
+
+        <div id="standard-choice-container" class="standard-choices"></div>
+        <div id="card-choice-container" class="card-hand"></div>
+
+        <div id="history-log" class="modal-box" style="display:none; flex-direction: column;">
+            <h2 class="modal-title">History</h2>
+            <div id="log-content" style="flex-grow: 1; overflow-y: auto; margin: 20px 0; text-align: left; padding-right: 10px;"></div>
+            <button class="game-btn" onclick="toggleLog(event)">Close</button>
         </div>
     </div>
 
@@ -74,8 +121,14 @@
     <div id="options-modal" class="modal-box" style="display:none">
         <h2 class="modal-title">Options</h2>
         <div class="settings-container">
-            <div class="slider-row"><label>BGM</label><input type="range" class="custom-slider" id="bgm-slider"></div>
-            <div class="slider-row"><label>SFX</label><input type="range" class="custom-slider" id="sfx-slider"></div>
+            <div class="slider-row">
+                <label>BGM</label>
+                <input type="range" class="custom-slider" id="bgm-slider" min="0" max="1" step="0.01" value="0.5">
+            </div>
+            <div class="slider-row">
+                <label>SFX</label>
+                <input type="range" class="custom-slider" id="sfx-slider" min="0" max="1" step="0.01" value="0.5">
+            </div>
         </div>
     </div>
 

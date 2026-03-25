@@ -57,14 +57,13 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 600px; /* Constrains the horizontal area */
+    max-width: 600px;
     z-index: 20;
 }
 
-/* FIX: Smaller, constrained Logo */
 .main-logo-img {
     width: 100%;
-    max-width: 600px; /* Reduced from 800px to prevent overflow */
+    max-width: 600px;
     height: auto;
     margin-bottom: 30px;
     filter: drop-shadow(0 0 15px var(--neon-glow));
@@ -76,16 +75,15 @@ body {
     50% { transform: translateY(-15px); }
 }
 
-/* --- BUTTON STACK --- */
 .button-stack {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    width: 280px; /* Consistent width for all buttons */
+    width: 280px;
 }
 
 .game-btn {
-    all: unset; /* Clear previous card-style overrides if necessary */
+    all: unset;
     background: var(--btn-bg);
     border: 1px solid var(--btn-border);
     border-radius: 8px;
@@ -102,7 +100,6 @@ body {
     gap: 10px;
 }
 
-/* --- FIXED FOOTER --- */
 .menu-footer {
     position: absolute;
     bottom: 0;
@@ -115,7 +112,7 @@ body {
     color: var(--neon-pink);
     opacity: 0.7;
     background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-    pointer-events: none; /* Keeps it from blocking button clicks */
+    pointer-events: none;
 }
 
 /* 2. ANIMATED BACKGROUND */
@@ -135,23 +132,7 @@ body {
     to { background-position: 0 1200px; }
 }
 
-/* 3. REUSABLE UI ELEMENTS (Buttons & Modals) */
-.game-btn {
-    background: var(--btn-bg);
-    border: 1px solid var(--btn-border);
-    border-radius: 8px;
-    padding: 12px 20px;
-    color: #ddd;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.2s ease;
-}
-
+/* 3. REUSABLE UI ELEMENTS */
 .game-btn:hover {
     background: rgba(255, 255, 255, 0.05);
     border-color: #5d2c8f;
@@ -160,17 +141,29 @@ body {
 }
 
 .modal-box {
-    display: none;
+    display: none; /* Controlled by JS */
     position: fixed;
-    top: 50%; left: 50%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    background: #8b5cf6;
-    border-radius: 40px;
-    padding: 40px;
+    background: rgba(30, 13, 51, 0.98);
+    border: 2px solid var(--neon-pink);
+    border-radius: 20px;
+    padding: 70px;
     width: 90%;
-    max-width: 500px;
-    z-index: 101;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    max-width: 600px;
+    z-index: 1000;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 15px var(--neon-glow);
+    text-align: center;
+    color: white;
+}
+
+.modal-title {
+    font-family: 'Magica', sans-serif;
+    color: var(--neon-pink);
+    margin-top: 0;
+    text-shadow: 0 0 10px var(--neon-glow);
+    font-size: 2rem;
 }
 
 .modal-overlay {
@@ -181,7 +174,77 @@ body {
     z-index: 100;
 }
 
-/* --- CAMPAIGN HEADER --- */
+.credit-entry {
+    display: flex;
+    justify-content: space-between; /* Pushes name to left, role to right */
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 179, 255, 0.2); /* Optional: thin neon line */
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+}
+
+/* --- SETTINGS & SLIDERS --- */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin: 20px 0;
+}
+
+.slider-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.slider-row label {
+    font-family: 'Unica One', sans-serif;
+    font-size: 1.2rem;
+    color: #fff;
+    width: 50px;
+    text-align: left;
+}
+
+/* Custom Neon Slider Styling */
+.custom-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #1a0a2e;
+    border-radius: 5px;
+    border: 1px solid var(--btn-border);
+    outline: none;
+}
+
+/* The Slider Handle (Thumb) */
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--neon-pink);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--neon-glow);
+    transition: transform 0.2s;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.custom-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--neon-pink);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px var(--neon-glow);
+}
+
 .campaign-header {
     position: absolute;
     top: 0;
@@ -214,7 +277,6 @@ body {
     text-shadow: 0 0 10px var(--neon-glow);
 }
 
-/* --- CHAPTER GRID --- */
 .chapter-grid {
     display: flex;
     gap: 30px;
@@ -259,7 +321,6 @@ body {
     font-size: 1.2rem;
 }
 
-/* Hover Effects */
 .chapter-card:hover {
     transform: translateY(-10px);
     border-color: var(--neon-pink);
@@ -277,23 +338,13 @@ body {
     cursor: not-allowed;
 }
 
-/* 4. VN / STORY SYSTEM */
-#vn-game-screen {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-    padding: 80px 20px 40px 20px;
-}
-
+/* 4. VN / STORY SYSTEM BASICS */
 #story-box {
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 #story-box:hover {
-    border-color: #fff; /* Glow white when hovering over dialogue */
+    border-color: #fff;
 }
 
 .locked-choice {
@@ -302,70 +353,39 @@ body {
     filter: grayscale(1);
 }
 
-#choice-container p {
-    font-family: 'Roboto', sans-serif;
-    letter-spacing: 2px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.3; }
-    50% { opacity: 0.7; }
-    100% { opacity: 0.3; }
-}
-
-/* 5. CARD-CHOICE HAND */
-#choice-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    perspective: 1000px;
-}
-
-#choice-container .game-btn {
-    all: unset;
-    cursor: pointer;
-    width: 180px;
-    height: 260px;
-    background: var(--card-bg);
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: 'Unica One', sans-serif;
-}
-
-#choice-container .game-btn::before {
-    content: "✦";
-    font-size: 2rem;
-    color: var(--neon-pink);
-    margin-bottom: 15px;
-    opacity: 0.6;
-}
-
-#choice-container .game-btn:hover:not(:disabled) {
-    transform: translateY(-20px) scale(1.05);
-    border-color: var(--neon-pink);
-    box-shadow: 0 0 30px var(--neon-glow);
-}
-
 #vn-resource-bar {
+    display: none; /* Hidden by default */
     position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 50px;
+    height: 60px;
     background: rgba(15, 15, 15, 0.9);
     border-bottom: 2px solid var(--neon-pink);
-    display: flex;
-    justify-content: center;
-    gap: 40px;
     align-items: center;
-    z-index: 100;
+    z-index: 1000;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+#vn-resource-bar.active {
+    display: flex !important;
+}
+
+#vn-resource-bar.menu-mode {
+    top: 25px;
+    right: 50px;
+    left: auto;
+    width: auto;
+    background: transparent;
+    border-bottom: none;
+    gap: 30px;
+}
+
+#vn-resource-bar.game-mode {
+    top: 0;
+    left: 0;
+    width: 100%;
+    justify-content: center;
+    gap: 50px;
+}
+
 
 .vn-res-item {
     font-family: 'Unica One', sans-serif;
@@ -378,3 +398,259 @@ body {
 #res-land { color: var(--land-color); }
 #res-ocean { color: var(--ocean-color); }
 #res-forest { color: var(--forest-color); }
+
+.vn-layout-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.path-map-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.node-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+/* Lines */
+.path-line-horizontal {
+    width: 100px; /* Space between start and fork */
+    height: 4px;
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+}
+
+.path-line-vertical {
+    position: absolute;
+    left: 0;
+    top: 20px; /* Distance to top node */
+    bottom: 20px; /* Distance to bottom node */
+    width: 4px;
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+}
+
+#path-selection-screen:not(.hidden) .path-map-wrapper {
+    display: flex !important;
+}
+
+.path-node {
+    width: 50px;
+    height: 50px;
+    background: #1a0a2e;
+    border: 3px solid var(--neon-pink);
+    border-radius: 50%;
+    z-index: 2; /* Sits on top of lines */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.path-node:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--neon-pink); }
+
+.node-icon { font-size: 1.5rem; }
+.node-label {
+    position: absolute;
+    bottom: -30px;
+    white-space: nowrap;
+    font-family: 'Unica One';
+    color: white;
+    font-size: 0.8rem;
+}
+
+/* Lines */
+
+.path-branches {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.path-branches-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1000px;
+}
+
+.branch { display: flex; align-items: center; }
+
+.branch-options {
+    display: flex;
+    flex-direction: column;
+    gap: 180px; /* Vertical gap between fire and water */
+    padding-left: 0; /* Aligns nodes directly on the vertical line */
+}
+
+/* Locked State */
+.path-node.locked {
+    filter: grayscale(1) brightness(0.3);
+    border-color: #444;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* --- VN LAYOUT POSITIONING (New Additions) --- */
+
+#vn-game-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 80px;
+}
+
+#log-toggle {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    z-index: 110;
+}
+
+#history-log {
+    display: none; /* Controlled by JS */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    height: 70vh;
+    background: rgba(20, 10, 35, 0.95);
+    border: 2px solid var(--neon-pink);
+    border-radius: 15px;
+    z-index: 2000; /* High z-index to stay on top */
+    padding: 20px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+#log-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.log-entry {
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 5px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.log-name {
+    color: var(--neon-pink);
+    font-weight: bold;
+    font-size: 0.8rem;
+    display: block;
+}
+
+.log-text {
+    color: #fff;
+    font-size: 1rem;
+}
+
+/* 1. NARRATIVE BOX (TOP) */
+#story-box {
+    position: absolute; /* Or relative, depending on your container */
+    top: 5%; /* Position it near the top */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1000px;
+    background: rgba(0, 0, 0, 0.85);
+    border-left: 5px solid var(--neon-pink);
+    padding: 25px 40px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    cursor: pointer;
+    z-index: 10;
+    display: flex; /* Ensure it can show content */
+    align-items: center;
+}
+
+#story-text {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* 2. MAGE DIALOGUE (MIDDLE) */
+.mage-box {
+    margin-top: -200px;
+    width: 70%;
+    max-width: 700px;
+    background: rgba(30, 13, 51, 0.95);
+    border: 1px solid var(--neon-pink);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+.mage-name { color: var(--neon-pink); font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
+
+/* 3. STANDARD CHOICES */
+.standard-choices {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* 4. CARD HAND (BOTTOM) */
+.card-hand {
+    position: absolute;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    animation: card-pop 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards;
+}
+
+@keyframes card-pop {
+    from { transform: translateY(300px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Card Button Styling */
+.card-hand .game-btn {
+    all: unset;
+    cursor: pointer;
+    width: 150px;
+    height: 220px;
+    background: linear-gradient(135deg, #1e0d33 0%, #3d1c6f 100%);
+    border: 2px solid var(--neon-pink);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.card-hand .game-btn:hover {
+    transform: translateY(-30px) scale(1.05);
+    box-shadow: 0 0 20px var(--neon-glow);
+}
