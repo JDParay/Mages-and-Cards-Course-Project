@@ -289,20 +289,29 @@ body {
 }
 
 #story-box {
-    background: rgba(0, 0, 0, 0.7);
-    border: 2px solid var(--neon-pink);
-    border-radius: 15px;
-    padding: 25px;
-    width: 90%;
-    max-width: 900px;
-    box-shadow: 0 0 20px rgba(255, 179, 255, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-#story-text {
-    font-family: 'Unica One', sans-serif;
-    font-size: 1.4rem;
-    color: #fff;
-    text-shadow: 0 0 5px var(--neon-pink);
+#story-box:hover {
+    border-color: #fff; /* Glow white when hovering over dialogue */
+}
+
+.locked-choice {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+    filter: grayscale(1);
+}
+
+#choice-container p {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.3; }
 }
 
 /* 5. CARD-CHOICE HAND */

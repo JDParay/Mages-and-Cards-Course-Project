@@ -43,117 +43,127 @@ window.addEventListener('click', () => playMusic('menu'), { once: true });
 let playerResources = { land: 0, ocean: 0, forest: 0 };
 
 const storyData = {
-    // CHAPTER 1: THE AWAKENING
+    // CHAPTER 1
     "ch1_start": {
-        text: "The Great Barrier has cracked. Mana leaks into the world. You must stabilize a region, but you only have enough strength for one.",
+        text: "The Great Barrier has cracked. Mana leaks into the world like bleeding light.",
+        type: "dialogue",
+        next: "ch1_intro_2"
+    },
+    "ch1_intro_2": {
+        text: "You stand at the precipice. You must stabilize a region, but your strength is fading.",
+        type: "choice",
         choices: [
-            { text: "Heal the Scorched Earth (Gain 2 Land)", next: "ch1_land_path", reward: { land: 2 } },
-            { text: "Purify the Corrupted Spring (Gain 2 Ocean)", next: "ch1_ocean_path", reward: { ocean: 2 } },
-            { text: "Use Ancient Rites (Costs 3 Land, 3 Ocean)", next: "ch1_secret_end", required: { land: 3, ocean: 3 } }
+            { text: "Heal the Scorched Earth", next: "ch1_land_path", reward: { land: 2 } },
+            { text: "Purify the Corrupted Spring", next: "ch1_ocean_path", reward: { ocean: 2 } }
         ]
     },
-    "ch1_land_path": {
-        text: "The ground stops trembling. You find a strange seed in the dirt. It feels heavy with potential.",
-        choices: [{ text: "Enter the Deep Forest", next: "ch2_start" }]
-    },
-    "ch1_ocean_path": {
-        text: "The waters clear, revealing an old sunken shrine. You feel the pull of the tides.",
-        choices: [{ text: "Follow the River", next: "ch2_start" }]
-    },
-    "ch1_secret_end": {
-        text: "[HIDDEN PATH] You balanced both! The elders are stunned. You gain massive Forest affinity.",
-        choices: [{ text: "Ascend to Chapter 2", next: "ch2_start", reward: { forest: 10 } }]
-    },
-
-    // CHAPTER 2: THE WHISPERING WOODS
+    // CHAPTER 2 (Unlocked via Menu or Path)
     "ch2_start": {
-        text: "You arrive at the Whispering Woods. The trees are screaming in a language only Mages understand.",
+        text: "The Whispering Woods loom ahead. The trees scream in a language of rustling leaves.",
+        type: "dialogue",
+        next: "ch2_choice_1"
+    },
+    "ch2_choice_1": {
+        text: "The corruption is thick here. How will you proceed?",
+        type: "choice",
         choices: [
-            { text: "Listen to the Forest (Gain 3 Forest)", next: "ch2_normal", reward: { forest: 3 } },
-            { text: "Burn the corruption (Costs 5 Ocean)", next: "ch2_burn", required: { ocean: 5 } }
+            { text: "Listen to the Forest", next: "ch2_end", reward: { forest: 3 } },
+            { text: "Burn the Rot", next: "ch2_end", reward: { land: 5 }, required: { ocean: 5 } }
         ]
     },
-    "ch2_burn": {
-        text: "The fire cleanses the rot, but the Forest hates you now. You found a charred Land artifact.",
-        choices: [{ text: "Move to Chapter 3", next: "ch3_start", reward: { land: 5 } }]
-    },
-
-    // ... Add more nodes following this structure until 3 chapters are full ...
-    "ch3_start": {
-        text: "The final trial begins. The resources you gathered will determine your fate.",
-        choices: [
-            { text: "Standard Ending", next: "end_normal" },
-            { text: "True Balance Ending (Needs 10 All)", next: "end_true", required: { land: 10, ocean: 10, forest: 10 } }
-        ]
-    },
-    "end_normal": { text: "You survived, but the world remains scarred. (Try gathering more resources in your next run!)", choices: [] },
-    "end_true": { text: "The world is reborn in perfect harmony. You are the Arch-Mage.", choices: [] }
+    "ch2_end": { text: "You push deeper into the unknown...", type: "dialogue", next: "main_menu" }
 };
 
 /* ==========================================
    3. THE ENGINE (Rendering & Logic)
    ========================================== */
-function startVN() {
-    // Hide menus
+let currentNode = "";
+
+function startVN(nodeId = "ch1_start") {
     document.getElementById('main-menu-screen').classList.add('hidden');
     document.getElementById('campaign-screen').classList.add('hidden');
     
-    // Show Resource Bar and VN Screen
     document.getElementById('vn-resource-bar').style.display = 'flex';
     document.getElementById('vn-game-screen').style.display = 'flex';
     document.getElementById('vn-game-screen').classList.remove('hidden');
     
     updateResourceUI();
-    renderNode("ch1_start");
+    renderNode(nodeId);
 }
 
-
 function renderNode(nodeId) {
+    currentNode = nodeId;
     const node = storyData[nodeId];
     if (!node) return;
 
     const textEl = document.getElementById('story-text');
     const choiceEl = document.getElementById('choice-container');
+    const storyBox = document.getElementById('story-box');
 
-    // Typewriter effect (simplified for deadline)
+    // Reset UI
     textEl.innerText = node.text;
-    choiceEl.innerHTML = ''; 
+    choiceEl.innerHTML = '';
+    storyBox.onclick = null;
+    storyBox.style.cursor = "default";
 
-    node.choices.forEach(choice => {
-        const btn = document.createElement('button');
-        btn.className = 'game-btn';
-        btn.innerHTML = choice.text;
+    if (node.type === "dialogue") {
+        // Dialogue Phase: Click the box to advance
+        storyBox.style.cursor = "pointer";
+        storyBox.onclick = () => {
+            playSFX('tap');
+            if (node.next === "main_menu") {
+                goBackToMenu();
+            } else {
+                renderNode(node.next);
+            }
+        };
+        // Hint for the player
+        choiceEl.innerHTML = `<p style="color:rgba(255,255,255,0.5)">[ Click text to continue ]</p>`;
+        
+    } else if (node.type === "choice") {
+        // Choice Phase: Show Cards
+        node.choices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.className = 'game-btn';
+            btn.innerHTML = `<span>${choice.text}</span>`;
 
-        // Resource Validation
-        let canUnlock = true;
-        if (choice.required) {
-            for (const [res, amt] of Object.entries(choice.required)) {
-                if (playerResources[res] < amt) {
-                    canUnlock = false;
-                    btn.innerHTML += ` <br><small>(Needs ${amt} ${res})</small>`;
+            // Resource Validation
+            let canUnlock = true;
+            if (choice.required) {
+                for (const [res, amt] of Object.entries(choice.required)) {
+                    if (playerResources[res] < amt) {
+                        canUnlock = false;
+                        btn.innerHTML += `<br><small style="color:#ff4444">(Needs ${amt} ${res})</small>`;
+                    }
                 }
             }
-        }
 
-        if (!canUnlock) {
-            btn.disabled = true;
-            btn.style.opacity = "0.4";
-            btn.style.cursor = "not-allowed";
-        } else {
-            btn.onclick = () => {
-                playSFX('tap');
-                // Apply rewards
-                if (choice.reward) {
-                    for (const [res, amt] of Object.entries(choice.reward)) {
-                        playerResources[res] += amt;
+            if (!canUnlock) {
+                btn.disabled = true;
+                btn.classList.add('locked-choice');
+            } else {
+                btn.onclick = (e) => {
+                    e.stopPropagation(); // Prevent trigger dialogue click
+                    playSFX('tap');
+                    if (choice.reward) {
+                        for (const [res, amt] of Object.entries(choice.reward)) {
+                            playerResources[res] += amt;
+                        }
+                        updateResourceUI();
                     }
-                    updateResourceUI();
-                }
-                renderNode(choice.next);
-            };
-        }
-        choiceEl.appendChild(btn);
-    });
+                    renderNode(choice.next);
+                };
+            }
+            choiceEl.appendChild(btn);
+        });
+    }
+}
+
+// Level Selector Logic
+function selectChapter(chapterId) {
+    playSFX('button');
+    if (chapterId === 1) startVN("ch1_start");
+    if (chapterId === 2) startVN("ch2_start");
 }
 
 function updateResourceUI() {
