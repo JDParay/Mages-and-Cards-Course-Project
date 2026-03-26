@@ -1,4 +1,4 @@
-const isDev = true;
+const isDev = false;
 
 if (isDev) {
   // 1. Set resources on script load
