@@ -1,19 +1,16 @@
 const isDev = false;
 
 if (isDev) {
-  // 1. Set resources on script load
   window.forestMana = 99;
   window.oceanMana = 99;
   window.landMana = 99;
   
-  // 2. Add a shortcut to "Refill" resources instantly
   document.addEventListener('keydown', (e) => {
     if (e.key === 'R' || e.key === 'r') {
       window.forestMana = 99;
       window.oceanMana = 99;
       window.landMana = 99;
       
-      // Call your existing UI update function if you have one
       if (typeof updateResourceUI === 'function') {
         updateResourceUI();
       }
@@ -57,7 +54,6 @@ const GameAudio = {
     }
 };
 
-// Enable looping
 GameAudio.music.tracks.menu.loop = true;
 GameAudio.music.tracks.vn.loop = true;
 
@@ -78,7 +74,6 @@ function playSFX(sfxName) {
     sound.play();
 }
 
-// Initial interaction to start music
 window.addEventListener('click', () => playMusic('menu'), { once: true });
 
 /* ==========================================
@@ -140,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
         sfxSlider.addEventListener('input', (e) => GameAudio.sfx.volume = e.target.value);
     }
 
-    // Quest cards
     document.querySelectorAll('.quest-card').forEach(card => {
         card.addEventListener('click', async () => {
             if (card.classList.contains('locked')) return;
@@ -159,15 +153,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function updateMapUI() {
-    // --- STEP 1: If 1 is done, unlock 2 & 3 ---
-    // Note: 'ch1_start_done' is a tag we add when Level 1 finishes
+
     if (unlockedNodes.includes("ch1_start_done")) {
         const q2 = document.getElementById('q-2');
         q2.classList.remove('hidden');
         unlockQuest('q-2', 'ENTER');
     }
 
-    // --- STEP 2: If 2 is finished, show and unlock 2.1 ---
     if (unlockedNodes.includes("ch1_level2_done")) {
         const q21 = document.getElementById('q-2-1');
         q21.classList.remove('hidden');
@@ -199,7 +191,6 @@ if (unlockedNodes.includes("stage5_unlocked")) {
 }
 }
 
-// HELPER: This prevents you from typing the same code 10 times
 function unlockQuest(id, text) {
     const el = document.getElementById(id);
     if (el) {
@@ -211,7 +202,6 @@ function unlockQuest(id, text) {
 
 function selectChoice(choice) {
     playSFX('button');
-    // 🚫 REQUIREMENT CHECK
     if (choice.requirement) {
         for (const [res, amt] of Object.entries(choice.requirement)) {
             if ((playerResources[res] || 0) < amt) {
@@ -221,7 +211,6 @@ function selectChoice(choice) {
         }
     }
 
-    // 🎁 REWARD
    if (choice.reward) {
     const rewardId = currentNode.id + "_" + choice.text;
 
@@ -236,7 +225,6 @@ function selectChoice(choice) {
     }
 }
 
-    // 🔓 UNLOCK TAG
     if (choice.unlockTag) {
         if (!unlockedNodes.includes(choice.unlockTag)) {
             unlockedNodes.push(choice.unlockTag);
@@ -257,7 +245,7 @@ if (destination === currentNode.id) {
 }
 
 function startVN(nodeId = "ch1_start") {
-    playMusic('vn'); // <--- TRIGGER GAMEPLAY MUSIC
+    playMusic('vn');
     
     document.getElementById('path-selection-screen').classList.add('hidden');
     document.getElementById('path-selection-screen').style.display = 'none';
@@ -308,12 +296,12 @@ function renderNode(nodeId) {
         document.getElementById('vn-game-screen').classList.add('hidden');
         document.getElementById('vn-game-screen').style.display = 'none';
         
-        // Show Path Selection Screen Directly
+
         const pathScreen = document.getElementById('path-selection-screen');
         pathScreen.classList.remove('hidden');
         pathScreen.style.display = 'flex';
 
-        // Reset resource bar to menu mode
+
         const resBar = document.getElementById('vn-resource-bar');
         resBar.classList.remove('game-mode');
         resBar.classList.add('menu-mode');
@@ -341,13 +329,12 @@ function renderNode(nodeId) {
 
     if (currentNode.uiType === "narrative") {
         storyBox.classList.remove('hidden');
-        storyBox.style.display = 'flex'; // FORCE visibility
+        storyBox.style.display = 'flex';
         mageBox.classList.add('hidden');
         addToLog("NARRATOR", currentNode.text);
         typeWriter(storyText, currentNode.text);
     } 
     else if (currentNode.uiType === "mage") {
-        // Hide narrator box when mage speaks
         storyBox.classList.add('hidden'); 
         storyBox.style.display = 'none';
 
@@ -370,7 +357,6 @@ function renderNode(nodeId) {
     let displayText = choice.text;
     btn.innerText = displayText;
 
-    // ✅ Add tooltip here
     if (choice.tooltip) btn.title = choice.tooltip;
 
     const hasRequirement = choice.requirement;
@@ -421,7 +407,6 @@ function showDemoCompletePopup() {
     }
 }
 
-// NEW FUNCTION: Add this to handle closing the specific popup
 function closeDemoPopup() {
     document.getElementById('demo-complete-popup').style.display = 'none';
     document.getElementById('modal-overlay').style.display = 'none';
@@ -477,10 +462,9 @@ function showCampaign() {
     document.getElementById('main-menu-screen').classList.add('hidden');
     document.getElementById('campaign-screen').classList.remove('hidden');
     
-    // Fix: Ensure resource bar shows up correctly in menu-mode
     const resBar = document.getElementById('vn-resource-bar');
     resBar.classList.add('active', 'menu-mode');
-    resBar.classList.remove('game-mode'); // Ensure it's not in game-mode
+    resBar.classList.remove('game-mode');
     resBar.style.display = 'flex';
 }
 
@@ -503,7 +487,6 @@ function goBackToMenu() {
     document.getElementById('campaign-screen').classList.add('hidden');
     document.getElementById('main-menu-screen').classList.remove('hidden');
     
-    // FIX: Completely hide and reset the resource bar classes
     const resBar = document.getElementById('vn-resource-bar');
     resBar.style.display = 'none';
     resBar.classList.remove('active', 'menu-mode', 'game-mode');
