@@ -152,7 +152,7 @@ body {
     padding: 70px;
     width: 90%;
     max-width: 600px;
-    z-index: 1000;
+    z-index: 2001;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 15px var(--neon-glow);
     text-align: center;
     color: white;
@@ -171,7 +171,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 100;
+    z-index: 2000;
 }
 
 .credit-entry {
@@ -494,12 +494,37 @@ body {
     padding-left: 0; /* Aligns nodes directly on the vertical line */
 }
 
-/* Locked State */
-.path-node.locked {
+/* --- LOCKED STATE --- */
+.node-group.locked .path-node {
     filter: grayscale(1) brightness(0.3);
     border-color: #444;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+.node-group.locked .path-line-horizontal,
+.path-line-vertical.locked {
+    background: #222;
+    box-shadow: none;
+    opacity: 0.5;
+}
+
+/* --- UNLOCKED / ACTIVE STATE --- */
+.node-group:not(.locked) .path-node {
+    filter: none;
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 15px var(--neon-pink);
+}
+
+/* Animation for the "Active" node (the one you should click next) */
+.node-group.active-pulse .path-node {
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 5px var(--neon-pink); }
+    50% { box-shadow: 0 0 25px var(--neon-pink), 0 0 40px var(--neon-purple); }
+    100% { box-shadow: 0 0 5px var(--neon-pink); }
 }
 
 /* --- VN LAYOUT POSITIONING (New Additions) --- */
@@ -593,7 +618,7 @@ body {
 
 /* 2. MAGE DIALOGUE (MIDDLE) */
 .mage-box {
-    margin-top: -200px;
+    margin-top: -120px;
     width: 70%;
     max-width: 700px;
     background: rgba(30, 13, 51, 0.95);
@@ -654,3 +679,99 @@ body {
     transform: translateY(-30px) scale(1.05);
     box-shadow: 0 0 20px var(--neon-glow);
 }
+
+.quest-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 95%;
+    max-width: 1200px; /* Increased to fit your horizontal plan */
+    margin-top: 120px;
+    
+    /* The Fix: Add padding so hover effects aren't clipped */
+    padding: 20px 40px; 
+    
+    /* Standard overflow */
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.quest-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px; /* Space between horizontal cards */
+}
+
+.quest-card {
+    width: 280px; 
+    flex-shrink: 0; 
+    flex-basis: 280px;
+
+    display: flex;
+    align-items: center;
+    background: rgba(30, 13, 51, 0.9);
+    border: 1px solid var(--neon-pink);
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    min-height: 80px;
+}
+
+.quest-details {
+    /* Ensure text doesn't push the box wider */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quest-card:hover:not(.locked) {
+    background: rgba(61, 28, 111, 0.9);
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px var(--neon-glow);
+}
+
+.quest-status {
+    font-size: 2rem;
+    margin-right: 20px;
+    color: var(--neon-pink);
+}
+
+.quest-details h3 {
+    margin: 0;
+    color: white;
+    font-family: 'Unica One', sans-serif;
+}
+
+.quest-details p {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+.quest-action {
+    margin-left: auto;
+    font-family: 'Unica One';
+    color: var(--neon-pink);
+    border-left: 1px solid rgba(255, 179, 255, 0.3);
+    padding-left: 20px;
+}
+
+/* Locked Styling */
+.quest-card.locked {
+    filter: grayscale(1);
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: #444;
+}
+
+.quest-row .quest-card + .quest-card::before {
+    content: "➔";
+    position: absolute;
+    left: -25px;
+    color: var(--neon-pink);
+    font-weight: bold;
+}
+
+.quest-card.locked .quest-action { color: #666; }

@@ -1,0 +1,70 @@
+
+{
+"ch1_level2_subarea1_start": {
+  "text": "You stumble as you try to retrace your steps, your legs weak and trembling. Antakin rushes to your side, her eyes wide with concern.",
+  "uiType": "standard",
+  "next": "antakin_checks_cards"
+},
+
+"antakin_checks_cards": {
+  "mageName": "ANTAKIN",
+  "mageText": "Hold on… these cards… they’re tainted! How could this happen? You weren’t corrupted, and neither were the cards before…",
+  "uiType": "mage",
+  "next": "player_headache"
+},
+
+"player_headache": {
+  "text": "You clutch your temples, groaning. 'My head… it feels like it’s tearing itself apart!' The world tilts, and your skin burns painfully.",
+  "uiType": "narrative",
+  "next": "grab_card"
+},
+
+"grab_card": {
+  "text": "Desperate, you snatch a card from Antakin’s deck. Instantly, 20 Land, 10 Ocean, and 10 Forest mana surge into you.",
+  "uiType": "cards",
+  "choices": [
+    { "text": "Use the corrupted card", "next": "corruption_agony" }
+  ]
+},
+
+"corruption_agony": {
+  "text": "The card pulses darkly in your hand. As its corruption seeps into you, agony wracks your body. Skin peels away painfully, revealing a shadowy form beneath…",
+  "uiType": "narrative",
+  "next": "mordu_reveal"
+},
+
+"mordu_reveal": {
+  "text": "From the darkness emerges a being with eyes that pierce through your soul. A chilling giggle echoes: it is Mordu.",
+  "uiType": "narrative",
+  "next": "antakin_shock"
+},
+
+"antakin_shock": {
+  "mageName": "ANTAKIN",
+  "mageText": "Impossible… How could this happen?!",
+  "uiType": "mage",
+  "next": "mordu_attack"
+},
+
+"mordu_attack": {
+  "text": "Mordu snaps its neck with terrifying speed. Everything around you collapses into a void of nothingness.",
+  "uiType": "narrative",
+  "next": "void_voice"
+},
+
+"void_voice": {
+  "text": "A distant voice speaks through the emptiness: 'Your journey has not yet ended. Endure… and return to the beginning.'",
+  "uiType": "narrative",
+  "choices": [
+    { "text": "…", "next": "ch1_level2_subarea1_end", "unlockTag": "ch1_level2_subarea1_done" }
+  ]
+},
+
+"ch1_level2_subarea1_end": {
+  "text": "Silence envelops you, the void swallowing everything. You know this is not the end—it is only a pause, a cruel reminder that the journey will continue.",
+  "uiType": "standard",
+  "choices": [
+    { "text": "Continue", "next": "go_to_path_selection" }
+  ]
+}
+}

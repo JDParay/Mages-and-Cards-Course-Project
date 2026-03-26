@@ -1,3 +1,17 @@
+const isDev = true;
+
+if (isDev) {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'E' || e.key === 'e') {
+      if (window.currentNode && window.currentNode.next) {
+        startVN(window.currentNode.next);
+      } else {
+        console.warn('No current node or next node to skip to.');
+      }
+    }
+  });
+}
+
 const GameAudio = {
     music: {
         current: null,
@@ -42,55 +56,40 @@ window.addEventListener('click', () => playMusic('menu'), { once: true });
 /* ==========================================
    STORY DATA
    ========================================== */
-const storyData = {
-    "ch1_start": {
-        text: "The Great Barrier has cracked. Mana leaks into the world like bleeding light, staining the sky a bruised purple.",
-        uiType: "narrative",
-        next: "mage_intro"
-    },
-    "mage_intro": {
-        mageName: "ELDER MAGE",
-        mageText: "You there! Do not just stand there watching the mana bleed away. The foundations of this world are brittle.",
-        uiType: "mage",
-        next: "response_options"
-    },
-    "response_options": {
-        text: "How do you respond to the Elder's call?",
-        uiType: "standard",
-        choices: [
-            { text: "I am ready to help. What must be done?", next: "mage_explains" },
-            { text: "Who are you to command me?", next: "mage_annoyed" }
-        ]
-    },
-    "mage_explains": {
-        mageName: "ELDER MAGE",
-        mageText: "A rift has opened in the Valley. Use your cards to stabilize the land before the corruption takes root.",
-        uiType: "mage",
-        next: "valley_card_choice"
-    },
-    "valley_card_choice": {
-        text: "The ground splits beneath you! Choose a card to play:",
-        uiType: "cards",
-        choices: [
-            { text: "Earth Aegis", next: "ch1_end", reward: { land: 5 } },
-            { text: "Tidal Surge", next: "ch1_end", reward: { ocean: 5 } }
-        ]
-    },
-    "ch1_end": {
-        text: "The rift closes. For now, the world is quiet. You have taken your first step.",
-        uiType: "narrative",
-        next: "main_menu"
-    }
-};
+let storyData = { };
 
+async function loadChapter(file) {
+    const response = await fetch(file);
+    storyData = await response.json();
+}
+
+async function startLevel(file, startNode) {
+    await loadChapter(file);
+    startVN(startNode);
+}
+
+document.querySelectorAll('.quest').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const file = btn.dataset.file;
+        const startNode = btn.dataset.start;
+
+        if (!file || !startNode) {
+            console.error("Missing data-file or data-start");
+            return;
+        }
+
+        await startLevel(file, startNode);
+    });
+});
 /* ==========================================
    ENGINE LOGIC
    ========================================== */
-let typeTimeout;
+let isTyping = false;
+let typeTimeout = null;
 let currentFullText = "";
 let gameHistory = [];
+let claimedRewards = [];
 let playerResources = { land: 0, ocean: 0, forest: 0 };
-let isTyping = false;
 let currentNode = null;
 let unlockedNodes = ["ch1_start"];
 
@@ -101,6 +100,7 @@ function updateBGMVolume(vol) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Volume sliders
     const bgmSlider = document.getElementById('bgm-slider');
     const sfxSlider = document.getElementById('sfx-slider');
 
@@ -110,21 +110,115 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sfxSlider) {
         sfxSlider.addEventListener('input', (e) => GameAudio.sfx.volume = e.target.value);
     }
+
+    // Quest cards
+    document.querySelectorAll('.quest-card').forEach(card => {
+        card.addEventListener('click', async () => {
+            if (card.classList.contains('locked')) return;
+
+            const file = card.dataset.file;
+            const startNode = card.dataset.start;
+
+            if (!file || !startNode) {
+                console.error("Missing data-file or data-start");
+                return;
+            }
+
+            await startLevel(file, startNode);
+        });
+    });
 });
 
 function updateMapUI() {
-    const nodes = document.querySelectorAll('.path-node');
-    nodes.forEach(node => {
-        // Extract nodeId from the onclick string, e.g., "startVN('ch1_start')" -> "ch1_start"
-        const clickAttr = node.getAttribute('onclick');
-        const nodeId = clickAttr.match(/'([^']+)'/)[1];
+    // --- STEP 1: If 1 is done, unlock 2 & 3 ---
+    // Note: 'ch1_start_done' is a tag we add when Level 1 finishes
+    if (unlockedNodes.includes("ch1_start_done")) {
+        unlockQuest('q-2', 'ENTER');
+    }
 
-        if (unlockedNodes.includes(nodeId)) {
-            node.classList.remove('locked');
-        } else {
-            node.classList.add('locked');
+    // --- STEP 2: If 2 is finished, show and unlock 2.1 ---
+    if (unlockedNodes.includes("ch1_level2_done")) {
+        const q21 = document.getElementById('q-2-1');
+        q21.classList.remove('hidden');
+        unlockQuest('q-2-1', 'ENTER');
+    }
+
+
+    if (unlockedNodes.includes("ch1_scorched_done")) {
+    const q31 = document.getElementById('q-3-1');
+    q31.classList.remove('hidden');
+
+    if (playerResources.ocean >= 50) {
+        unlockQuest('q-3-1', 'ENTER');
+    } else {
+        q31.querySelector('.quest-action').innerText = "50💧 REQ";
+    }
+}
+
+    // --- STEP 4: If 3.1 is done, show 3.2 and 4 ---
+    if (unlockedNodes.includes("ch1_ocean_canon_done")) {
+        document.getElementById('q-3-2').classList.remove('hidden');
+        unlockQuest('q-3-2', 'ENTER');
+        
+        document.getElementById('q-4').classList.remove('hidden');
+        unlockQuest('q-4', 'ENTER');
+    }
+}
+
+// HELPER: This prevents you from typing the same code 10 times
+function unlockQuest(id, text) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.classList.remove('locked');
+        const action = el.querySelector('.quest-action');
+        if (action) action.innerText = text;
+    }
+}
+
+function selectChoice(choice) {
+    // 🚫 REQUIREMENT CHECK
+    if (choice.requirement) {
+        for (const [res, amt] of Object.entries(choice.requirement)) {
+            if ((playerResources[res] || 0) < amt) {
+                console.log("Not enough resources");
+                return; // BLOCK the choice
+            }
         }
-    });
+    }
+
+    // 🎁 REWARD
+   if (choice.reward) {
+    const rewardId = currentNode.id + "_" + choice.text;
+
+    if (!claimedRewards.includes(rewardId)) {
+        for (const [res, amt] of Object.entries(choice.reward)) {
+            playerResources[res] = (playerResources[res] || 0) + amt;
+        }
+        claimedRewards.push(rewardId);
+        updateResourceUI();
+    } else {
+        console.log("Reward already claimed");
+    }
+}
+
+    // 🔓 UNLOCK TAG
+    if (choice.unlockTag) {
+        if (!unlockedNodes.includes(choice.unlockTag)) {
+            unlockedNodes.push(choice.unlockTag);
+        }
+    }
+
+    addToLog("YOU", choice.text);
+
+    const destination = choice.next || choice.nextNode || choice.nextPath;
+    if (!destination) return;
+
+// 🔥 If staying in same node → refresh buttons
+if (destination === currentNode.id) {
+    renderNode(currentNode.id);
+} else {
+    renderNode(destination);
+}
 }
 
 function startVN(nodeId = "ch1_start") {
@@ -169,27 +263,33 @@ function typeWriter(element, text, callback) {
 }
 
 function renderNode(nodeId) {
-    // FIX: Instead of reload, go back to the map and stop music
-    if (nodeId === "main_menu") {
-        playMusic('menu'); // Switch back to menu music
+    if (nodeId === "main_menu" || nodeId === "go_to_path_selection") {
+        playMusic('menu'); 
         
+
         document.getElementById('vn-game-screen').classList.add('hidden');
         document.getElementById('vn-game-screen').style.display = 'none';
         
-        // Show the map again
+        // Show Path Selection Screen Directly
         const pathScreen = document.getElementById('path-selection-screen');
         pathScreen.classList.remove('hidden');
         pathScreen.style.display = 'flex';
 
-        // Reset resource bar to menu mode (top right)
+        // Reset resource bar to menu mode
         const resBar = document.getElementById('vn-resource-bar');
         resBar.classList.remove('game-mode');
         resBar.classList.add('menu-mode');
+
+        
+        updateMapUI(); 
         return;
     }
 
     currentNode = storyData[nodeId];
+    currentNode.id = nodeId;
     if (!currentNode) return;
+
+    window.currentNode = currentNode;
 
     const storyBox = document.getElementById('story-box');
     const storyText = document.getElementById('story-text');
@@ -229,18 +329,31 @@ function renderNode(nodeId) {
         currentNode.choices.forEach(choice => {
             const btn = document.createElement('button');
             btn.className = 'game-btn';
-            btn.innerHTML = choice.text;
+            let displayText = choice.text;
+            btn.innerText = displayText;
+
+    const hasRequirement = choice.requirement;
+    let hasEnough = true;
+
+    if (hasRequirement) {
+        hasEnough = Object.entries(choice.requirement).every(
+            ([res, amt]) => (playerResources[res] || 0) >= amt
+        );
+
+        if (!hasEnough) {
+            btn.disabled = true;
+
+            const reqText = Object.entries(choice.requirement)
+                .map(([res, amt]) => `${amt} ${res}`)
+                .join(", ");
+
+            displayText += ` (${reqText} needed)`;
+        }
+    }
             btn.onclick = (e) => {
-                e.stopPropagation(); 
-                // PERSISTENCE: Resources are updated here and not wiped
-                if (choice.reward) {
-                    for (const [res, amt] of Object.entries(choice.reward)) {
-                        playerResources[res] += amt;
-                    }
-                    updateResourceUI();
-                }
-                addToLog("YOU", choice.text);
-                renderNode(choice.next);
+                e.stopPropagation();
+                if (btn.disabled) return;
+                selectChoice(choice);
             };
             container.appendChild(btn);
         });
@@ -254,16 +367,7 @@ function renderNode(nodeId) {
     document.getElementById('vn-game-screen').style.display = 'none';
     document.getElementById('path-selection-screen').classList.remove('hidden');
     document.getElementById('path-selection-screen').style.display = 'flex';
-
-    // UNLOCK LOGIC: 
-    // If player finished ch1_start, unlock BOTH branches for the demo
-    if (!unlockedNodes.includes("ch1_scorched")) {
-        unlockedNodes.push("ch1_scorched", "ch1_spring");
     }
-
-    updateMapUI(); 
-    return;
-}
 }
 
 function handleGlobalClick() {
@@ -313,8 +417,11 @@ function toggleLog(e) {
 function showCampaign() {
     document.getElementById('main-menu-screen').classList.add('hidden');
     document.getElementById('campaign-screen').classList.remove('hidden');
+    
+    // Fix: Ensure resource bar shows up correctly in menu-mode
     const resBar = document.getElementById('vn-resource-bar');
     resBar.classList.add('active', 'menu-mode');
+    resBar.classList.remove('game-mode'); // Ensure it's not in game-mode
     resBar.style.display = 'flex';
 }
 
@@ -333,7 +440,11 @@ function goBackToChapters() {
 function goBackToMenu() {
     document.getElementById('campaign-screen').classList.add('hidden');
     document.getElementById('main-menu-screen').classList.remove('hidden');
-    document.getElementById('vn-resource-bar').style.display = 'none';
+    
+    // FIX: Completely hide and reset the resource bar classes
+    const resBar = document.getElementById('vn-resource-bar');
+    resBar.style.display = 'none';
+    resBar.classList.remove('active', 'menu-mode', 'game-mode');
 }
 
 function updateResourceUI() {

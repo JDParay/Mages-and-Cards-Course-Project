@@ -1,0 +1,95 @@
+{
+  "ch1_level2_start": {
+    "text": "The forest thickens as Antakin leads you deeper. A chill settles in, and the shadows stretch unnaturally between the trees. You notice movement—shapes twisted and writhing, corrupted by dark mana.",
+    "uiType": "narrative",
+    "next": "antakin_level2_instruction"
+  },
+
+  "antakin_level2_instruction": {
+    "mageName": "ANTAKIN",
+    "mageText": "Here… I’ll stay back for now. Do exactly what you did before. Trust your instincts.",
+    "uiType": "mage",
+    "next": "level2_card_choice"
+  },
+
+  "level2_card_choice": {
+    "text": "Two cards float before you, glowing softly. Choose one.",
+    "uiType": "cards",
+    "choices": [
+      { "text": "Thunderstrike (Attack)", "next": "level2_result_1" },
+      { "text": "Unkept Flames (Attack)", "next": "level2_result_1" }
+    ]
+  },
+
+  "level2_result_1": {
+    "text": "You strike. The first corrupted creature falls. Another appears. You act again. Choose a card.",
+    "uiType": "cards",
+    "choices": [
+      { "text": "Thunderstrike (Attack)", "next": "level2_result_1_1" },
+      { "text": "Unkept Flames (Attack)", "next": "level2_result_1_1" }
+    ]
+  },
+
+  "level2_result_1_1": {
+    "text": "You strike again. And once more, you strike—each blow swift and unerring. Choose a card.",
+    "uiType": "cards",
+    "choices": [
+      { "text": "Thunderstrike (Attack)", "next": "level2_result_1_2" },
+      { "text": "Unkept Flames (Attack)", "next": "level2_result_1_2" }
+    ]
+  },
+
+  "level2_result_1_2": {
+    "text": "The urge to do it again, why it was breathtaking… You use one more card.",
+    "uiType": "cards",
+    "choices": [
+      { "text": "Thunderstrike (Attack)", "next": "antakin_level2_warning" },
+      { "text": "Unkept Flames (Attack)", "next": "antakin_level2_warning" }
+    ]
+  },
+
+  "antakin_level2_warning": {
+    "mageName": "ANTAKIN",
+    "mageText": "Okay, i think that's enough... Quite concerning. It might be altering something… in your mind.",
+    "uiType": "mage",
+    "next": "response_options"
+  },
+
+  "response_options": {
+    "text": "A shiver runs down your spine. You scold yourself internally, but… Antakin might be right. Something feels different… heavier.",
+    "uiType": "standard",
+    "choices": [
+      { "text": "…Ngh, my head does hurt...", "next": "antakin_softens" },
+      { "text": "I think... i'll be fine.", "next": "antakin_concern" }
+    ]
+  },
+
+  "antakin_softens": {
+    "mageName": "ANTAKIN",
+    "mageText": "Oh dear, maybe I was a bit impulsive letting you slaughter those creatures...",
+    "uiType": "mage",
+    "next": "antakin_leads_back"
+  },
+
+  "antakin_concern": {
+    "mageName": "ANTAKIN",
+    "mageText": "Stubborn, eh? That's not quite what I envisioned... Hmm...",
+    "uiType": "mage",
+    "next": "antakin_leads_back"
+  },
+
+  "antakin_leads_back": {
+    "mageName": "ANTAKIN",
+    "mageText": "Come. Let’s return to where you woke up. We need to understand this before we go any further.",
+    "uiType": "mage",
+    "next": "ch1_level2_end"
+  },
+
+  "ch1_level2_end": {
+    "text": "You follow Antakin back through the shadowed forest. The corrupted shapes fade behind you, leaving only the whisper of mana and the questions you cannot yet answer.",
+    "uiType": "standard",
+    "choices": [
+      { "text": "Continue", "next": "go_to_path_selection", "unlockTag": "ch1_level2_done" }
+    ]
+  }
+}
