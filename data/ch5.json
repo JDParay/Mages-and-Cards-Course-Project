@@ -1,0 +1,174 @@
+{
+    "level5_start": {
+        "text": "You and Antakin descend toward the shoreline. Below, a group of mages and their apprentices move with urgent purpose.",
+        "uiType": "narrative",
+        "next": "stage5_observation"
+    },
+
+    "stage5_observation": {
+        "mageName": "ANTAKIN",
+        "mageText": "Look at them... they’re preparing for something big.",
+        "uiType": "mage",
+        "next": "aelthred_approach"
+    },
+
+    "aelthred_approach": {
+        "text": "A mage with eyes like the deep ocean walks toward you. Her presence is calming, yet commanding.",
+        "uiType": "narrative",
+        "next": "aelthred_intro"
+    },
+
+    "aelthred_intro": {
+        "mageName": "AELTHRED",
+        "mageText": "Antakin. Is this the human Valor spoke of in her letters?",
+        "uiType": "mage",
+        "next": "antakin_confirms"
+    },
+
+    "antakin_confirms": {
+        "mageName": "ANTAKIN",
+        "mageText": "It is. The new holder of the deck.",
+        "uiType": "mage",
+        "next": "player_shock"
+    },
+
+    "player_shock": {
+        "text": "You blink in surprise. How many people knew you were coming?",
+        "uiType": "standard",
+        "choices": [
+            { "text": "She knows about me?", "next": "aelthred_letter_reveal" }
+        ]
+    },
+
+    "aelthred_letter_reveal": {
+        "mageName": "AELTHRED",
+        "mageText": "I received the letter first, actually. I was the one who passed it to Antakin.",
+        "uiType": "mage",
+        "next": "antakin_flushed"
+    },
+
+    "antakin_flushed": {
+        "mageName": "ANTAKIN",
+        "mageText": "Hey! It was meant for me anyway, so it doesn't matter who touched it first!",
+        "uiType": "mage",
+        "next": "aelthred_warning"
+    },
+
+    "aelthred_warning": {
+        "mageName": "AELTHRED",
+        "mageText": "The deck you hold is vulnerable. You must learn to defend yourself in the battles to come. Physically, Mentally, and Magically",
+        "uiType": "mage",
+        "next": "player_weakness"
+    },
+
+    "player_weakness": {
+        "text": "You look at the cards. Despite everything, you feel small. Unready. A fraud.",
+        "uiType": "narrative",
+        "next": "head_swelling"
+    },
+
+    "head_swelling": {
+        "text": "Suddenly, your head begins to swell. That dark pressure from before starts to claw at your temples.",
+        "uiType": "narrative",
+        "next": "aelthred_dispel"
+    },
+
+    "aelthred_dispel": {
+        "text": "Aelthred snaps a card between her fingers. A wave of cool mist washes over you, dispelling the distress instantly.",
+        "uiType": "narrative",
+        "next": "aelthred_mordu_target"
+    },
+
+    "aelthred_mordu_target": {
+        "mageName": "AELTHRED",
+        "mageText": "Mordu has marked you. He knows exactly what you are capable of becoming.",
+        "uiType": "mage",
+        "next": "aelthred_mordu_mystery"
+    },
+
+    "aelthred_mordu_mystery": {
+        "mageName": "AELTHRED",
+        "mageText": "It makes me wonder... he must have been very close to Valor to know her plans for you.",
+        "uiType": "mage",
+        "next": "player_mordu_question"
+    },
+
+    "player_mordu_question": {
+        "text": "The name Mordu feels like a curse on your tongue.",
+        "uiType": "standard",
+        "choices": [
+            { "text": "Do you know more about him?", "next": "aelthred_mordu_lore" },
+            { "text": "How can I stop him?", "next": "aelthred_mordu_lore" }
+        ]
+    },
+
+    "aelthred_mordu_lore": {
+        "mageName": "AELTHRED",
+        "mageText": "He was once an apprentice. Then he discovered the 'Sorcerous'—the power to devour a mage's magic and twist it.",
+        "uiType": "mage",
+        "next": "aelthred_trial_info"
+    },
+
+    "aelthred_trial_info": {
+        "mageName": "AELTHRED",
+        "mageText": "To defeat him, you must best him in a Trial of Earth. But you aren't strong enough yet.",
+        "uiType": "mage",
+        "next": "aelthred_training_plan"
+    },
+
+    "aelthred_training_plan": {
+        "mageName": "AELTHRED",
+        "mageText": "You must seek the Great Mages: Calla of Reflection, Griamhan of Roots, and Humulus of Eras.",
+        "uiType": "mage",
+        "next": "aelthred_training_plan_2"
+    },
+
+    "aelthred_training_plan_2": {
+        "mageName": "AELTHRED",
+        "mageText": "They do not like to be disturbed, but with Valor's deck on the line, they might as well listen.",
+        "uiType": "mage",
+        "next": "aelthred_final_advice"
+    },
+
+    "aelthred_final_advice": {
+        "mageName": "AELTHRED",
+        "mageText": "Keep hope in your heart. Trust yourself. It is the only shield Mordu cannot break.",
+        "uiType": "mage",
+        "next": "aelthred_calla_mission"
+    },
+
+    "aelthred_calla_mission": {
+        "mageName": "AELTHRED",
+        "mageText": "Go to Calla first. Follow the moon rays across the ocean. They will lead you to her.",
+        "uiType": "mage",
+        "next": "antakin_watch"
+    },
+
+    "antakin_watch": {
+        "mageName": "ANTAKIN",
+        "mageText": "Don't worry. I'll keep a close watch on this one.",
+        "uiType": "mage",
+        "next": "aelthred_warning_final"
+    },
+
+    "aelthred_warning_final": {
+        "mageName": "AELTHRED",
+        "mageText": "You better. We can't let Mordu get the upper hand.",
+        "uiType": "mage",
+        "next": "boat_departure"
+    },
+
+    "boat_departure": {
+        "text": "You pack your resources and step into the boat. The water ripples beneath you as you prepare for the long journey ahead.",
+        "uiType": "narrative",
+        "next": "demo_end_modal"
+    },
+
+    "demo_end_modal": {
+        "text": "END OF DEMO. Thank you for playing! This version has been prepared specifically for submission.",
+        "uiType": "standard",
+        "choices": [
+            { "text": "Return to Menu", "next": "go_to_path_selection" }
+        ]
+    }
+}

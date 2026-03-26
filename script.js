@@ -1,14 +1,42 @@
 const isDev = true;
 
 if (isDev) {
+  // 1. Set resources on script load
+  window.forestMana = 99;
+  window.oceanMana = 99;
+  window.landMana = 99;
+  
+  // 2. Add a shortcut to "Refill" resources instantly
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'E' || e.key === 'e') {
-      if (window.currentNode && window.currentNode.next) {
-        startVN(window.currentNode.next);
-      } else {
-        console.warn('No current node or next node to skip to.');
+    if (e.key === 'R' || e.key === 'r') {
+      window.forestMana = 99;
+      window.oceanMana = 99;
+      window.landMana = 99;
+      
+      // Call your existing UI update function if you have one
+      if (typeof updateResourceUI === 'function') {
+        updateResourceUI();
       }
+      console.log("Resources Refilled: 99+");
     }
+  });
+
+  document.addEventListener('keydown', (e) => {
+
+    if (e.key === 'E' || e.key === 'e') {
+
+      if (window.currentNode && window.currentNode.next) {
+
+        startVN(window.currentNode.next);
+
+      } else {
+
+        console.warn('No current node or next node to skip to.');
+
+      }
+
+    }
+
   });
 }
 
@@ -21,7 +49,7 @@ const GameAudio = {
         }
     },
     sfx: {
-        volume: 0.5,
+        volume: .5,
         tracks: {
             button: new Audio('audio/sfx_button.mp3'),
             tap: new Audio('audio/sfx_tap.mp3')
@@ -65,6 +93,7 @@ async function loadChapter(file) {
 
 async function startLevel(file, startNode) {
     await loadChapter(file);
+    playSFX('button');
     startVN(startNode);
 }
 
@@ -133,6 +162,8 @@ function updateMapUI() {
     // --- STEP 1: If 1 is done, unlock 2 & 3 ---
     // Note: 'ch1_start_done' is a tag we add when Level 1 finishes
     if (unlockedNodes.includes("ch1_start_done")) {
+        const q2 = document.getElementById('q-2');
+        q2.classList.remove('hidden');
         unlockQuest('q-2', 'ENTER');
     }
 
@@ -143,26 +174,29 @@ function updateMapUI() {
         unlockQuest('q-2-1', 'ENTER');
     }
 
-
-    if (unlockedNodes.includes("ch1_scorched_done")) {
-    const q31 = document.getElementById('q-3-1');
-    q31.classList.remove('hidden');
-
-    if (playerResources.ocean >= 50) {
-        unlockQuest('q-3-1', 'ENTER');
-    } else {
-        q31.querySelector('.quest-action').innerText = "50💧 REQ";
-    }
+    if (unlockedNodes.includes("ch1_defense_done")) {
+        const q3 = document.getElementById('q-3');
+        q3.classList.remove('hidden');
+        unlockQuest('q-3', 'ENTER');
 }
 
-    // --- STEP 4: If 3.1 is done, show 3.2 and 4 ---
-    if (unlockedNodes.includes("ch1_ocean_canon_done")) {
-        document.getElementById('q-3-2').classList.remove('hidden');
-        unlockQuest('q-3-2', 'ENTER');
-        
-        document.getElementById('q-4').classList.remove('hidden');
-        unlockQuest('q-4', 'ENTER');
-    }
+    if (unlockedNodes.includes("stage3_1_unlocked")) {
+    const q31 = document.getElementById('q-3-1');
+    q31.classList.remove('hidden');
+    unlockQuest('q-3-1', 'ENTER');
+}
+
+if (unlockedNodes.includes("stage4_unlocked")) {
+    const q4 = document.getElementById('q-4');
+    q4.classList.remove('hidden');
+    unlockQuest('q-4', 'ENTER');
+}
+
+if (unlockedNodes.includes("stage5_unlocked")) {
+    const q5 = document.getElementById('q-5');
+    q5.classList.remove('locked');
+    unlockQuest('q-5', 'ENTER');
+}
 }
 
 // HELPER: This prevents you from typing the same code 10 times
@@ -176,6 +210,7 @@ function unlockQuest(id, text) {
 }
 
 function selectChoice(choice) {
+    playSFX('button');
     // 🚫 REQUIREMENT CHECK
     if (choice.requirement) {
         for (const [res, amt] of Object.entries(choice.requirement)) {
@@ -265,8 +300,11 @@ function typeWriter(element, text, callback) {
 function renderNode(nodeId) {
     if (nodeId === "main_menu" || nodeId === "go_to_path_selection") {
         playMusic('menu'); 
-        
 
+        if (window.currentNode && window.currentNode.id === "demo_end_modal") {
+        showDemoCompletePopup();
+    }
+        
         document.getElementById('vn-game-screen').classList.add('hidden');
         document.getElementById('vn-game-screen').style.display = 'none';
         
@@ -327,10 +365,13 @@ function renderNode(nodeId) {
         const container = currentNode.uiType === "standard" ? standardContainer : cardContainer;
         
         currentNode.choices.forEach(choice => {
-            const btn = document.createElement('button');
-            btn.className = 'game-btn';
-            let displayText = choice.text;
-            btn.innerText = displayText;
+    const btn = document.createElement('button');
+    btn.className = 'game-btn';
+    let displayText = choice.text;
+    btn.innerText = displayText;
+
+    // ✅ Add tooltip here
+    if (choice.tooltip) btn.title = choice.tooltip;
 
     const hasRequirement = choice.requirement;
     let hasEnough = true;
@@ -347,16 +388,17 @@ function renderNode(nodeId) {
                 .map(([res, amt]) => `${amt} ${res}`)
                 .join(", ");
 
-            displayText += ` (${reqText} needed)`;
+            btn.title = choice.tooltip || `Need ${reqText}`;
         }
     }
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                if (btn.disabled) return;
-                selectChoice(choice);
-            };
-            container.appendChild(btn);
-        });
+
+    btn.onclick = (e) => {
+        e.stopPropagation();
+        if (btn.disabled) return;
+        selectChoice(choice);
+    };
+    container.appendChild(btn);
+});
     }
 
     if (nodeId === "main_menu") {
@@ -370,7 +412,23 @@ function renderNode(nodeId) {
     }
 }
 
+function showDemoCompletePopup() {
+    const popup = document.getElementById('demo-complete-popup');
+    const overlay = document.getElementById('modal-overlay');
+    if (popup && overlay) {
+        popup.style.display = 'block';
+        overlay.style.display = 'block';
+    }
+}
+
+// NEW FUNCTION: Add this to handle closing the specific popup
+function closeDemoPopup() {
+    document.getElementById('demo-complete-popup').style.display = 'none';
+    document.getElementById('modal-overlay').style.display = 'none';
+}
+
 function handleGlobalClick() {
+    playSFX('tap');
     const logModal = document.getElementById('history-log');
     if (logModal.style.display === 'flex') return;
 
@@ -415,6 +473,7 @@ function toggleLog(e) {
 }
 
 function showCampaign() {
+    playSFX('button');
     document.getElementById('main-menu-screen').classList.add('hidden');
     document.getElementById('campaign-screen').classList.remove('hidden');
     
@@ -426,18 +485,21 @@ function showCampaign() {
 }
 
 function showPathSelection(chapterId) {
+    playSFX('button');
     document.getElementById('campaign-screen').classList.add('hidden');
     document.getElementById('path-selection-screen').classList.remove('hidden');
     document.getElementById('path-selection-screen').style.display = 'flex';
 }
 
 function goBackToChapters() {
+    playSFX('button');
     document.getElementById('path-selection-screen').classList.add('hidden');
     document.getElementById('path-selection-screen').style.display = 'none';
     document.getElementById('campaign-screen').classList.remove('hidden');
 }
 
 function goBackToMenu() {
+    playSFX('button');
     document.getElementById('campaign-screen').classList.add('hidden');
     document.getElementById('main-menu-screen').classList.remove('hidden');
     
@@ -448,22 +510,36 @@ function goBackToMenu() {
 }
 
 function updateResourceUI() {
-    document.getElementById('res-land').innerText = playerResources.land;
-    document.getElementById('res-ocean').innerText = playerResources.ocean;
-    document.getElementById('res-forest').innerText = playerResources.forest;
+
+    if (isDev) {
+        playerResources.land = 99;
+        playerResources.ocean = 99;
+        playerResources.forest = 99;
+    }
+
+    document.getElementById('res-land').innerText = isDev ? "99+" : playerResources.land;
+    document.getElementById('res-ocean').innerText = isDev ? "99+" : playerResources.ocean;
+    document.getElementById('res-forest').innerText = isDev ? "99+" : playerResources.forest;
+
+    if (currentNode && currentNode.uiType === "cards") {
+        renderNode(currentNode.id);
+    }
 }
 
 function openOptions() {
+    playSFX('button');
     document.getElementById('options-modal').style.display = 'block';
     document.getElementById('modal-overlay').style.display = 'block';
 }
 
 function openCredits() {
+    playSFX('button');
     document.getElementById('credits-modal').style.display = 'block';
     document.getElementById('modal-overlay').style.display = 'block';
 }
 
 function closeModals() {
+    playSFX('button');
     document.getElementById('options-modal').style.display = 'none';
     document.getElementById('credits-modal').style.display = 'none';
     document.getElementById('modal-overlay').style.display = 'none';

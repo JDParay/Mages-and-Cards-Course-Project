@@ -1,0 +1,151 @@
+{
+    "level4_start": {
+        "text": "The air feels thinner now. You can’t shake the sensation of being stalked.",
+        "uiType": "narrative",
+        "next": "level4_sensations_1"
+    },
+
+    "level4_sensations_1": {
+        "text": "Every muscle aches. It feels like your body has experienced death, rebirth, and hell all at once.",
+        "uiType": "narrative",
+        "next": "level4_sensations_2"
+    },
+
+    "level4_sensations_2": {
+        "text": "The voice that spoke to you, you try to make it disappear. Turn his voice back into a mystery.",
+        "uiType": "narrative",
+        "next": "asking_about_valor"
+    },
+
+    "asking_about_valor": {
+        "text": "The silence was too much for the voice to eventually return. So, you turn to Antakin and finally ask the question that’s been haunting you.",
+        "uiType": "narrative",
+        "next": "asking_about_valor_2"
+    },
+
+    "asking_about_valor_2": {
+        "text": "You ask her about Valor. Who she really was... and why she left.",
+        "uiType": "standard",
+        "choices": [
+            { "text": "What really happened before I woke up?", "next": "antakin_revelation_protege" },
+            { "text": "Did she request you to take care of me?", "next": "antakin_revelation_protege" }
+        ]
+    },
+
+    "antakin_revelation_protege": {
+        "mageName": "ANTAKIN",
+        "mageText": "Well, to be frank, I discovered a letter that today was the day you'd be awake from your slumber.",
+        "uiType": "mage",
+        "next": "antakin_revelation_guessing"
+    },
+
+    "antakin_revelation_guessing": {
+        "mageName": "ANTAKIN",
+        "mageText": "Didn't really require any strength to realize that the letter was from Valor.",
+        "uiType": "mage",
+        "next": "antakin_revelation_protege_2"
+    },
+
+    "antakin_revelation_protege_2": {
+        "mageName": "ANTAKIN",
+        "mageText": "She wanted you to be the next protégé. The one to carry her magic deck.",
+        "uiType": "mage",
+        "next": "antakin_giggles"
+    },
+
+    "antakin_giggles": {
+        "mageName": "ANTAKIN",
+        "mageText": "Heh... honestly, I couldn't help but giggle. No offense, but you're just a frail human.",
+        "uiType": "mage",
+        "next": "antakin_giggles_2"
+    },
+
+    "antakin_giggles_2": {
+        "mageName": "ANTAKIN",
+        "mageText": "How did she see it in you? What did she know that I'm missing?",
+        "uiType": "mage",
+        "next": "player_valor_doubt_choice"
+    },
+
+    "player_valor_doubt_choice": {
+        "text": "You look at your hands, then back at Antakin.",
+        "uiType": "standard",
+        "choices": [
+            { "text": "Did she really see something in me?", "next": "antakin_response_vision" },
+            { "text": "Well, I doubt she was right.", "next": "antakin_response_doubt" }
+        ]
+    },
+
+    "antakin_response_vision": {
+        "mageName": "ANTAKIN",
+        "mageText": "I don't know. But she had a sense for the world. She saw beauty where we see mess.",
+        "uiType": "mage",
+        "next": "antakin_response_vision_2"
+    },
+
+    "antakin_response_vision_2": {
+        "mageName": "ANTAKIN",
+        "mageText": "If she bet on you, she had a reason. I trust her judgment over mine.",
+        "uiType": "mage",
+        "next": "path_becomes_silent"
+    },
+
+    "antakin_response_doubt": {
+        "mageName": "ANTAKIN",
+        "mageText": "Heh, I have my doubts too. You're a mess, kid.",
+        "uiType": "mage",
+        "next": "antakin_response_doubt_2"
+    },
+
+    "antakin_response_doubt_2": {
+        "mageName": "ANTAKIN",
+        "mageText": "But it feels wrong to doubt someone I trust so much. If she chose you, I'll follow.",
+        "uiType": "mage",
+        "next": "path_becomes_silent"
+    },
+
+    "path_becomes_silent": {
+        "text": "The path remains silent for twenty minutes. Only the sound of your boots on the gravel remains.",
+        "uiType": "narrative",
+        "next": "mordu_fades_1"
+    },
+
+    "mordu_fades_1": {
+        "text": "Within those past minutes, the lingering of doubt began to fade.",
+        "uiType": "narrative",
+        "next": "mordu_fades_2"
+    },
+
+    "mordu_fades_2": {
+        "text": "Hope was reignited. Mind began to clear.",
+        "uiType": "narrative",
+        "next": "mordu_fades_3"
+    },
+
+    "mordu_fades_3": {
+        "text": "The voices are gone. That feeling of being watched? It finally vanished.",
+        "uiType": "narrative",
+        "next": "level4_conclusion"
+    },
+
+    "level4_conclusion": {
+        "text": "You find yourself smiling as you think of Valor. It would be such honor to find out what truly happened.",
+        "uiType": "narrative",
+        "next": "antakin_final"
+    },
+
+    "antakin_final": {
+        "mageName": "ANTAKIN",
+        "mageText": "We're here. The Bay of Truth.",
+        "uiType": "mage",
+        "next": "bay_of_truth"
+    },
+
+    "bay_of_truth": {
+        "text": "In front of you is the Bay of Truth, home of the Murmuring Siren... Aelthred.",
+        "uiType": "standard",
+        "choices": [
+            { "text": "Continue", "next": "go_to_path_selection", "unlockTag": "stage5_unlocked", "reward": { "ocean": 5 } }
+        ]
+    }
+}

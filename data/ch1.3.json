@@ -1,0 +1,156 @@
+{
+    "level3_path_follow": {
+        "text": "You follow the path with Antakin, feeling the subtle hum of the cards under your fingers.",
+        "uiType": "narrative",
+        "next": "level3_path_follow_2"
+    },
+
+    "level3_path_follow_2": {
+        "text": "Antakin begins to speak, her voice sounding heavier than usual—weighted down by old memories.",
+        "uiType": "narrative",
+        "next": "antakin_talks_about_valor"
+    },
+
+    "antakin_talks_about_valor": {
+        "mageName": "ANTAKIN",
+        "mageText": "Valor had to sacrifice herself to hold back the corruption. But it wasn't enough.",
+        "uiType": "mage",
+        "next": "antakin_talks_about_mordu"
+    },
+
+    "antakin_talks_about_mordu": {
+        "mageName": "ANTAKIN",
+        "mageText": "There’s someone you need to know about: Mordu. A shapeshifter who devours the land to grow stronger.",
+        "uiType": "mage",
+        "next": "antakin_talks_about_mordu_2"
+    },
+
+    "antakin_talks_about_mordu_2": {
+        "mageName": "ANTAKIN",
+        "mageText": "What he leaves behind is nothing but devastation. Pure silence.",
+        "uiType": "mage",
+        "next": "mordu_voice_intro"
+    },
+
+    "mordu_voice_intro": {
+        "text": "Suddenly, a sharp pang pierces your mind. A cold, oily voice fills your head.",
+        "uiType": "narrative",
+        "next": "mordu_voice_intro_2"
+    },
+
+    "mordu_voice_intro_2": {
+        "text": "Mordu. 'Use the cards for evil,' he whispers. 'This world has nothing left but sadness anyway.'",
+        "uiType": "narrative",
+        "next": "mordu_voice_intro_3"
+    },
+
+    "mordu_voice_intro_3": {
+        "text": "'Isn’t it curious?' the voice coaxes. 'Imagine the power you could wield...'",
+        "uiType": "narrative",
+        "next": "mordu_offer_choice"
+    },
+
+    "mordu_offer_choice": {
+        "text": "Mordu whispers promises: 'I am only a servant. You... you are the one who can claim all of this.'",
+        "uiType": "cards",
+        "choices": [
+            { "text": "…Don’t listen.", "next": "f1_dont_listen", "unlockTag": "stage4_unlocked", "reward": { "forest": 5 } },
+            { "text": "…Curious.", "next": "f2_curious", "unlockTag": "stage3_1_unlocked" }
+        ]
+    },
+
+    "f1_dont_listen": {
+        "text": "Mordu grumbles angrily, his voice fading like a dying echo.",
+        "uiType": "narrative",
+        "next": "f1_dont_listen_2"
+    },
+
+    "f1_dont_listen_2": {
+        "text": "A sudden splash of water from Antakin's flask jolts you back to reality.",
+        "uiType": "narrative",
+        "next": "antakin_wakes_player"
+    },
+
+    "antakin_wakes_player": {
+        "mageName": "ANTAKIN",
+        "mageText": "Hah… you alright? You spaced out for a moment there, kid.",
+        "uiType": "mage",
+        "next": "f1_player_response"
+    },
+
+    "f1_player_response": {
+        "text": "You try to explain what you felt...",
+        "uiType": "standard",
+        "choices": [
+            { "text": "Eugh... What happened?", "next": "antakin_response_what_happened" },
+            { "text": "I… I… just talked to someone", "next": "antakin_response_talked" }
+        ]
+    },
+
+    "antakin_response_what_happened": {
+        "mageName": "ANTAKIN",
+        "mageText": "Nothing you can’t handle. But you need more practice—with the cards, and with yourself.",
+        "uiType": "mage",
+        "next": "antakin_response_common"
+    },
+
+    "antakin_response_talked": {
+        "mageName": "ANTAKIN",
+        "mageText": "Imaginary or not, you need to sharpen up. Don't let your mind wander into the fog.",
+        "uiType": "mage",
+        "next": "antakin_response_common"
+    },
+
+    "antakin_response_common": {
+        "mageName": "ANTAKIN",
+        "mageText": "Focus up. There's something waiting ahead. Pay attention.",
+        "uiType": "mage",
+        "next": "f1_end"
+    },
+
+    "f1_end": {
+        "text": "You take a deep breath. The path ahead remains dark and uncertain, but it's yours to face.",
+        "uiType": "standard",
+        "choices": [
+            { "text": "Continue", "next": "go_to_path_selection" }
+        ]
+    },
+
+    "f2_curious": {
+        "text": "Compelled by curiosity, you reach for a card and unleash it immediately.",
+        "uiType": "narrative",
+        "next": "f2_curious_2"
+    },
+
+    "f2_curious_2": {
+        "text": "Pain sears through your head. Mordu’s voice giggles, promising the agony is only brief.",
+        "uiType": "narrative",
+        "next": "f2_floating"
+    },
+
+    "f2_floating": {
+        "text": "You breathe in, breathe out, and feel your boots leave the ground. You're lifting.",
+        "uiType": "narrative",
+        "next": "f2_floating_2"
+    },
+
+    "f2_floating_2": {
+        "text": "You hear Antakin shouting instructions, but her voice is miles away. It's too late.",
+        "uiType": "narrative",
+        "next": "f2_floating_3"
+    },
+
+    "f2_floating_3": {
+        "text": "The sludge of Mordu's presence has entered your system. It feels... warm.",
+        "uiType": "narrative",
+        "next": "f2_end"
+    },
+
+    "f2_end": {
+        "text": "The darkness pulses inside you. Curiosity has consequences you can never undo.",
+        "uiType": "standard",
+        "choices": [
+            { "text": "Continue", "next": "go_to_path_selection" }
+        ]
+    }
+}

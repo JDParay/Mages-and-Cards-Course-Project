@@ -2,7 +2,7 @@
 {
 "ch1_level2_subarea1_start": {
   "text": "You stumble as you try to retrace your steps, your legs weak and trembling. Antakin rushes to your side, her eyes wide with concern.",
-  "uiType": "standard",
+  "uiType": "narrative",
   "next": "antakin_checks_cards"
 },
 
@@ -20,11 +20,20 @@
 },
 
 "grab_card": {
-  "text": "Desperate, you snatch a card from Antakin’s deck. Instantly, 20 Land, 10 Ocean, and 10 Forest mana surge into you.",
+  "text": "Desperate, you snatch a card from Antakin’s deck. Your body feeling a surge of strange energy.",
   "uiType": "cards",
   "choices": [
-    { "text": "Use the corrupted card", "next": "corruption_agony" }
-  ]
+    { 
+      "text": "???", 
+      "next": "corruption_agony", 
+      "reward": { "land": 15, "ocean": 15, "forest": 15 } 
+    },
+    { 
+      "text": "???", 
+      "next": "corruption_agony", 
+      "reward": { "land": 15, "ocean": 15, "forest": 15 } 
+    }
+]
 },
 
 "corruption_agony": {
@@ -43,21 +52,51 @@
   "mageName": "ANTAKIN",
   "mageText": "Impossible… How could this happen?!",
   "uiType": "mage",
+  "next": "mordu_1"
+},
+
+"mordu_1": {
+  "mageName": "MORDU",
+  "mageText": "Silly little mage... Once enveloped with power, I shall rise...",
+  "uiType": "mage",
+  "next": "mordu_2"
+},
+
+"mordu_2": {
+  "mageName": "MORDU",
+  "mageText": "Don't even try, Antakin. It was very reckless of you to trust someone quickly...",
+  "uiType": "mage",
   "next": "mordu_attack"
 },
 
 "mordu_attack": {
-  "text": "Mordu snaps its neck with terrifying speed. Everything around you collapses into a void of nothingness.",
+  "text": "Mordu snaps your neck. You heard a glimpse of gasp before the deafening noise came. Everything around you collapses into a void of nothingness.",
   "uiType": "narrative",
-  "next": "void_voice"
+  "next": "void_voice_1"
 },
 
-"void_voice": {
-  "text": "A distant voice speaks through the emptiness: 'Your journey has not yet ended. Endure… and return to the beginning.'",
+"void_voice_1": {
+  "text": "...",
   "uiType": "narrative",
-  "choices": [
-    { "text": "…", "next": "ch1_level2_subarea1_end", "unlockTag": "ch1_level2_subarea1_done" }
-  ]
+  "next": "void_voice_2"
+},
+
+"void_voice_2": {
+  "text": "Nothing but silence.",
+  "uiType": "narrative",
+  "next": "void_voice_3"
+},
+
+"void_voice_3": {
+  "text": "In the void, nothing exists... But a faint voice whispered through.",
+  "uiType": "narrative",
+  "next": "void_voice_4"
+},
+
+"void_voice_4": {
+  "text": "'Your journey has not yet ended. Endure… \nand return to the beginning.'",
+  "uiType": "narrative",
+  "next": "ch1_level2_subarea1_end"
 },
 
 "ch1_level2_subarea1_end": {

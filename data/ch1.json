@@ -1,43 +1,37 @@
 {
   "ch1_start": {
-    "text": "…Warmth.\n\nA fading dream clings to you like morning mist.\n\nYou remember a voice—calm, familiar—chanting a spell you once knew by heart. The words slip away the moment you reach for them.\n\nThen… silence.\n\nYour eyes snap open.",
+    "text": "…Warmth. A fading dream clings to you like morning mist. You remember a voice—calm, familiar—chanting a spell you once knew by heart. The words slip away the moment you reach for them. Then… silence. Your eyes snap open.",
     "uiType": "narrative",
     "next": "ch1_wakeup"
   },
-
   "ch1_wakeup": {
-    "text": "You sit upright, breath uneven. The air feels wrong—heavy, as if the world itself has been holding its breath.\n\nHow long were you asleep?\n\nThe last thing you remember… was your mentor.",
+    "text": "You sit upright, breath uneven. The air feels wrong—heavy, as if the world itself has been holding its breath. How long were you asleep? The last thing you remember… was your mentor.",
     "uiType": "narrative",
     "next": "ch1_outside"
   },
-
   "ch1_outside": {
-    "text": "You step outside.\n\nThe forest greets you—\n\n—but something is terribly wrong.\n\nLeaves crumble at the slightest touch. Bark peels away like ash. A faint purple glow pulses beneath the soil, spreading like a disease.\n\nThe land is… rotting.\n\n\"What happened… while I was asleep?\"",
+    "text": "You step outside. The forest greets you— but something is terribly wrong. Leaves crumble at the slightest touch. Bark peels away like ash. A faint purple glow pulses beneath the soil, spreading like a disease. The land is… rotting. \"What happened… while I was asleep?\"",
     "uiType": "narrative",
     "next": "antakin_intro_unknown"
   },
-
   "antakin_intro_unknown": {
     "mageName": "???",
-    "mageText": "So… you finally woke up.\n\nI was beginning to think you’d sleep through the end of the world.",
+    "mageText": "So… you finally woke up. I was beginning to think you’d sleep through the end of the world.",
     "uiType": "mage",
     "next": "antakin_intro_reveal"
   },
-
   "antakin_intro_reveal": {
     "mageName": "ANTAKIN",
-    "mageText": "…Sorry. That was harsher than I meant.\n\nMy name is Antakin.\n\nAnd… a lot has changed.",
+    "mageText": "…Sorry. That was harsher than I meant. My name is Antakin. And… a lot has changed.",
     "uiType": "mage",
     "next": "antakin_explains_time"
   },
-
   "antakin_explains_time": {
     "mageName": "ANTAKIN",
-    "mageText": "It’s been a year.\n\nA whole year since your mentor… since Valor died.\n\nThe barrier protecting this land shattered not long after.\n\nSince then, corruption has been spreading—slowly, but relentlessly.",
+    "mageText": "It’s been a year. A whole year since your mentor… since Valor died. The barrier protecting this land shattered not long after. Since then, corruption has been spreading—slowly, but relentlessly.",
     "uiType": "mage",
     "next": "response_options"
   },
-
   "response_options": {
     "text": "A year…? Your chest tightens. The memories refuse to return. How do you respond?",
     "uiType": "standard",
@@ -46,64 +40,59 @@
       { "text": "Tell me everything. Now.", "next": "antakin_direct" }
     ]
   },
-
   "antakin_softens": {
     "mageName": "ANTAKIN",
-    "mageText": "I know. I didn’t want to believe it either.\n\nBut I was there.\n\nI saw what happened… or at least, what we thought happened.",
+    "mageText": "I know. I didn’t want to believe it either. But I was there. I saw what happened… or at least, what we thought happened.",
     "uiType": "mage",
     "next": "antakin_cards_intro"
   },
-
   "antakin_direct": {
     "mageName": "ANTAKIN",
-    "mageText": "Straight to the point, huh…\n\nAlright.\n\nThe barrier broke. Creatures twisted by mana began appearing.\n\nAnd Valor… didn’t make it out.\n\nAt least… that’s what everyone believes.",
+    "mageText": "Straight to the point, huh… Alright. The barrier broke. Creatures twisted by mana began appearing. And Valor… didn’t make it out. At least… that’s what everyone believes.",
     "uiType": "mage",
     "next": "antakin_cards_intro"
   },
-
   "antakin_cards_intro": {
     "mageName": "ANTAKIN",
-    "mageText": "Before everything collapsed… Valor left something behind.\n\nFor you.\n\nThese cards—they’re infused with their magic.\n\nI don’t fully understand them, but… they respond to you.",
+    "mageText": "Before everything collapsed… Valor left something behind. For you. These cards—they’re infused with their magic. I don’t fully understand them, but… they respond to you.",
     "uiType": "mage",
     "next": "antakin_cards_hint"
   },
-
   "antakin_cards_hint": {
     "mageName": "ANTAKIN",
-    "mageText": "…And between us?\n\nI don’t think Valor is gone.\n\nCall it foolish, but… I feel like they’re still out there.\n\nLike these cards are trying to say something we haven’t figured out yet.",
+    "mageText": "…And between us? I don’t think Valor is gone. Call it foolish, but… I feel like they’re still out there. Like these cards are trying to say something we haven’t figured out yet.",
     "uiType": "mage",
     "next": "antakin_tutorial"
   },
-
   "antakin_tutorial": {
     "mageName": "ANTAKIN",
-    "mageText": "No time to dwell on it.\n\nCome—I’ll show you how the cards work.\n\nThere’s a corrupted creature nearby.",
+    "mageText": "No time to dwell on it. Come—I’ll show you how the cards work. There’s a corrupted creature nearby.",
     "uiType": "mage",
     "next": "first_card_choice"
   },
-
   "first_card_choice": {
-    "text": "A twisted beast emerges, its body flickering with unstable mana.\nAntakin steps back. \"Focus. Choose a card.\"",
+    "text": "A twisted beast emerges, its body flickering with unstable mana. Antakin steps back. \"Focus. Choose a card.\"",
     "uiType": "cards",
     "choices": [
-      { "text": "Scorching Ruin (Attack)", "next": "f1_result", "reward": { "land": 5 } },
-      { "text": "Verdant Barrier (Stun) [Requires 20 Land]", "next": "second_card_choice" }
+      { "text": "Scorching Ruin (Wrath)", "next": "f1_result", "reward": { "land": 5 } },
+      {"text": "Root Formation (Harmony)",
+      "next": "s2_result",
+      "requirement": { "land": 20 },
+      "reward": { "land": -20 },
+      "tooltip": "Need 20 Land"}
     ]
   },
-
   "f1_result": {
-    "text": "Flames erupt from the card, consuming the creature in a violent burst of mana.\n\nThe beast lets out a distorted cry before dissolving into nothing.",
+    "text": "Flames erupt from the card, consuming the creature in a violent burst of mana. The beast lets out a distorted cry before dissolving into nothing.",
     "uiType": "narrative",
     "next": "antakin_impressed"
   },
-
   "antakin_impressed": {
     "mageName": "ANTAKIN",
-    "mageText": "That was… incredible.\n\nYou handled that far better than I expected.\n\nMaybe Valor really did prepare you for this.",
+    "mageText": "That was… incredible. You handled that far better than I expected. Maybe Valor really did prepare you for this.",
     "uiType": "mage",
     "next": "path_forward_f1"
   },
-
   "path_forward_f1": {
     "text": "The forest still groans under the weight of corruption. But now… you have a way to fight back. Together, you and Antakin step deeper into the unknown.",
     "uiType": "standard",
@@ -111,45 +100,28 @@
       { "text": "Continue", "next": "go_to_path_selection", "unlockTag": "ch1_start_done" }
     ]
   },
-
-  "second_card_choice": {
-    "text": "With enough power gathered, the Verdant Barrier card hums to life.\n\nThe same corrupted beast stands before you once more.",
-    "uiType": "cards",
-    "choices": [
-      {
-        "text": "Verdant Barrier (Stun)",
-        "next": "s2_result",
-        "reward": { "land": -20 },
-        "requirement": { "land": 20 }
-      }
-    ]
-  },
-
   "s2_result": {
-    "text": "Roots burst from the ground, binding the creature in place.\n\nIt struggles—but cannot move.\n\nThe mana around it stabilizes, if only briefly.",
+    "text": "Roots burst from the ground, binding the creature in place. It struggles—but cannot move. The mana around it stabilizes, if only briefly.",
     "uiType": "narrative",
     "next": "antakin_surprised"
   },
-
   "antakin_surprised": {
     "mageName": "ANTAKIN",
-    "mageText": "…That spell.\n\nThat felt exactly like—\n\n…Valor.\n\n\nI… I haven’t felt that presence in a long time.",
+    "mageText": "…That spell. That felt exactly like— …Valor. I… I haven’t felt that presence in a long time.",
     "uiType": "mage",
     "next": "path_forward_s2"
   },
-
   "path_forward_s2": {
     "mageName": "ANTAKIN",
-    "mageText": "Maybe I’m not imagining things after all.\n\n…Come on.\n\nLet’s follow this path. Together.",
+    "mageText": "Maybe I’m not imagining things after all. …Come on. Let’s follow this path. Together.",
     "uiType": "mage",
     "next": "end_s2"
   },
-
   "end_s2": {
-    "text": "With renewed hope, you move forward.\n\nSomewhere… somehow… the truth awaits.",
+    "text": "With renewed hope, you move forward. Somewhere… somehow… the truth awaits.",
     "uiType": "standard",
     "choices": [
-      { "text": "Continue", "next": "go_to_path_selection", "unlockTag": "ch1_scorched_done" }
+      { "text": "Continue", "next": "go_to_path_selection", "unlockTag": "ch1_defense_done" }
     ]
   }
 }

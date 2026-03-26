@@ -1,0 +1,186 @@
+{
+    "level3_subarea1_start": {
+        "text": "It wasn't a small spark. It was a match dropped in a powder keg.",
+        "uiType": "narrative",
+        "next": "level3_subarea1_start_2"
+    },
+
+    "level3_subarea1_start_2": {
+        "text": "Mordu’s essence floods your veins. The world turns a bruised purple. Your heart hammers against your ribs, but you can't stop now.",
+        "uiType": "narrative",
+        "next": "level3_subarea1_start_3"
+    },
+
+    "level3_subarea1_start_3": {
+        "text": "Through the noise in your head, you hear a scream. It’s Antakin.",
+        "uiType": "narrative",
+        "next": "antakin_summons_defense"
+    },
+
+    "antakin_summons_defense": {
+        "mageName": "ANTAKIN",
+        "mageText": "No! Pull back, kid! Don't let that filth settle in! Grip the deck—grip it until your hands bleed!",
+        "uiType": "mage",
+        "next": "antakin_summons_defense_2"
+    },
+
+    "antakin_summons_defense_2": {
+        "mageName": "ANTAKIN",
+        "mageText": "Just don't let go of who you are!",
+        "uiType": "mage",
+        "next": "antakin_battle_visual"
+    },
+
+    "antakin_battle_visual": {
+        "text": "She moves fast. Faster than she looks. Her cards explode into a circle of gold light.",
+        "uiType": "narrative",
+        "next": "antakin_battle_visual_2"
+    },
+
+    "antakin_battle_visual_2": {
+        "text": "She’s burning her own life force to build a cage around you. The black sludge stops for a second. You find your voice.",
+        "uiType": "narrative",
+        "next": "player_demands_truth"
+    },
+
+    "player_demands_truth": {
+        "text": "Your voice sounds like scraping rocks. 'Why?' you ask the empty air. 'What do you want with me?'",
+        "uiType": "narrative",
+        "next": "mordu_manipulation"
+    },
+
+    "mordu_manipulation": {
+        "mageName": "MORDU",
+        "mageText": "I seek the truth Valor was too cowardly to tell you. She didn't die to save a hero; she died because she saw the rot in you and couldn't face her own failure.",
+        "uiType": "mage",
+        "next": "mordu_manipulation_2"
+    },
+
+    "mordu_manipulation_2": {
+        "mageName": "MORDU",
+        "mageText": "She looked into your eyes and saw *me* waiting there. Her sacrifice wasn't a gift—it was an escape from the monster you were always destined to become.",
+        "uiType": "mage",
+        "next": "mordu_possession"
+    },
+
+    "mordu_possession": {
+        "text": "His words hurt more than the magic. You feel something inside you break. The 'Hero' is gone.",
+        "uiType": "narrative",
+        "next": "mordu_possession_2"
+    },
+
+    "mordu_possession_2": {
+        "text": "The light from Antakin starts to burn your skin. It’s too bright for you now. You look at a card and see your eyes turning into black ink.",
+        "uiType": "narrative",
+        "next": "mordu_final_offer"
+    },
+
+    "mordu_final_offer": {
+        "mageName": "MORDU",
+        "mageText": "Look at her, little spark. Antakin is gasping for air, killing herself for a ghost. Let her go. Shed the skin of the student and take the crown of the Scourge.",
+        "uiType": "mage",
+        "next": "mordu_final_offer_2"
+    },
+
+    "mordu_final_offer_2": {
+        "mageName": "MORDU",
+        "mageText": "Tell me... is there hope for us to be one? To finally rule this silence?",
+        "uiType": "mage",
+        "next": "mordu_dark_ascent_choice"
+    },
+
+    "mordu_dark_ascent_choice": {
+        "text": "The sadness of the land feels... right. You reach into the dark, and it grabs you back like family.",
+        "uiType": "cards",
+        "choices": [
+            { 
+                "text": "Yes. Let the world burn.", 
+                "next": "bad_ending_ascension", 
+                "reward": { "land": 15 } 
+            },
+            { 
+                "text": "Definitely. I am the end.", 
+                "next": "bad_ending_ascension", 
+                "reward": { "land": 15 } 
+            }
+        ]
+    },
+
+    "bad_ending_ascension": {
+        "text": "Antakin’s cards fall to the ground. She looks at you—at the thing wearing your clothes.",
+        "uiType": "narrative",
+        "next": "bad_ending_ascension_2"
+    },
+
+    "bad_ending_ascension_2": {
+        "text": "She looks terrified. You don't feel bad. You feel huge. You step over her and the earth turns to ash under your feet.",
+        "uiType": "narrative",
+        "next": "bad_ending_visual_start"
+    },
+
+    "bad_ending_visual_start": {
+        "text": "You aren't bound by skin or bone anymore. You *are* the ground. Thinking about 'green' or 'life' just feels annoying now.",
+        "uiType": "narrative",
+        "next": "transform_vegetation"
+    },
+
+    "transform_vegetation": {
+        "text": "The Forest cards in your hand turn into black ash. The trees around you wither and die instantly.",
+        "uiType": "narrative",
+        "next": "transform_vegetation_2"
+    },
+
+    "transform_vegetation_2": {
+        "text": "Everything turns to gray dust. You aren't just taking the land; you're wiping it out.",
+        "uiType": "narrative",
+        "next": "transform_water"
+    },
+
+    "transform_water": {
+        "text": "You look at the stream nearby. The water stops being clear and turns thick, like old blood.",
+        "uiType": "narrative",
+        "next": "transform_water_2"
+    },
+
+    "transform_water_2": {
+        "text": "It doesn't flow anymore. It pulses. It's like a network of veins that you can feel for miles.",
+        "uiType": "narrative",
+        "next": "transform_sky"
+    },
+
+    "transform_sky": {
+        "text": "The sky splits open. No thunder, just a silent rip. The blue fades away and turns into a bruised purple twilight.",
+        "uiType": "narrative",
+        "next": "transform_sky_2"
+    },
+
+    "transform_sky_2": {
+        "text": "A warm rain begins to fall. Steam rises where it touches your new skin. The land is crying.",
+        "uiType": "narrative",
+        "next": "bad_ending_final_ruler"
+    },
+
+    "bad_ending_final_ruler": {
+        "text": "You are the ruler of this quiet place. You feel the weight of the land. It's not soil; it's a memory you killed.",
+        "uiType": "narrative",
+        "next": "bad_ending_final_ruler_2"
+    },
+
+    "bad_ending_final_ruler_2": {
+        "mageName": "MORDU",
+        "mageText": "Magnificent. They will worship our void.",
+        "uiType": "mage",
+        "next": "bad_ending_final_choice"
+    },
+
+    "bad_ending_final_choice": {
+        "text": "You step into your world. It is finally quiet.",
+        "uiType": "standard",
+        "choices": [
+            { 
+                "text": "Accept the Glory.", 
+                "next": "go_to_path_selection" 
+            }
+        ]
+    }
+}

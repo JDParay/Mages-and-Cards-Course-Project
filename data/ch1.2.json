@@ -1,19 +1,32 @@
 {
   "ch1_level2_start": {
-    "text": "The forest thickens as Antakin leads you deeper. A chill settles in, and the shadows stretch unnaturally between the trees. You notice movement—shapes twisted and writhing, corrupted by dark mana.",
+    "text": "The forest thickens. As Antakin leads you deeper, the birds fall silent. A heavy chill settles into your bones.",
+    "uiType": "narrative",
+    "next": "ch1_level2_start_2"
+  },
+
+  "ch1_level2_start_2": {
+    "text": "Shadows between the trees begin to stretch and twist unnaturally. You see movement—shapes that look like animals, but warped by dark mana.",
     "uiType": "narrative",
     "next": "antakin_level2_instruction"
   },
 
   "antakin_level2_instruction": {
     "mageName": "ANTAKIN",
-    "mageText": "Here… I’ll stay back for now. Do exactly what you did before. Trust your instincts.",
+    "mageText": "Look at them... poor things. The corruption has taken hold. I’ll stay back and watch your perimeter.",
+    "uiType": "mage",
+    "next": "antakin_level2_instruction_2"
+  },
+
+  "antakin_level2_instruction_2": {
+    "mageName": "ANTAKIN",
+    "mageText": "Do exactly what you did before. Don't overthink it. Trust your instincts.",
     "uiType": "mage",
     "next": "level2_card_choice"
   },
 
   "level2_card_choice": {
-    "text": "Two cards float before you, glowing softly. Choose one.",
+    "text": "Two cards float before you, glowing with a soft, hungry light. You feel a strange pull in your chest. Choose one.",
     "uiType": "cards",
     "choices": [
       { "text": "Thunderstrike (Attack)", "next": "level2_result_1" },
@@ -22,7 +35,13 @@
   },
 
   "level2_result_1": {
-    "text": "You strike. The first corrupted creature falls. Another appears. You act again. Choose a card.",
+    "text": "You strike. The first creature dissolves into a vile, black mist. It felt... satisfying. Too satisfying.",
+    "uiType": "narrative",
+    "next": "level2_result_1_b"
+  },
+
+  "level2_result_1_b": {
+    "text": "Another shape lunges from the bush. Your fingers are already reaching for the next card. Act again.",
     "uiType": "cards",
     "choices": [
       { "text": "Thunderstrike (Attack)", "next": "level2_result_1_1" },
@@ -31,7 +50,13 @@
   },
 
   "level2_result_1_1": {
-    "text": "You strike again. And once more, you strike—each blow swift and unerring. Choose a card.",
+    "text": "Another hit. Each blow feels swifter, more unerring. You don't even have to think; the cards are moving for you.",
+    "uiType": "narrative",
+    "next": "level2_result_1_1_b"
+  },
+
+  "level2_result_1_1_b": {
+    "text": "You feel a rush of heat in your blood. You want to see them vanish. Again. Choose a card.",
     "uiType": "cards",
     "choices": [
       { "text": "Thunderstrike (Attack)", "next": "level2_result_1_2" },
@@ -40,7 +65,7 @@
   },
 
   "level2_result_1_2": {
-    "text": "The urge to do it again, why it was breathtaking… You use one more card.",
+    "text": "The urge to do it again is breathtaking. It's like a drug. You use one more card, barely waiting for the target to appear.",
     "uiType": "cards",
     "choices": [
       { "text": "Thunderstrike (Attack)", "next": "antakin_level2_warning" },
@@ -50,43 +75,70 @@
 
   "antakin_level2_warning": {
     "mageName": "ANTAKIN",
-    "mageText": "Okay, i think that's enough... Quite concerning. It might be altering something… in your mind.",
+    "mageText": "Whoa! Kid! Stop! That’s enough... they’re all gone.",
+    "uiType": "mage",
+    "next": "antakin_level2_warning_2"
+  },
+
+  "antakin_level2_warning_2": {
+    "mageName": "ANTAKIN",
+    "mageText": "This is... quite concerning. The cards aren't just tools. They’re altering something in your mind.",
     "uiType": "mage",
     "next": "response_options"
   },
 
   "response_options": {
-    "text": "A shiver runs down your spine. You scold yourself internally, but… Antakin might be right. Something feels different… heavier.",
+    "text": "A cold shiver runs down your spine. Your hands are shaking, and your head feels heavy, like it's filled with lead.",
     "uiType": "standard",
     "choices": [
       { "text": "…Ngh, my head does hurt...", "next": "antakin_softens" },
-      { "text": "I think... i'll be fine.", "next": "antakin_concern" }
+      { "text": "I think... I'll be fine.", "next": "antakin_concern" }
     ]
   },
 
   "antakin_softens": {
     "mageName": "ANTAKIN",
-    "mageText": "Oh dear, maybe I was a bit impulsive letting you slaughter those creatures...",
+    "mageText": "Oh dear... sit down for a second. I was too impulsive, letting you slaughter those things so quickly.",
+    "uiType": "mage",
+    "next": "antakin_softens_2"
+  },
+
+  "antakin_softens_2": {
+    "mageName": "ANTAKIN",
+    "mageText": "Magic has a price, especially Valor's. I should have remembered that humans aren't built for this much mana at once.",
     "uiType": "mage",
     "next": "antakin_leads_back"
   },
 
   "antakin_concern": {
     "mageName": "ANTAKIN",
-    "mageText": "Stubborn, eh? That's not quite what I envisioned... Hmm...",
+    "mageText": "Stubborn, eh? That’s a dangerous trait to have with that deck in your pocket.",
+    "uiType": "mage",
+    "next": "antakin_concern_2"
+  },
+
+  "antakin_concern_2": {
+    "mageName": "ANTAKIN",
+    "mageText": "You're pale, kid. If you can't be honest about the pain, the mana will eat you from the inside out. Remember that.",
     "uiType": "mage",
     "next": "antakin_leads_back"
   },
 
   "antakin_leads_back": {
     "mageName": "ANTAKIN",
-    "mageText": "Come. Let’s return to where you woke up. We need to understand this before we go any further.",
+    "mageText": "Come on. Let’s head back to the clearing where you woke up. We need to ground you before you lose yourself.",
     "uiType": "mage",
     "next": "ch1_level2_end"
   },
 
   "ch1_level2_end": {
-    "text": "You follow Antakin back through the shadowed forest. The corrupted shapes fade behind you, leaving only the whisper of mana and the questions you cannot yet answer.",
+    "text": "You follow Antakin back through the shadowed forest. Behind you, the gray dust of the creatures settles.",
+    "uiType": "narrative",
+    "next": "ch1_level2_end_2"
+  },
+
+  "ch1_level2_end_2": {
+    "text": "The forest is quiet again, but the hum in your fingers remains—a constant, pulsing reminder of the power you just touched.",
     "uiType": "standard",
     "choices": [
       { "text": "Continue", "next": "go_to_path_selection", "unlockTag": "ch1_level2_done" }

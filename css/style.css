@@ -775,3 +775,34 @@ body {
 }
 
 .quest-card.locked .quest-action { color: #666; }
+
+.game-btn:disabled {
+    opacity: 0.5;      /* Grayed out */
+    cursor: not-allowed;
+    background-color: #555; /* Optional darker color */
+}
+
+/* Demo Completion Popup Styles */
+.demo-modal {
+    border-color: #3b82f6; /* Ocean blue to match the Bay of Truth theme */
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(59, 130, 246, 0.6);
+}
+
+.demo-content {
+    margin: 25px 0;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+}
+
+.highlight-text {
+    color: var(--neon-pink);
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin: 20px 0;
+    text-shadow: 0 0 5px var(--neon-glow);
+}
+
+.demo-modal .game-btn {
+    margin-top: 20px;
+    width: 100%;
+}

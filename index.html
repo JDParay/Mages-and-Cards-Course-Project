@@ -41,18 +41,18 @@
 
     <div class="chapter-grid">
         <div class="chapter-card" onclick="showPathSelection(1)">
-            <img src="chapter1_thumb.png" alt="Chapter 1">
+            <img src="assets/chapter1_thumb.png" alt="Chapter 1">
             <div class="chapter-info">
                 <p class="chapter-subtitle">CHAPTER 01</p>
-                <h3>The Great Barrier</h3>
+                <h3>The Pathway to Answers</h3>
             </div>
         </div>
 
         <div class="chapter-card locked">
-            <img src="chapter2_thumb.png" alt="Chapter 2">
+            <img src="assets/chapter2_thumb.png" alt="Chapter 2">
             <div class="chapter-info">
                 <p class="chapter-subtitle">CHAPTER 02</p>
-                <h3>Whispering Woods</h3>
+                <h3>The Sea of Questions</h3>
             </div>
         </div>
     </div>
@@ -70,44 +70,43 @@
         <div class="quest-row" id="row-1">
             <div class="quest-card" id="q-1" data-file="data/ch1.json" data-start="ch1_start">
                 <div class="quest-status">✦</div>
-                <div class="quest-details"><h3>1. The Awakening</h3></div>
+                <div class="quest-details"><h3>Awakened From Chaos</h3></div>
             </div>
         </div>
 
         <div class="quest-row" id="row-2">
             <div class="quest-card locked" id="q-2" data-file="data/ch1.2.json" data-start="ch1_level2_start">
-                <div class="quest-status">🔥</div>
-                <div class="quest-details"><h3>2. Scorched Earth</h3></div>
+                <div class="quest-status">⟡</div>
+                <div class="quest-details"><h3>The Taste Of Enigma</h3></div>
             </div>
-            <div class="quest-card locked" id="q-2-1" data-file="data/ch1.2.1.json" data-start="ch1_level2_subarea1_start">
-                <div class="quest-status">📜</div>
-                <div class="quest-details"><h3>2.1 Ancient Records</h3></div>
+            <div class="quest-card locked hidden" id="q-2-1" data-file="data/ch1.2.1.json" data-start="ch1_level2_subarea1_start">
+                <div class="quest-status">✦</div>
+                <div class="quest-details"><h3>The Cursed</h3></div>
             </div>
         </div>
 
         <div class="quest-row" id="row-3">
-            <div class="quest-card locked" id="q-3" onclick="startVN('ch1_spring')">
-                <div class="quest-status">💧</div>
-                <div class="quest-details"><h3>3. Corrupted Spring</h3></div>
+            <div class="quest-card locked" id="q-3" data-file="data/ch1.3.json" data-start="level3_path_follow">
+                <div class="quest-status">⟡</div>
+                <div class="quest-details"><h3>The Major Turn</h3></div>
             </div>
-            <div class="quest-card locked hidden" id="q-3-1" onclick="startVN('ch1_ocean_canon')">
-                <div class="quest-status">🌊</div>
-                <div class="quest-details"><h3>3.1 The Deep Path</h3></div>
-            </div>
-            <div class="quest-card locked hidden" id="q-3-2" onclick="startVN('ch1_ocean_alt')">
-                <div class="quest-status">🐚</div>
-                <div class="quest-details"><h3>3.2 Siren's Song</h3></div>
+            <div class="quest-card locked hidden" id="q-3-1" data-file="data/ch1.3.1.json" data-start="level3_subarea1_start">
+                <div class="quest-status">✦</div>
+                <div class="quest-details"><h3>Twisted Fate</h3></div>
             </div>
         </div>
 
         <div class="quest-row" id="row-4">
-            <div class="quest-card locked hidden" id="q-4" onclick="startVN('ch1_siege')">
-                <div class="quest-status">⚔️</div>
-                <div class="quest-details"><h3>4. The Siege</h3></div>
+            <div class="quest-card locked" id="q-4" data-file="data/ch4.json" data-start="level4_start">
+                <div class="quest-status">✦</div>
+                <div class="quest-details"><h3>Keep Forward</h3></div>
             </div>
-            <div class="quest-card locked hidden" id="q-4-1" onclick="startVN('ch1_boss')">
-                <div class="quest-status">👑</div>
-                <div class="quest-details"><h3>4.1 Final Boss</h3></div>
+        </div>
+
+        <div class="quest-row" id="row-5">
+            <div class="quest-card locked" id="q-5" data-file="data/ch5.json" data-start="level5_start">
+                <div class="quest-status">✦</div>
+                <div class="quest-details"><h3>Revelation</h3></div>
             </div>
         </div>
     </div>
@@ -159,6 +158,16 @@
             <div class="credit-entry"><span>Jeko Damiel Paray</span> <span>Developer</span></div>
         </div>
     </div>
+
+    <div id="demo-complete-popup" class="modal-box demo-modal" style="display:none">
+    <h2 class="modal-title">JOURNEY PAUSED</h2>
+    <div class="demo-content">
+        <p>You have reached the end of the current demo!</p>
+        <p class="highlight-text">Chapter 2: The Sea of Questions is currently under construction.</p>
+        <p>Thank you for playing and for your submission!</p>
+    </div>
+    <button class="game-btn" onclick="closeDemoPopup()">RETURN TO JOURNAL</button>
+</div>
     
     <script src="script.js"></script>
 </body>
