@@ -5,52 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mages & Cards</title>
     <link rel="icon" type="image/png" href="assets/icon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Unica+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="bg-layer" class="waterfall-bg"></div>
+<div id="bg-layer" class="waterfall-bg"></div>
 
-    <div id="main-menu-screen" class="screen">
-        <div class="menu-content">
-            <img src="MaCLogo.png" alt="Mages and Cards Logo" class="main-logo-img">
-            <nav class="button-stack">
-                <button class="game-btn" onclick="showCampaign()"><span class="icon">►</span> Play</button>
-                <button class="game-btn" onclick="openOptions()"><span class="icon">⚙</span> Options</button>
-                <button class="game-btn" onclick="openCredits()"><span class="icon">👤</span> Credits</button>
-            </nav>
-        </div>
-        <footer class="menu-footer">
-            <div class="footer-left v-tag">v 1.0.0-pivot</div>
-            <div class="footer-right studio-tag">Instinction Games</div>
-        </footer>
+<!-- ===================== MAIN MENU ===================== -->
+<div id="main-menu-screen" class="screen">
+    <div class="menu-content">
+        <img src="MaCLogo.png" alt="Mages and Cards Logo" class="main-logo-img">
+        <nav class="button-stack">
+            <button class="game-btn" onclick="showCampaign()"><span class="icon">►</span> Play</button>
+            <button class="game-btn" onclick="openTutorial()"><span class="icon">📖</span> Tutorial</button>
+            <button class="game-btn" onclick="openOptions()"><span class="icon">⚙</span> Options</button>
+            <button class="game-btn" onclick="openCredits()"><span class="icon">👤</span> Credits</button>
+        </nav>
     </div>
+    <footer class="menu-footer">
+        <div class="footer-left v-tag">v 1.2.0-battle</div>
+        <div class="footer-right studio-tag">Instinction Games</div>
+    </footer>
+</div>
 
-    <div id="vn-resource-bar">
-        <div class="vn-res-item">Land: <span id="res-land">0</span></div>
-        <div class="vn-res-item">Ocean: <span id="res-ocean">0</span></div>
-        <div class="vn-res-item">Forest: <span id="res-forest">0</span></div>
-    </div>
-        
-    <div id="campaign-screen" class="screen hidden">
+<!-- ===================== CHAPTER SELECT ===================== -->
+<div id="campaign-screen" class="screen hidden">
     <header class="campaign-header">
-        <div class="header-left">
-            <button class="back-btn" onclick="goBackToMenu()">◀ BACK</button>
-            <h1 class="campaign-title">SELECT CHAPTER</h1>
-        </div>
+        <button class="back-btn" onclick="goBackToMenu()">&#9664; BACK</button>
+        <h1 class="campaign-title">SELECT CHAPTER</h1>
     </header>
-
     <div class="chapter-grid">
         <div class="chapter-card" onclick="showPathSelection(1)">
-            <img src="assets/chapter1_thumb.png" alt="Chapter 1">
+            <!-- ASSET NEEDED: assets/chapter1_thumb.png — 260x350px dark fantasy art -->
+            <img src="assets/chapter1_thumb.png" alt="Chapter 1" onerror="this.style.background='#1e0d33';this.removeAttribute('src')">
             <div class="chapter-info">
                 <p class="chapter-subtitle">CHAPTER 01</p>
                 <h3>The Pathway to Answers</h3>
             </div>
         </div>
-
-        <div class="chapter-card locked">
-            <img src="assets/chapter2_thumb.png" alt="Chapter 2">
+        <div class="chapter-card locked" id="chapter-2-card">
+            <!-- ASSET NEEDED: assets/chapter2_thumb.png — 260x350px ocean/dark theme -->
+            <img src="assets/chapter2_thumb.png" alt="Chapter 2" onerror="this.style.background='#0d1e33';this.removeAttribute('src')">
             <div class="chapter-info">
                 <p class="chapter-subtitle">CHAPTER 02</p>
                 <h3>The Sea of Questions</h3>
@@ -59,117 +54,218 @@
     </div>
 </div>
 
+<!-- ===================== PATH / LEVEL MAP ===================== -->
 <div id="path-selection-screen" class="screen hidden">
     <header class="campaign-header">
-        <div class="header-left">
-            <button class="back-btn" onclick="goBackToChapters()">◀ BACK</button>
-            <h1 class="campaign-title">QUEST JOURNAL</h1>
-        </div>
+        <button class="back-btn" onclick="goBackToChapters()">&#9664; BACK</button>
+        <h1 class="campaign-title">CHAPTER I</h1>
     </header>
+    <div class="level-map">
 
-    <div class="quest-list-container">
-        <div class="quest-row" id="row-1">
-            <div class="quest-card" id="q-1" data-file="data/ch1.json" data-start="ch1_start">
-                <div class="quest-status">✦</div>
-                <div class="quest-details"><h3>Awakened From Chaos</h3></div>
+        <div class="map-node-group">
+            <div class="map-node unlocked" id="q-1"
+                 data-file="data/ch1.json" data-start="ch1_start" data-level="1-1">
+                <div class="map-node-dot">&#10022;</div>
+                <div class="map-node-label">
+                    <span class="map-level-id">1-1</span>
+                    <span class="map-level-name">Awakened From Chaos</span>
+                </div>
             </div>
         </div>
 
-        <div class="quest-row" id="row-2">
-            <div class="quest-card locked" id="q-2" data-file="data/ch1.2.json" data-start="ch1_level2_start">
-                <div class="quest-status">⟡</div>
-                <div class="quest-details"><h3>The Taste Of Enigma</h3></div>
-            </div>
-            <div class="quest-card locked hidden" id="q-2-1" data-file="data/ch1.2.1.json" data-start="ch1_level2_subarea1_start">
-                <div class="quest-status">✦</div>
-                <div class="quest-details"><h3>The Cursed</h3></div>
+        <div class="map-connector" id="con-1-2"></div>
+
+        <div class="map-node-group">
+            <div class="map-node locked" id="q-2"
+                 data-file="data/ch1.2.json" data-start="ch1_level2_start" data-level="1-2">
+                <div class="map-node-dot">&#9108;</div>
+                <div class="map-node-label">
+                    <span class="map-level-id">1-2</span>
+                    <span class="map-level-name">The Taste Of Enigma</span>
+                </div>
             </div>
         </div>
 
-        <div class="quest-row" id="row-3">
-            <div class="quest-card locked" id="q-3" data-file="data/ch1.3.json" data-start="level3_path_follow">
-                <div class="quest-status">⟡</div>
-                <div class="quest-details"><h3>The Major Turn</h3></div>
-            </div>
-            <div class="quest-card locked hidden" id="q-3-1" data-file="data/ch1.3.1.json" data-start="level3_subarea1_start">
-                <div class="quest-status">✦</div>
-                <div class="quest-details"><h3>Twisted Fate</h3></div>
+        <div class="map-connector" id="con-2-3"></div>
+
+        <div class="map-node-group">
+            <div class="map-node locked" id="q-3"
+                 data-file="data/ch1.3.json" data-start="level3_path_follow" data-level="1-3">
+                <div class="map-node-dot">&#9108;</div>
+                <div class="map-node-label">
+                    <span class="map-level-id">1-3</span>
+                    <span class="map-level-name">The Major Turn</span>
+                </div>
             </div>
         </div>
 
-        <div class="quest-row" id="row-4">
-            <div class="quest-card locked" id="q-4" data-file="data/ch4.json" data-start="level4_start">
-                <div class="quest-status">✦</div>
-                <div class="quest-details"><h3>Keep Forward</h3></div>
+    </div>
+</div>
+
+<!-- ===================== BATTLE SCREEN ===================== -->
+<div id="vn-game-screen" class="screen hidden">
+
+    <!-- TOP BAR -->
+    <div id="battle-top-bar">
+        <div id="level-label">1-1</div>
+        <div id="enemy-tracker"><!-- JS --></div>
+        <div class="battle-top-btns">
+            <button class="game-btn small-btn" onclick="toggleLog(event)">&#128220; LOG</button>
+            <button class="game-btn small-btn danger-btn" onclick="confirmLeave()">&#10005; LEAVE</button>
+        </div>
+    </div>
+
+    <!-- ARENA BANNER -->
+    <div id="arena-banner">
+        <!-- ASSET NEEDED: assets/arena_bg_strip.png — full-width ~130px tall dark ground texture/strip -->
+        <img src="assets/arena_bg_strip.png" alt="" class="arena-bg-img" onerror="this.style.display='none'">
+
+        <div class="combatant-panel" id="player-panel">
+            <!-- ASSET NEEDED: assets/player_mage.png — ~160x240px mage sprite, transparent bg -->
+            <img src="assets/player_mage.png" alt="Mage" class="combatant-sprite player-sprite"
+                 onerror="this.outerHTML='&lt;div class=&quot;sprite-placeholder player-placeholder&quot;&gt;&#129497;&lt;/div&gt;'">
+            <div class="combatant-info">
+                <span class="combatant-name">MAGE</span>
+                <div class="health-bar-wrap">
+                    <div class="health-bar player-hp" id="player-hp-bar" style="width:100%"></div>
+                </div>
+                <span class="hp-label" id="player-hp-label">100 / 100</span>
+                <div class="mana-bar-wrap">
+                    <div class="mana-bar" id="player-mana-bar" style="width:100%"></div>
+                </div>
+                <span class="mana-label" id="player-mana-label">Mana: 50 / 50</span>
             </div>
         </div>
 
-        <div class="quest-row" id="row-5">
-            <div class="quest-card locked" id="q-5" data-file="data/ch5.json" data-start="level5_start">
-                <div class="quest-status">✦</div>
-                <div class="quest-details"><h3>Revelation</h3></div>
+        <div class="combatant-panel" id="enemy-panel">
+            <!-- ASSET NEEDED: assets/enemy_1.png, enemy_2.png, enemy_boss.png — ~160x240px sprites -->
+            <img src="assets/enemy_1.png" alt="Enemy" class="combatant-sprite enemy-sprite"
+                 onerror="this.outerHTML='&lt;div class=&quot;sprite-placeholder enemy-placeholder&quot;&gt;&#128121;&lt;/div&gt;'">
+            <div class="combatant-info enemy-info">
+                <span class="combatant-name enemy-name" id="enemy-name-label">WRAITH</span>
+                <div class="health-bar-wrap">
+                    <div class="health-bar enemy-hp" id="enemy-hp-bar" style="width:100%"></div>
+                </div>
+                <span class="hp-label" id="enemy-hp-label">80 / 80</span>
             </div>
+        </div>
+    </div>
+
+    <!-- CARD DISPLAY ZONE (selected cards float here) -->
+    <div id="card-display-zone" class="hidden">
+        <div id="card-display-slots"></div>
+        <div id="card-display-actions"></div>
+    </div>
+
+    <!-- CARD HAND AREA: resource panel | cards | narrative -->
+    <div id="card-hand-area">
+
+        <!-- LEFT: resource bars + deck counter -->
+        <div id="resource-panel">
+            <div class="res-row">
+                <!-- ASSET NEEDED: assets/icon_forest.png — ~24x24px forest/leaf icon -->
+                <img src="assets/icon_forest.png" class="res-icon" onerror="this.outerHTML='&#127807;'">
+                <div class="res-bar-wrap"><div class="res-bar forest-bar" id="res-forest-bar" style="width:100%"></div></div>
+                <span class="res-count" id="res-forest">10</span>
+            </div>
+            <div class="res-row">
+                <!-- ASSET NEEDED: assets/icon_ocean.png — ~24x24px ocean/wave icon -->
+                <img src="assets/icon_ocean.png" class="res-icon" onerror="this.outerHTML='&#127754;'">
+                <div class="res-bar-wrap"><div class="res-bar ocean-bar" id="res-ocean-bar" style="width:100%"></div></div>
+                <span class="res-count" id="res-ocean">10</span>
+            </div>
+            <div class="res-row">
+                <!-- ASSET NEEDED: assets/icon_land.png — ~24x24px land/mountain icon -->
+                <img src="assets/icon_land.png" class="res-icon" onerror="this.outerHTML='&#127956;'">
+                <div class="res-bar-wrap"><div class="res-bar land-bar" id="res-land-bar" style="width:100%"></div></div>
+                <span class="res-count" id="res-land">10</span>
+            </div>
+            <div class="deck-info">
+                <span id="deck-count-label">Deck: 8</span>
+                <span id="discard-count-label">Discard: 0</span>
+            </div>
+        </div>
+
+        <!-- CENTER: card rows + action buttons -->
+        <div id="hand-cards-area">
+            <div id="combat-cards" class="card-row"><!-- JS --></div>
+            <div id="utility-cards" class="card-row utility-row"><!-- JS --></div>
+            <div id="hand-action-row">
+                <button class="game-btn small-btn" id="btn-add-cards" onclick="addCardsFromDeck()" style="display:none">+ Draw (25 MP)</button>
+                <button class="game-btn small-btn end-turn-btn" onclick="endTurn()">END TURN</button>
+            </div>
+        </div>
+
+        <!-- RIGHT: battle narrative -->
+        <div id="battle-narrative">
+            <div id="battle-log-box">
+                <p id="battle-log-text">Prepare for battle...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- History log modal -->
+    <div id="history-log" class="modal-box" style="display:none; flex-direction:column;">
+        <h2 class="modal-title">History</h2>
+        <div id="log-content"></div>
+        <button class="game-btn" style="margin-top:16px" onclick="toggleLog(event)">Close</button>
+    </div>
+
+</div>
+
+<!-- ===================== MODALS ===================== -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModals()"></div>
+
+<!-- Tutorial -->
+<div id="tutorial-modal" class="modal-box tutorial-modal-box" style="display:none">
+    <h2 class="modal-title">Tutorial</h2>
+    <!-- ASSET NEEDED: assets/tutorial.png — 800x600px tutorial infographic -->
+    <img src="assets/tutorial.png" alt="Tutorial" class="tutorial-img">
+</div>
+
+<!-- Leave confirm -->
+<div id="leave-confirm-modal" class="modal-box confirm-modal" style="display:none">
+    <h2 class="modal-title" style="font-size:1.4rem">Leave Battle?</h2>
+    <p class="confirm-subtext">Your progress in this level will be lost. Are you sure?</p>
+    <div class="confirm-btn-row">
+        <button class="game-btn danger-btn" onclick="leaveBattle()">YES, LEAVE</button>
+        <button class="game-btn" onclick="closeLeaveConfirm()">CANCEL</button>
+    </div>
+</div>
+
+<!-- Options -->
+<div id="options-modal" class="modal-box" style="display:none">
+    <h2 class="modal-title">Options</h2>
+    <div class="settings-container">
+        <div class="slider-row">
+            <label>BGM</label>
+            <input type="range" class="custom-slider" id="bgm-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+        <div class="slider-row">
+            <label>SFX</label>
+            <input type="range" class="custom-slider" id="sfx-slider" min="0" max="1" step="0.01" value="0.5">
         </div>
     </div>
 </div>
 
-    <div id="vn-game-screen" class="screen hidden" onclick="handleGlobalClick()">
-        <button id="log-toggle" class="game-btn" onclick="toggleLog(event)">📜 LOG</button>
-
-        <div class="vn-layout-container">
-        <div id="story-box" class="modal-box">
-            <p id="story-text"></p> 
-        </div>
-
-        <div id="mage-dialogue-box" class="mage-box hidden">
-            <div class="mage-name">MAGE</div>
-            <p id="mage-text"></p>
-        </div>
-
-        <div id="standard-choice-container" class="standard-choices"></div>
-        <div id="card-choice-container" class="card-hand"></div>
-
-        <div id="history-log" class="modal-box" style="display:none; flex-direction: column;">
-            <h2 class="modal-title">History</h2>
-            <div id="log-content" style="flex-grow: 1; overflow-y: auto; margin: 20px 0; text-align: left; padding-right: 10px;"></div>
-            <button class="game-btn" onclick="toggleLog(event)">Close</button>
-        </div>
+<!-- Credits -->
+<div id="credits-modal" class="modal-box" style="display:none">
+    <h2 class="modal-title">Credits</h2>
+    <div class="credits-grid">
+        <div class="credit-entry"><span>Jeko Damiel Paray</span><span>Developer</span></div>
     </div>
-    </div>
-
-    <div id="modal-overlay" class="modal-overlay" onclick="closeModals()"></div>
-    
-    <div id="options-modal" class="modal-box" style="display:none">
-        <h2 class="modal-title">Options</h2>
-        <div class="settings-container">
-            <div class="slider-row">
-                <label>BGM</label>
-                <input type="range" class="custom-slider" id="bgm-slider" min="0" max="1" step="0.01" value="0.5">
-            </div>
-            <div class="slider-row">
-                <label>SFX</label>
-                <input type="range" class="custom-slider" id="sfx-slider" min="0" max="1" step="0.01" value="0.5">
-            </div>
-        </div>
-    </div>
-
-    <div id="credits-modal" class="modal-box" style="display:none">
-        <h2 class="modal-title">Credits</h2>
-        <div class="credits-grid">
-            <div class="credit-entry"><span>Jeko Damiel Paray</span> <span>Developer</span></div>
-        </div>
-    </div>
-
-    <div id="demo-complete-popup" class="modal-box demo-modal" style="display:none">
-    <h2 class="modal-title">JOURNEY PAUSED</h2>
-    <div class="demo-content">
-        <p>You have reached the end of the current demo!</p>
-        <p class="highlight-text">Chapter 2: The Sea of Questions is currently under construction.</p>
-        <p>Thank you for playing and for your submission!</p>
-    </div>
-    <button class="game-btn" onclick="closeDemoPopup()">RETURN TO JOURNAL</button>
 </div>
-    
-    <script src="script.js"></script>
+
+<!-- Level complete -->
+<div id="level-complete-popup" class="modal-box" style="display:none">
+    <h2 class="modal-title">&#9876; VICTORY!</h2>
+    <p style="font-family:'Lato',sans-serif;color:#ccc;margin:16px 0 24px" id="victory-msg">
+        Level cleared!
+    </p>
+    <button class="game-btn" onclick="closeVictoryPopup()" style="width:100%">RETURN TO MAP</button>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
