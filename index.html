@@ -178,10 +178,8 @@
             </div>
 
             <div id="action-sidebar-controls">
-                <button class="game-btn small-btn attack-btn" id="btn-attack" onclick="executeAttack()">ATTACK</button>
-                
+                <div id="display-actions"></div>
                 <button class="game-btn small-btn draw-btn" id="btn-draw" onclick="addCardsFromDeck()">+ Draw (25 MP)</button>
-                
                 <button class="game-btn small-btn end-turn-btn" onclick="endTurn()">END TURN</button>
             </div>
         </div>
@@ -206,13 +204,16 @@
              onerror="this.parentElement.innerHTML=`
              <div class='tutorial-text'>
              <b>Cards &amp; Hand</b><br>
-             You have a 12-card deck. Four Wrath cards sit on top; three Harmony cards below.<br><br>
+             You are given 12 cards in your deck\; 9 Wrath Cards and 3 Harmony Cards.<br>
+             You have a UTILITY that may help you in dire need.<br><br>
              <b>Staging &amp; Attacking</b><br>
-             Click a card to stage it. Press ATTACK to use it. Or stage two cards and press MERGE.<br><br>
+             Click a card to stage it. Press USE to use it. Or stage two cards and press MERGE.<br><br>
              <b>Merging</b><br>
-             Two Wrath cards merge into a combo card (costs mana). The merge card can stay in hand or be used on ATTACK. Used merge cards disappear — they don\'t go to the discard pile.<br><br>
+             Merging two Wrath cards create a MERGE card, you need at least 20 MP to merge.<br>
+             The merge card can stay in hand or be used on ATTACK. Merge cards aren\'t discardable, they disappear.<br><br>
              <b>Resources</b><br>
-             Wrath cards cost Forest / Ocean / Land resources. Harmony cards restore mana or resources.<br><br>
+             Wrath cards cost Forest / Ocean / Land resources. Harmony cards restore mana or resources.<br>
+             Use them strategically. Don\'t let them run out.<br><br>
              <b>Deck Cycle</b><br>
              Used cards go to the discard pile. When your hand is empty, draw 4 new cards for 25 MP.<br>
              Once all 12 are discarded, the deck reshuffles automatically.<br><br>
@@ -220,7 +221,7 @@
              The enemy only acts after you press END TURN. Plan carefully!
              </div>`">
     </div>
-    <button class="game-btn" onclick="closeTutorial()" style="width:100%;margin-top:18px">&#9664; BACK</button>
+    <button class="game-btn" onclick="closeTutorial()" style="width:93.2%;margin-top:18px;justify-content: center;">&#9664; BACK</button>
 </div>
 
 <!-- Leave confirm -->
@@ -260,7 +261,7 @@
 <div id="level-complete-popup" class="modal-box small-modal" style="display:none">
     <h2 class="modal-title">&#9876; VICTORY!</h2>
     <p class="confirm-sub" id="victory-msg">Level cleared! The path ahead opens...</p>
-    <button class="game-btn" onclick="closeVictoryPopup()" style="width:100%;margin-top:16px">RETURN TO MAP</button>
+    <button class="game-btn" onclick="closeVictoryPopup()" style="width:90.2%;margin-top:16px;justify-content: center;">RETURN TO MAP</button>
 </div>
 
 <script src="script.js"></script>

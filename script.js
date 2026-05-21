@@ -21,7 +21,11 @@ const GameAudio = {
             button: new Audio('audio/sfx_button.mp3'),
             tap:    new Audio('audio/sfx_tap.mp3'),
             card:   new Audio('audio/sfx_button.mp3'),
-            hit:    new Audio('audio/sfx_tap.mp3')
+            shuffle: new Audio('audio/sfx_shuffle.mp3'),
+            hit:    new Audio('audio/sfx_tap.mp3'),
+            hurt:   new Audio('audio/sfx_hurt.mp3'),   // Player gets hit / Enemy gets hit
+            hurt2:  new Audio('audio/sfx_hurt2.mp3'),  // Player dies
+            hurt4:  new Audio('audio/sfx_hurt4.mp3')
         }
     }
 };
@@ -55,38 +59,38 @@ window.addEventListener('click', () => playMusic('menu'), { once: true });
 // These fill the top 4 hand slots. They cycle through draw → hand → discard → reshuffle.
 const MAIN_DECK_POOL = [
     // Wrath cards (red border) — cost resources, deal damage
-    { id:'w1', name:'Flame Burst',  icon:'🔥', type:'wrath', element:'forest', manaCost:0, resCost:{forest:2}, damage:16 },
-    { id:'w2', name:'Tidal Wave',   icon:'🌊', type:'wrath', element:'ocean',  manaCost:0, resCost:{ocean:2},  damage:18 },
-    { id:'w3', name:'Stone Crush',  icon:'🪨', type:'wrath', element:'land',   manaCost:0, resCost:{land:2},   damage:15 },
-    { id:'w4', name:'Arcane Bolt',  icon:'⚡', type:'wrath', element:'forest', manaCost:6, resCost:{forest:1}, damage:22 },
-    { id:'w5', name:'Frost Lance',  icon:'❄️', type:'wrath', element:'ocean',  manaCost:8, resCost:{ocean:1},  damage:24 },
-    { id:'w6', name:'Quake Spike',  icon:'🌋', type:'wrath', element:'land',   manaCost:6, resCost:{land:1},   damage:20 },
-    { id:'w7', name:'Wildfire',     icon:'🌿', type:'wrath', element:'forest', manaCost:4, resCost:{forest:3}, damage:30 },
-    { id:'w8', name:'Riptide',      icon:'💧', type:'wrath', element:'ocean',  manaCost:4, resCost:{ocean:3},  damage:28 },
-    { id:'w9', name:'Landslide',    icon:'🏔️', type:'wrath', element:'land',   manaCost:4, resCost:{land:3},   damage:26 },
+    { id:'w1', name:'Flame Burst',  icon:'🔥', type:'wrath', element:'forest', manaCost:0, resCost:{forest:3}, damage:20 },
+    { id:'w2', name:'Tidal Wave',   icon:'🌊', type:'wrath', element:'ocean',  manaCost:0, resCost:{ocean:3},  damage:20 },
+    { id:'w3', name:'Stone Crush',  icon:'🪨', type:'wrath', element:'land',   manaCost:0, resCost:{land:3},   damage:20 },
+    { id:'w4', name:'Meteorite Landing',  icon:'🔥', type:'wrath', element:'forest', manaCost:0, resCost:{forest:4}, damage:30 },
+    { id:'w5', name:'Tsunami',  icon:'🌊', type:'wrath', element:'ocean',  manaCost:0, resCost:{ocean:4},  damage:30 },
+    { id:'w6', name:'Earthquake',  icon:'🏔️', type:'wrath', element:'land',   manaCost:0, resCost:{land:4},   damage:30 },
+    { id:'w7', name:'Wildfire',     icon:'🔥', type:'wrath', element:'forest', manaCost:0, resCost:{forest:4}, damage:25 },
+    { id:'w8', name:'Flash Flood',      icon:'🌊', type:'wrath', element:'ocean',  manaCost:0, resCost:{ocean:4},  damage:25 },
+    { id:'w9', name:'Landslide',    icon:'🏔️', type:'wrath', element:'land',   manaCost:0, resCost:{land:4},   damage:25 },
     // Harmony cards (gold border) — restore mana or resources; mixed into the same deck
-    { id:'h1', name:'Mana Bloom',  icon:'💎', type:'harmony', element:'none', manaCost:0,  resCost:{forest:3,ocean:2,land:2}, effect:'mana',      healMana:30 },
-    { id:'h2', name:'Earth Pulse', icon:'🌱', type:'harmony', element:'none', manaCost:20, resCost:{},                        effect:'resource',   healRes:4   },
-    { id:'h3', name:'Free Weave',  icon:'✨', type:'harmony', element:'none', manaCost:0,  resCost:{},                        effect:'freemerge'               }
+    { id:'h1', name:'Goopful of Mana',  icon:'💎', type:'harmony', element:'none', manaCost:0,  resCost:{forest:3,ocean:3,land:3}, effect:'mana',      healMana:30 },
+    { id:'h2', name:'Resource Surge', icon:'🌱', type:'harmony', element:'none', manaCost:20, resCost:{},                        effect:'resource',   healRes:4   },
+    { id:'h3', name:'Free Merge',  icon:'✨', type:'harmony', element:'none', manaCost:0,  resCost:{},                        effect:'freemerge'               }
 ];
 
 // UTILITY CARDS — fixed, always present in the bottom 3 slots.
 // Never shuffle, never go to discard, never used up (one-time per battle resets each enemy).
 const UTILITY_CARDS = [
-    { id:'u1', name:'Heal Rune',   icon:'💚', type:'utility', manaCost:0,  resCost:{}, effect:'healHp',   healHp:25,  desc:'Restore 25 HP. One use per enemy.' },
+    { id:'u1', name:'Heal Rune',   icon:'💚', type:'utility', manaCost:10,  resCost:{}, effect:'healHp',   healHp:25,  desc:'Restore 25 HP. One use per enemy.' },
     { id:'u2', name:'Mana Surge',  icon:'🔷', type:'utility', manaCost:0,  resCost:{}, effect:'healMana', healMana:20, desc:'Restore 20 MP. One use per enemy.' },
-    { id:'u3', name:'Ward Stone',  icon:'🛡️', type:'utility', manaCost:10, resCost:{}, effect:'shield',   shieldAmt:15, desc:'Block 15 dmg next enemy hit. Costs 10 MP.' }
+    { id:'u3', name:'Card Boost',  icon:'⬆️', type:'utility', manaCost:20, resCost:{}, effect:'boostcard',           desc:'Add +15 ATK on your Wrath Cards on your hand.' }
 ];
 
 // Merge result table: element combos → new card stats
 // key: sorted elements joined by '_'
 const MERGE_TABLE = {
-    'forest_ocean': { name:'Mist Surge',    icon:'🌫️', damage:38, resCost:{forest:1,ocean:1}, manaCost:5 },
-    'forest_land':  { name:'Verdant Slam',  icon:'🌳', damage:35, resCost:{forest:1,land:1},  manaCost:5 },
-    'land_ocean':   { name:'Tidal Stone',   icon:'⛰️', damage:40, resCost:{ocean:1,land:1},   manaCost:5 },
-    'forest_forest':{ name:'Twin Blaze',    icon:'🔥', damage:44, resCost:{forest:2},          manaCost:6 },
-    'ocean_ocean':  { name:'Twin Tide',     icon:'🌊', damage:46, resCost:{ocean:2},            manaCost:6 },
-    'land_land':    { name:'Twin Quake',    icon:'🪨', damage:48, resCost:{land:2},             manaCost:6 }
+    'forest_ocean': { name:'Grove',    icon:'🌫️', damage:40, resCost:{forest:3,ocean:3}, manaCost:0 },
+    'forest_land':  { name:'Bind',  icon:'🌳', damage:40, resCost:{forest:3,land:3},  manaCost:0 },
+    'land_ocean':   { name:'Hide',   icon:'⛰️', damage:40, resCost:{ocean:3,land:3},   manaCost:0 },
+    'forest_forest':{ name:'Abandoned',    icon:'🔥', damage:60, resCost:{forest:5},          manaCost:0 },
+    'ocean_ocean':  { name:'Lost',     icon:'🌊', damage:50, resCost:{ocean:5},            manaCost:0 },
+    'land_land':    { name:'Encapsulated',    icon:'🪨', damage:50, resCost:{land:5},             manaCost:0 }
 };
 
 /* =============================================
@@ -316,17 +320,17 @@ async function startBattle(file, startNode) {
 function getDemoEnemies(levelId) {
     const sets = {
         '1-1': [
-            { name:'Shade',   hp:55,  maxHp:55,  sprite:'assets/enemy_1.png',    atk:8  },
-            { name:'Wraith',  hp:70,  maxHp:70,  sprite:'assets/enemy_1.png',    atk:10 }
+            { name:'Goblin',   hp:55,  maxHp:55,  sprite:'assets/enemy_1.png',    atk:20  },
+            { name:'Goblin Guard',  hp:70,  maxHp:70,  sprite:'assets/enemy_1.png',    atk:25 }
         ],
         '1-2': [
-            { name:'Golem',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:12 },
-            { name:'Golem',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:12 },
-            { name:'Brute',   hp:100, maxHp:100, sprite:'assets/enemy_2.png',    atk:14 }
+            { name:'Goblin Prince',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:20 },
+            { name:'Goblin KIng',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:25 },
+            { name:'Executioner',   hp:100, maxHp:100, sprite:'assets/enemy_2.png',    atk:30 }
         ],
         '1-3': [
-            { name:'Revenant',hp:90,  maxHp:90,  sprite:'assets/enemy_boss.png', atk:13 },
-            { name:'Dark Mage',hp:110,maxHp:110, sprite:'assets/enemy_boss.png', atk:16 }
+            { name:'Apprentice',hp:90,  maxHp:90,  sprite:'assets/enemy_boss.png', atk:30 },
+            { name:'Dark Mage',hp:110,maxHp:110, sprite:'assets/enemy_boss.png', atk:35 }
         ]
     };
     return (sets[levelId] || sets['1-1']).map(e => ({ ...e }));
@@ -486,7 +490,7 @@ function stageCard(card) {
         return;
     }
 
-    // Already staged — remove it
+    // Already staged — remove it (Unselect)
     const existingIdx = stagedCards.findIndex(s => s.uid === card.uid);
     if (existingIdx !== -1) {
         stagedCards.splice(existingIdx, 1);
@@ -494,64 +498,72 @@ function stageCard(card) {
         renderDisplayZone();
         return;
     }
+
+    // --- STAGING RULES & SAFETY CHECKS ---
+    if (stagedCards.length === 1) {
+        const firstCard = stagedCards[0];
+
+        // 1. Block Merged Cards from being used in ANY merge
+        if (firstCard.type === 'merge-hand' || card.type === 'merge-hand') {
+            setBattleLog("Merged cards cannot be merged again! Use it to ATTACK.");
+            return;
+        }
+
+        // 2. Block Harmony + Harmony
+        if (firstCard.type === 'harmony' && card.type === 'harmony') {
+            setBattleLog("Cannot combine two Harmony cards!");
+            return;
+        }
+
+        // 3. Block Wrath + Harmony (and vice versa)
+        if (firstCard.type === 'wrath' && card.type === 'harmony') {
+            setBattleLog("Cannot merge a Wrath card with a Harmony card!");
+            return;
+        }
+        if (firstCard.type === 'harmony' && card.type === 'wrath') {
+            setBattleLog("Cannot merge a Harmony card with a Wrath card!");
+            return;
+        }
+    }
+
     // Max 2 staged
     if (stagedCards.length >= 2) {
         setBattleLog('You can only stage up to 2 cards at a time.');
         return;
     }
+
     stagedCards.push(card);
     renderHand();
     renderDisplayZone();
 }
 
 function renderDisplayZone() {
-    const zone    = document.getElementById('card-display-zone');
-    const slots   = document.getElementById('staged-slots');
     const actions = document.getElementById('display-actions');
-    if (!zone || !slots || !actions) return;
+    if (!actions) return;
 
-    if (stagedCards.length === 0) {
-        zone.classList.add('hidden');
-        return;
-    }
-    zone.classList.remove('hidden');
-
-    // Render staged cards
-    slots.innerHTML = '';
-    stagedCards.forEach(card => {
-        const el = document.createElement('div');
-        el.className = `staged-card ${card.type === 'merge-hand' ? 'merge-card' : card.type}`;
-
-        let resCostStr = '';
-        if (card.resCost && Object.keys(card.resCost).length > 0) {
-            resCostStr = Object.entries(card.resCost).map(([r,v]) => `${v}${r[0].toUpperCase()}`).join('+');
-        }
-
-        el.innerHTML = `
-            <span class="s-dismiss">✕ click to remove</span>
-            <span class="s-icon">${card.icon}</span>
-            <span class="s-name">${card.name}</span>
-            <span class="s-cost">${card.manaCost > 0 ? card.manaCost + ' MP' : ''}${resCostStr ? ' ' + resCostStr : ''}${!card.manaCost && !resCostStr ? 'Free' : ''}</span>`;
-        el.addEventListener('click', () => stageCard(card));
-        slots.appendChild(el);
-    });
-
-    // Action buttons
+    // Reset the actions area completely if no cards are staged
     actions.innerHTML = '';
+
     if (stagedCards.length === 1) {
+        // 1 Card Selected -> Show ATTACK
         const btn = document.createElement('button');
         btn.className = 'game-btn attack-btn';
-        btn.textContent = 'USE CARD';
+        btn.style.width = "100%";
+        btn.textContent = '✦ USE';
         btn.addEventListener('click', executeAttack);
         actions.appendChild(btn);
     } else if (stagedCards.length === 2) {
+        // 2 Cards Selected -> Morphs into MERGE
         const btn = document.createElement('button');
         btn.className = 'game-btn merge-btn';
-        btn.textContent = '✦ MERGE';
+        btn.style.width = "100%";
+        btn.textContent = '✦ MERGE (20 MP)';
         btn.addEventListener('click', executeMerge);
         actions.appendChild(btn);
     }
 }
+
+
 
 /* =============================================
    EXECUTE ATTACK
@@ -591,6 +603,7 @@ function executeAttack() {
     }
 
     playSFX('card');
+    playSFX('hurt');
 
     // Deduct costs
     if (card.resCost) {
@@ -628,8 +641,16 @@ function executeAttack() {
    UTILITY CARD EFFECTS (fixed bottom row)
    ============================================= */
 function executeUtilityCard(card) {
+    if (card.manaCost && player.mana < card.manaCost) {
+        setBattleLog(`Not enough mana for ${card.name}! Need ${card.manaCost} MP.`);
+        playSFX('tap');
+        return;
+    }
     playSFX('card');
 
+    if (card.manaCost) {
+        player.mana -= card.manaCost;
+    }
     if (card.effect === 'healHp') {
         player.hp = Math.min(player.maxHp, player.hp + (card.healHp || 0));
         setBattleLog(`${card.name}: Restored ${card.healHp} HP!`);
@@ -637,14 +658,25 @@ function executeUtilityCard(card) {
         player.mana = Math.min(player.maxMana, player.mana + (card.healMana || 0));
         setBattleLog(`${card.name}: Restored ${card.healMana} MP!`);
     } else if (card.effect === 'shield') {
-        if (player.mana < (card.manaCost || 0)) {
-            setBattleLog(`Not enough mana for ${card.name}! Need ${card.manaCost} MP.`);
-            playSFX('tap');
-            return;
-        }
-        player.mana -= card.manaCost || 0;
         shield += card.shieldAmt || 0;
         setBattleLog(`${card.name}: Blocking ${card.shieldAmt} damage next hit!`);
+    } else if (card.effect === 'boostcard') {
+        // --- MOVED TO UTILITY: BOOST ALL DAMAGE CARDS IN HAND BY +15 ---
+        let boostedCount = 0;
+        hand.forEach(c => {
+            if (c.damage !== undefined) {
+                c.damage += 15;
+                boostedCount++;
+            }
+        });
+        
+        if (boostedCount > 0) {
+            setBattleLog(`${card.name}: Empowered cards in hand with +15 DMG!`);
+        } else {
+            setBattleLog(`${card.name}: Cast, but no attack cards were in hand to boost.`);
+        }
+        
+        renderHand(); 
     }
 
     utilityUsed.add(card.id);
@@ -728,7 +760,7 @@ function executeMerge() {
     const key      = elements.join('_');
     const template = MERGE_TABLE[key] || MERGE_TABLE['forest_forest'];
 
-    const mergeCost = freeMerge ? 0 : (template.manaCost || 5);
+    const mergeCost = freeMerge ? 0 : (template.manaCost || 20);
     if (player.mana < mergeCost) {
         setBattleLog(`Not enough mana to merge! Need ${mergeCost} MP.`);
         playSFX('tap');
@@ -766,10 +798,12 @@ function executeMerge() {
 function endTurn() {
     if (!currentEnemy || currentEnemy.hp <= 0) return;
     playSFX('tap');
+    playSFX('hurt');
 
     const dmg = Math.floor(Math.random() * (currentEnemy.atk || 10)) + (Math.floor((currentEnemy.atk || 10) / 2));
     player.hp = Math.max(0, player.hp - dmg);
     setBattleLog(`${currentEnemy.name} strikes back for ${dmg} damage!`);
+
 
     updatePlayerUI();
 
@@ -796,6 +830,7 @@ function addCardsFromDeck() {
         return;
     }
     playSFX('card');
+    playSFX('shuffle');
     player.mana -= 25;
     for (let i = 0; i < 4; i++) {
         const drawn = dealFromDrawPile();
@@ -826,6 +861,7 @@ function loadNextEnemy() {
 }
 
 function onEnemyDefeated() {
+    playSFX('hurt4');
     setBattleLog(`${currentEnemy.name} is defeated!`);
 
     // Mark dot dead
@@ -833,10 +869,13 @@ function onEnemyDefeated() {
     if (dots[enemyIndex]) dots[enemyIndex].classList.add('dead');
 
     // Partial mana/resource restore between enemies
-    player.mana = Math.min(player.maxMana, player.mana + 12);
+    player.mana = Math.min(player.maxMana, player.mana + 10);
     resources.forest = Math.min(MAX_RES, resources.forest + 2);
     resources.ocean  = Math.min(MAX_RES, resources.ocean  + 2);
     resources.land   = Math.min(MAX_RES, resources.land   + 2);
+
+    utilityUsed.clear(); 
+    renderUtility();
 
     // Clear staged
     stagedCards = [];
@@ -863,6 +902,7 @@ function onLevelComplete() {
 }
 
 function onPlayerDeath() {
+    playSFX('hurt2');
     setBattleLog('You have been defeated...');
     setTimeout(() => {
         leaveBattle();

@@ -71,7 +71,7 @@ body {
     z-index:20; width:100%; max-width:540px;
 }
 .main-logo-img {
-    width:100%; max-width:480px; height:auto;
+    width:680px; height:auto;
     margin-bottom:30px;
     filter:drop-shadow(0 0 20px var(--pink-glow));
     animation:logoFloat 5s ease-in-out infinite;
@@ -301,14 +301,15 @@ body {
 .right-panel { align-items:flex-end; }
 
 .combatant-sprite {
-    width:110px; height:auto; max-height:160px;
-    object-fit:contain;
-    filter:drop-shadow(0 6px 18px rgba(0,0,0,.8));
+    width: 300px;
+    height: auto;
+    animation: playerIdle 2.5s ease-in-out infinite;
+
 }
 .sprite-ph {
     font-size:4.5rem; line-height:1;
     filter:drop-shadow(0 4px 14px rgba(0,0,0,.5));
-    user-select:none; animation:playerIdle 3s ease-in-out infinite;
+    user-select:none; animation:playerIdle 2.5s ease-in-out infinite;
 }
 .enemy-ph { animation:enemyIdle 2.5s ease-in-out infinite; }
 @keyframes playerIdle { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
@@ -325,7 +326,7 @@ body {
 .right-panel .combatant-info { align-items:flex-end; }
 
 .stat-bar-row {
-    display:flex; align-items:center; gap:5px; width:140px;
+    display:flex; align-items:center; gap:5px; width:200px;
 }
 .bar-tag {
     font-family:'Lato',sans-serif; font-weight:700; font-size:0.58rem;
@@ -338,11 +339,11 @@ body {
     flex:1; height:7px; background:rgba(255,255,255,.1);
     border-radius:4px; overflow:hidden;
 }
-.bar-fill { height:100%; border-radius:4px; transition:width .5s ease; }
+.bar-fill { height:300px; width: 500;border-radius:4px; transition:width .5s ease; }
 .hp-fill  { background:var(--hp-green); box-shadow:0 0 5px rgba(61,232,122,.5); }
 .mp-fill  { background:var(--mana);     box-shadow:0 0 5px rgba(78,184,255,.5); }
 .ehp-fill { background:var(--hp-enemy); box-shadow:0 0 5px rgba(232,64,64,.5); }
-.bar-label { font-family:'Lato',sans-serif; font-size:0.6rem; color:var(--dim); min-width:44px; }
+.bar-label { font-family:'Lato',sans-serif; font: size 16px;; color:var(--dim); min-width:44px; }
 
 /* =============================================
    CARD DISPLAY ZONE (staged area)
@@ -561,7 +562,7 @@ body {
     padding: 7px 0px 9px 300px;
 }
 #battle-log-box {
-    width: 100%;
+    width: 70%;
     height: 60px;               /* Fixed short height so it doesn't take over the screen space */
     background: rgba(5, 3, 12, 0.85);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
