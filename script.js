@@ -1,12 +1,12 @@
-/* ==========================================
-   MAGES & CARDS — Battle Rewrite v1.1
-   ========================================== */
+/* =============================================
+   MAGES & CARDS  —  script.js  v1.2
+   ============================================= */
 
 const isDev = false;
 
-/* ==========================================
+/* =============================================
    AUDIO
-   ========================================== */
+   ============================================= */
 const GameAudio = {
     music: {
         current: null,
@@ -20,7 +20,7 @@ const GameAudio = {
         tracks: {
             button: new Audio('audio/sfx_button.mp3'),
             tap:    new Audio('audio/sfx_tap.mp3'),
-            card:   new Audio('audio/sfx_button.mp3'), // reuse until dedicated sfx exists
+            card:   new Audio('audio/sfx_button.mp3'),
             hit:    new Audio('audio/sfx_tap.mp3')
         }
     }
@@ -28,17 +28,16 @@ const GameAudio = {
 GameAudio.music.tracks.menu.loop   = true;
 GameAudio.music.tracks.battle.loop = true;
 
-function playMusic(trackName) {
-    const next = GameAudio.music.tracks[trackName];
-    if (!next || GameAudio.music.current === next) return;
+function playMusic(name) {
+    const t = GameAudio.music.tracks[name];
+    if (!t || GameAudio.music.current === t) return;
     if (GameAudio.music.current) {
         GameAudio.music.current.pause();
         GameAudio.music.current.currentTime = 0;
     }
-    GameAudio.music.current = next;
-    next.play().catch(() => {});
+    GameAudio.music.current = t;
+    t.play().catch(() => {});
 }
-
 function playSFX(name) {
     const src = GameAudio.sfx.tracks[name];
     if (!src) return;
@@ -46,59 +45,117 @@ function playSFX(name) {
     s.volume = GameAudio.sfx.volume;
     s.play().catch(() => {});
 }
-
 window.addEventListener('click', () => playMusic('menu'), { once: true });
 
-/* ==========================================
-   BATTLE STATE
-   ========================================== */
+/* =============================================
+   CARD DEFINITIONS
+   ============================================= */
 
-let player = {
-    hp: 100, maxHp: 100,
-    mana: 50, maxMana: 50,
-    resources: { forest: 10, ocean: 10, land: 10 }
-};
-
-let deck = [];
-let hand = [];
-let discardPile = [];
-let selectedCards = []; // for display zone + merge/attack
-
-let currentEnemy = null;
-let enemyQueue = [];
-let enemyIndex = 0;
-
-let gameHistory = [];
-let unlockedLevels = { '1-1': true, '1-2': false, '1-3': false };
-
-// Card definitions (Wrath + Harmony)
-const allCards = [
-    // Wrath (Combat)
-    { id: 'w1', type: 'wrath', name: 'Fire Blast', icon: '🔥', resReq: {forest:2}, damage: 25, manaCost: 12, element: 'forest' },
-    { id: 'w2', type: 'wrath', name: 'Forest Fire', icon: '🔥', resReq: {forest:4}, damage: 40, manaCost: 10, element: 'forest' },
-    { id: 'w3', type: 'wrath', name: 'Burning Shot', icon: '🔥', resReq: {land:2}, damage: 20, manaCost: 11, element: 'forest' },
-    { id: 'w4', type: 'wrath', name: 'Tsunami', icon: '🌊', resReq: {ocean:5}, damage: 50, manaCost: 12, element: 'ocean' },
-    { id: 'w5', type: 'wrath', name: 'Water Strike', icon: '🌊', resReq: {ocean:2}, damage: 20, manaCost: 10, element: 'ocean' },
-    { id: 'w6', type: 'wrath', name: 'Rain Dance', icon: '🌊', resReq: {ocean:3}, damage: 25, manaCost: 11, element: 'ocean' },
-    { id: 'w7', type: 'wrath', name: 'Earthquake', icon: '⛰️', resReq: {land:5}, damage: 50, manaCost: 12, element: 'land' },
-    { id: 'w8', type: 'wrath', name: 'Sinkhole', icon: '⛰️', resReq: {land:3}, damage: 25, manaCost: 10, element: 'land' },
-    { id: 'w9', type: 'wrath', name: 'Earth Slam', icon: '⛰️', resReq: {land:2}, damage: 20, manaCost: 11, element: 'land' },
-    
-
-    // Harmony
-    { id: 'h1', type: 'harmony', name: 'Mana Bloom', icon: '🌟', effect: 'mana', value: 30, resCost: {forest:5, ocean:5, land:5} },
-    { id: 'h2', type: 'harmony', name: 'Resource Gift', icon: '🌱', effect: 'resource', value: 8, manaCost: 25 },
-    { id: 'h3', type: 'harmony', name: 'Free Merge', icon: '🔄', effect: 'freemerge', manaCost: 0, resCost: {} }
+// MAIN DECK — 12 cards, shuffled together: 9 Wrath + 3 Harmony.
+// These fill the top 4 hand slots. They cycle through draw → hand → discard → reshuffle.
+const MAIN_DECK_POOL = [
+    // Wrath cards (red border) — cost resources, deal damage
+    { id:'w1', name:'Flame Burst',  icon:'🔥', type:'wrath', element:'forest', manaCost:0, resCost:{forest:2}, damage:16 },
+    { id:'w2', name:'Tidal Wave',   icon:'🌊', type:'wrath', element:'ocean',  manaCost:0, resCost:{ocean:2},  damage:18 },
+    { id:'w3', name:'Stone Crush',  icon:'🪨', type:'wrath', element:'land',   manaCost:0, resCost:{land:2},   damage:15 },
+    { id:'w4', name:'Arcane Bolt',  icon:'⚡', type:'wrath', element:'forest', manaCost:6, resCost:{forest:1}, damage:22 },
+    { id:'w5', name:'Frost Lance',  icon:'❄️', type:'wrath', element:'ocean',  manaCost:8, resCost:{ocean:1},  damage:24 },
+    { id:'w6', name:'Quake Spike',  icon:'🌋', type:'wrath', element:'land',   manaCost:6, resCost:{land:1},   damage:20 },
+    { id:'w7', name:'Wildfire',     icon:'🌿', type:'wrath', element:'forest', manaCost:4, resCost:{forest:3}, damage:30 },
+    { id:'w8', name:'Riptide',      icon:'💧', type:'wrath', element:'ocean',  manaCost:4, resCost:{ocean:3},  damage:28 },
+    { id:'w9', name:'Landslide',    icon:'🏔️', type:'wrath', element:'land',   manaCost:4, resCost:{land:3},   damage:26 },
+    // Harmony cards (gold border) — restore mana or resources; mixed into the same deck
+    { id:'h1', name:'Mana Bloom',  icon:'💎', type:'harmony', element:'none', manaCost:0,  resCost:{forest:3,ocean:2,land:2}, effect:'mana',      healMana:30 },
+    { id:'h2', name:'Earth Pulse', icon:'🌱', type:'harmony', element:'none', manaCost:20, resCost:{},                        effect:'resource',   healRes:4   },
+    { id:'h3', name:'Free Weave',  icon:'✨', type:'harmony', element:'none', manaCost:0,  resCost:{},                        effect:'freemerge'               }
 ];
 
-function initDeck() {
-    deck = Array.from({length: 12}, (_,i) => ({...allCards[i % allCards.length], uid: 'c'+Date.now()+i}));
-    discardPile = [];
-}
+// UTILITY CARDS — fixed, always present in the bottom 3 slots.
+// Never shuffle, never go to discard, never used up (one-time per battle resets each enemy).
+const UTILITY_CARDS = [
+    { id:'u1', name:'Heal Rune',   icon:'💚', type:'utility', manaCost:0,  resCost:{}, effect:'healHp',   healHp:25,  desc:'Restore 25 HP. One use per enemy.' },
+    { id:'u2', name:'Mana Surge',  icon:'🔷', type:'utility', manaCost:0,  resCost:{}, effect:'healMana', healMana:20, desc:'Restore 20 MP. One use per enemy.' },
+    { id:'u3', name:'Ward Stone',  icon:'🛡️', type:'utility', manaCost:10, resCost:{}, effect:'shield',   shieldAmt:15, desc:'Block 15 dmg next enemy hit. Costs 10 MP.' }
+];
 
-/* ==========================================
+// Merge result table: element combos → new card stats
+// key: sorted elements joined by '_'
+const MERGE_TABLE = {
+    'forest_ocean': { name:'Mist Surge',    icon:'🌫️', damage:38, resCost:{forest:1,ocean:1}, manaCost:5 },
+    'forest_land':  { name:'Verdant Slam',  icon:'🌳', damage:35, resCost:{forest:1,land:1},  manaCost:5 },
+    'land_ocean':   { name:'Tidal Stone',   icon:'⛰️', damage:40, resCost:{ocean:1,land:1},   manaCost:5 },
+    'forest_forest':{ name:'Twin Blaze',    icon:'🔥', damage:44, resCost:{forest:2},          manaCost:6 },
+    'ocean_ocean':  { name:'Twin Tide',     icon:'🌊', damage:46, resCost:{ocean:2},            manaCost:6 },
+    'land_land':    { name:'Twin Quake',    icon:'🪨', damage:48, resCost:{land:2},             manaCost:6 }
+};
+
+/* =============================================
+   GAME STATE
+   ============================================= */
+let player = { hp:100, maxHp:100, mana:50, maxMana:50 };
+let resources = { forest:10, ocean:10, land:10 };
+const MAX_RES = 10;
+
+// Deck system
+// drawPile: remaining cards from the shuffled 12-card main deck
+// hand:     the 4 cards currently showing in the top row (drawn from drawPile)
+// discardPile: used main-deck cards waiting for reshuffle
+// utilityUsed: tracks which utility card ids were used this enemy fight
+let drawPile     = [];
+let hand         = [];   // top 4 slots — from main deck
+let discardPile  = [];
+let utilityUsed  = new Set(); // resets each enemy
+let stagedCards  = [];
+let freeMerge    = false;
+let shield       = 0;
+
+// Enemies
+let enemyQueue   = [];
+let currentEnemy = null;
+let enemyIndex   = 0;
+
+// Level tracking
+let currentLevelId   = '1-1';
+let unlockedLevels   = ['q-1']; // element IDs
+let gameHistory      = [];
+let currentLevelFile = '';
+
+/* =============================================
+   DOMContentLoaded — wire up map nodes
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    // Volume sliders
+    document.getElementById('bgm-slider')?.addEventListener('input', e => {
+        Object.values(GameAudio.music.tracks).forEach(t => t.volume = e.target.value);
+    });
+    document.getElementById('sfx-slider')?.addEventListener('input', e => {
+        GameAudio.sfx.volume = e.target.value;
+    });
+
+    // Map node click handlers
+    document.querySelectorAll('.map-node').forEach(node => {
+        node.addEventListener('click', async () => {
+            if (node.classList.contains('locked')) return;
+            const file  = node.dataset.file;
+            const start = node.dataset.start;
+            const level = node.dataset.level;
+            if (!file) return;
+            currentLevelId   = level || '1-1';
+            currentLevelFile = file;
+            await startBattle(file, start);
+        });
+    });
+});
+
+/* =============================================
    SCREEN NAVIGATION
-   ========================================== */
+   ============================================= */
+function switchScreen(fromId, toId) {
+    const f = document.getElementById(fromId);
+    const t = document.getElementById(toId);
+    if (f) { f.classList.add('hidden'); f.style.display = ''; }
+    if (t) { t.classList.remove('hidden'); t.style.display = 'flex'; }
+}
 function showCampaign() {
     playSFX('button');
     switchScreen('main-menu-screen', 'campaign-screen');
@@ -106,6 +163,7 @@ function showCampaign() {
 function showPathSelection(chapterId) {
     playSFX('button');
     switchScreen('campaign-screen', 'path-selection-screen');
+    updateMapUI();
 }
 function goBackToChapters() {
     playSFX('button');
@@ -116,28 +174,10 @@ function goBackToMenu() {
     playMusic('menu');
     switchScreen('campaign-screen', 'main-menu-screen');
 }
-function switchScreen(fromId, toId) {
-    const from = document.getElementById(fromId);
-    const to   = document.getElementById(toId);
-    if (from) { from.classList.add('hidden'); from.style.display = ''; }
-    if (to)   { to.classList.remove('hidden'); to.style.display = 'flex'; }
-}
 
-document.querySelectorAll('.map-node').forEach(node => {
-    node.addEventListener('click', () => {
-        if (node.classList.contains('locked')) return;
-        const level = node.dataset.level;
-        startBattleLevel(level);
-    });
-});
-
-window.onload = () => {
-    updateMapLocks();
-};
-
-/* ==========================================
-   OPTIONS / CREDITS / MODALS
-   ========================================== */
+/* =============================================
+   MODALS
+   ============================================= */
 function openOptions() {
     playSFX('button');
     document.getElementById('options-modal').style.display = 'block';
@@ -148,509 +188,731 @@ function openCredits() {
     document.getElementById('credits-modal').style.display = 'block';
     document.getElementById('modal-overlay').style.display = 'block';
 }
-
-function closeModals() {
-    playSFX('button');
-    document.querySelectorAll('.modal-box').forEach(m => m.style.display = 'none');
-    document.getElementById('modal-overlay').style.display = 'none';
-}
-
-function confirmLeave() {
-    document.getElementById('leave-confirm-modal').style.display = 'block';
-    document.getElementById('modal-overlay').style.display = 'block';
-}
-
-function leaveBattle() {
-    closeModals();
-    switchScreen('vn-game-screen', 'path-selection-screen');
-}
-
-function closeLeaveConfirm() {
-    closeModals();
-}
-
 function openTutorial() {
     playSFX('button');
     document.getElementById('tutorial-modal').style.display = 'block';
     document.getElementById('modal-overlay').style.display = 'block';
 }
-
-/* ==========================================
-   VOLUME SLIDERS
-   ========================================== */
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('bgm-slider')?.addEventListener('input', e => {
-        Object.values(GameAudio.music.tracks).forEach(t => t.volume = e.target.value);
-    });
-    document.getElementById('sfx-slider')?.addEventListener('input', e => {
-        GameAudio.sfx.volume = e.target.value;
-    });
-
-    // Quest tile click handlers
-    document.querySelectorAll('.quest-tile').forEach(tile => {
-        tile.addEventListener('click', async () => {
-            if (tile.classList.contains('locked')) return;
-            const file  = tile.dataset.file;
-            const start = tile.dataset.start;
-            if (!file || !start) return;
-            await startBattleLevel(file, start);
-        });
-    });
-});
-
-/* ==========================================
-   LEVEL LOADING & BATTLE START
-   ========================================== */
-
-// Load chapter JSON (for narrative nodes between battles if needed)
-async function loadChapter(file) {
-    try {
-        const res = await fetch(file);
-        storyData = await res.json();
-    } catch(e) {
-        storyData = {};
-        console.warn('Could not load chapter file:', file, e);
-    }
+function closeTutorial() {
+    playSFX('button');
+    document.getElementById('tutorial-modal').style.display = 'none';
+    document.getElementById('modal-overlay').style.display = 'none';
 }
-
-async function startBattleLevel(levelId) {
-    // Reset
-    initDeck();
-    hand = [];
-    drawNewHand();
-    player.hp = player.maxHp;
-    player.mana = player.maxMana;
-    player.resources = {forest:10, ocean:10, land:10};
-
-    enemyQueue = [
-        {name: "Wraith", hp: 70, maxHp: 70},
-        {name: "Forest Guardian", hp: 95, maxHp: 95},
-        {name: "Abyssal Horror", hp: 120, maxHp: 120}
-    ];
-    enemyIndex = 0;
-    currentEnemy = {...enemyQueue[0]};
-
-    document.getElementById('level-label').textContent = levelId;
-    switchScreen('path-selection-screen', 'vn-game-screen');
-    
-    renderHand();
-    updateResourcesUI();
-    updatePlayerUI();
-    updateEnemyUI();
-    renderTrackerDots();
-    setBattleLog(`Battle started: ${currentEnemy.name}`);
+function closeModals() {
+    ['options-modal','credits-modal','tutorial-modal',
+     'level-complete-popup','leave-confirm-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+    document.getElementById('modal-overlay').style.display = 'none';
 }
-
-/* ==========================================
-   ENEMY MANAGEMENT
-   ========================================== */
-function loadNextEnemy() {
-    enemyIndex++;
-    if (enemyIndex >= enemyQueue.length) {
-        onLevelComplete();
-        return;
-    }
-    currentEnemy = {...enemyQueue[enemyIndex]};
-    updateEnemyUI();
-    renderTrackerDots();
-}
-
-// ===================== VICTORY / PROGRESSION =====================
-function onLevelComplete() {
-    const level = document.getElementById('level-label').textContent;
-    if (level === '1-1') unlockedLevels['1-2'] = true;
-    if (level === '1-2') unlockedLevels['1-3'] = true;
-    
-    document.getElementById('level-complete-popup').style.display = 'block';
+function confirmLeave() {
+    playSFX('button');
+    document.getElementById('leave-confirm-modal').style.display = 'block';
     document.getElementById('modal-overlay').style.display = 'block';
 }
-
-function returnToMap() {
+function closeLeaveConfirm() {
+    playSFX('button');
+    document.getElementById('leave-confirm-modal').style.display = 'none';
+    document.getElementById('modal-overlay').style.display = 'none';
+}
+function leaveBattle() {
+    playSFX('button');
+    closeModals();
+    playMusic('menu');
+    switchScreen('vn-game-screen', 'path-selection-screen');
+    updateMapUI();
+}
+function closeVictoryPopup() {
+    playSFX('button');
     closeModals();
     switchScreen('vn-game-screen', 'path-selection-screen');
-    updateMapLocks();
+    playMusic('menu');
+    updateMapUI();
 }
 
-function updateMapLocks() {
-    if (unlockedLevels['1-2']) document.getElementById('q-2').classList.remove('locked');
-    if (unlockedLevels['1-3']) document.getElementById('q-3').classList.remove('locked');
-}
-
-function onPlayerDeath() {
-    setBattleLog('You have been defeated...');
-    setTimeout(() => {
-        // Return to quest select on death (could add game-over screen later)
-        switchScreen('vn-game-screen', 'path-selection-screen');
-        playMusic('menu');
-        updateMapUI();
-    }, 2000);
-}
-
-/* ==========================================
-   BATTLE LOG
-   ========================================== */
-function setBattleLog(text) {
-    document.getElementById('battle-log-text').textContent = text;
-    gameHistory.push({name: 'SYSTEM', text});
-}
-function appendBattleLog(text) {
-    const el = document.getElementById('battle-log-text');
-    if (el) el.textContent = text;
-    addToLog('BATTLE', text);
-}
-
-/* ==========================================
-   CARD RENDERING
-   ========================================== */
-function renderCards() {
-    renderCombatCards();
-    renderUtilityCards();
-}
-
-function renderHand() {
-    // Combat (Wrath)
-    const combatContainer = document.getElementById('combat-cards');
-    combatContainer.innerHTML = '';
-    hand.filter(c => c.type === 'wrath').forEach(card => {
-        const el = createCardElement(card);
-        combatContainer.appendChild(el);
+/* =============================================
+   MAP UI
+   ============================================= */
+function updateMapUI() {
+    // Which levels are unlocked
+    unlockedLevels.forEach(id => {
+        const node = document.getElementById(id);
+        if (!node) return;
+        node.classList.remove('locked');
+        node.classList.add('unlocked');
+        // Update dot symbol
+        const dot = node.querySelector('.map-dot');
+        if (dot) dot.innerHTML = '&#10022;';
     });
-
-    // Harmony
-    const utilContainer = document.getElementById('utility-cards');
-    utilContainer.innerHTML = '';
-    hand.filter(c => c.type === 'harmony').forEach(card => {
-        const el = createCardElement(card);
-        utilContainer.appendChild(el);
-    });
+    // Connector lines
+    if (unlockedLevels.includes('q-2')) {
+        document.getElementById('line-1-2')?.classList.add('unlocked');
+    }
+    if (unlockedLevels.includes('q-3')) {
+        document.getElementById('line-2-3')?.classList.add('unlocked');
+    }
 }
 
-function renderUtilityCards() {
-    const container = document.getElementById('utility-cards');
-    if (!container) return;
-    container.innerHTML = '';
-    utilityCards.forEach(card => {
-        const el = buildCardElement(card, 'utility');
-        if (usedUtility.has(card.id)) el.classList.add('used');
-        container.appendChild(el);
-    });
+function unlockNextLevel(currentNodeId) {
+    const order = ['q-1', 'q-2', 'q-3'];
+    const idx = order.indexOf(currentNodeId);
+    if (idx !== -1 && idx + 1 < order.length) {
+        const nextId = order[idx + 1];
+        if (!unlockedLevels.includes(nextId)) {
+            unlockedLevels.push(nextId);
+        }
+    }
 }
 
-function buildCardElement(card, type) {
-    const el = document.createElement('div');
-    el.className = `spell-card ${type}`;
-    el.title = card.desc || '';
+/* =============================================
+   BATTLE INIT
+   ============================================= */
+async function startBattle(file, startNode) {
+    playSFX('button');
+    playMusic('battle');
 
-    // Mana pips (combat cards only)
-    let pipsHtml = '';
-    if (type === 'combat') {
-        const totalPips = 5;
-        const filled = Math.min(Math.ceil(card.manaCost / 10), totalPips);
-        pipsHtml = `<div class="card-mana-pips">` +
-            Array.from({length: totalPips}, (_,i) =>
-                `<div class="pip${i < filled ? '' : ' empty'}"></div>`
-            ).join('') +
-        `</div>`;
+    // Load chapter JSON if provided (for enemy list etc.)
+    let chapterData = {};
+    try {
+        const res = await fetch(file);
+        chapterData = await res.json();
+    } catch(e) {
+        // fallback demo data if file missing
     }
 
-    const costLabel = card.manaCost === 0
-        ? `<span class="card-cost zero">FREE</span>`
-        : `<span class="card-cost">${card.manaCost} MP</span>`;
+    // Enemy queue from chapter JSON or demo fallback
+    if (chapterData.__enemies) {
+        enemyQueue = chapterData.__enemies.map(e => ({ ...e }));
+    } else {
+        enemyQueue = getDemoEnemies(currentLevelId);
+    }
 
-    el.innerHTML = `
-        <div class="card-icon">${card.icon}</div>
-        <div class="card-name">${card.name}</div>
-        ${type === 'combat' ? pipsHtml : ''}
-        ${type === 'combat' ? costLabel : '<span class="card-cost zero">1× USE</span>'}
-    `;
+    // Reset player
+    player.hp   = player.maxHp;
+    player.mana = player.maxMana;
+    resources   = { forest:10, ocean:10, land:10 };
 
-    el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (type === 'combat')  useCombatCard(card);
-        if (type === 'utility') useUtilityCard(card, el);
+    // Build and shuffle deck
+    buildDeck();
+
+    // Reset state
+    stagedCards  = [];
+    freeMerge    = false;
+    gameHistory  = [];
+    enemyIndex   = 0;
+
+    // Set level label
+    const lbl = document.getElementById('level-label');
+    if (lbl) lbl.textContent = currentLevelId;
+
+    // Show battle screen
+    switchScreen('path-selection-screen', 'vn-game-screen');
+
+    renderTrackerDots();
+    loadNextEnemy();
+}
+
+function getDemoEnemies(levelId) {
+    const sets = {
+        '1-1': [
+            { name:'Shade',   hp:55,  maxHp:55,  sprite:'assets/enemy_1.png',    atk:8  },
+            { name:'Wraith',  hp:70,  maxHp:70,  sprite:'assets/enemy_1.png',    atk:10 }
+        ],
+        '1-2': [
+            { name:'Golem',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:12 },
+            { name:'Golem',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:12 },
+            { name:'Brute',   hp:100, maxHp:100, sprite:'assets/enemy_2.png',    atk:14 }
+        ],
+        '1-3': [
+            { name:'Revenant',hp:90,  maxHp:90,  sprite:'assets/enemy_boss.png', atk:13 },
+            { name:'Dark Mage',hp:110,maxHp:110, sprite:'assets/enemy_boss.png', atk:16 }
+        ]
+    };
+    return (sets[levelId] || sets['1-1']).map(e => ({ ...e }));
+}
+
+/* =============================================
+   DECK SYSTEM
+   ============================================= */
+function buildDeck() {
+    // Shuffle all 12 main deck cards together (9 wrath + 3 harmony)
+    const shuffled = [...MAIN_DECK_POOL]
+        .sort(() => Math.random() - 0.5)
+        .map(c => ({ ...c, uid: c.id + '_' + Math.random().toString(36).slice(2) }));
+
+    drawPile    = shuffled;   // all 12 start in draw pile
+    hand        = [];
+    discardPile = [];
+
+    // Draw initial 4 into hand
+    hand = drawPile.splice(0, 4);
+
+    updateDeckCountUI();
+    renderHand();
+    renderUtility();
+}
+
+function dealFromDrawPile() {
+    // Reshuffle discard back in if draw pile empty
+    if (drawPile.length === 0) {
+        if (discardPile.length === 0) return null;
+        drawPile = [...discardPile].sort(() => Math.random() - 0.5);
+        discardPile = [];
+        setBattleLog('Deck reshuffled!');
+    }
+    return drawPile.splice(0, 1)[0] || null;
+}
+
+function refreshHandAfterTurn() {
+    // Fill empty hand slots from draw pile (hand should always have up to 4)
+    while (hand.length < 4) {
+        const drawn = dealFromDrawPile();
+        if (!drawn) break;
+        hand.push(drawn);
+    }
+    updateDeckCountUI();
+    renderHand();
+}
+
+function updateDeckCountUI() {
+    const deckEl    = document.getElementById('deck-count-label');
+    const discardEl = document.getElementById('discard-count-label');
+    if (deckEl)    deckEl.textContent    = `Deck: ${drawPile.length}`;
+    if (discardEl) discardEl.textContent = `Discard: ${discardPile.length}`;
+}
+
+/* =============================================
+   RENDER HAND (top 4 — from deck)
+   ============================================= */
+function renderHand() {
+    const row = document.getElementById('wrath-row');
+    if (!row) return;
+    row.innerHTML = '';
+
+    hand.forEach(card => {
+        const el = buildCardEl(card);
+        row.appendChild(el);
     });
-    return el;
+
+    // Show draw button only if hand is empty and deck/discard has cards
+    const drawBtn = document.getElementById('btn-draw');
+    if (drawBtn) {
+        const hasDrawable = drawPile.length > 0 || discardPile.length > 0;
+        drawBtn.style.display = (hand.length === 0 && hasDrawable) ? 'flex' : 'none';
+    }
 }
 
-function createCardElement(card) {
+/* =============================================
+   RENDER UTILITY (bottom 3 — always fixed)
+   ============================================= */
+function renderUtility() {
+    const row = document.getElementById('utility-row');
+    if (!row) return;
+    row.innerHTML = '';
+
+    UTILITY_CARDS.forEach(card => {
+        const el = buildCardEl(card);
+        if (utilityUsed.has(card.id)) el.classList.add('used');
+        row.appendChild(el);
+    });
+}
+
+function buildCardEl(card) {
     const el = document.createElement('div');
-    el.className = `spell-card ${card.type}`;
+    el.className  = `spell-card ${card.type === 'merge-hand' ? 'merge-hand' : card.type}`;
+    el.dataset.uid = card.uid;
+
+    if (stagedCards.find(s => s.uid === card.uid)) {
+        el.classList.add('selected');
+    }
+
+    // Resource cost label
+    let resCostStr = '';
+    if (card.resCost && Object.keys(card.resCost).length > 0) {
+        resCostStr = Object.entries(card.resCost)
+            .map(([r, v]) => `${v}${r[0].toUpperCase()}`)
+            .join('+');
+    }
+    // Mana pips (wrath)
+    let pipsHtml = '';
+    if (card.type === 'wrath' || card.type === 'merge-hand') {
+        const maxPips = 5;
+        const filled  = Math.min(Math.ceil((card.manaCost || 0) / 10), maxPips);
+        pipsHtml = `<div class="card-pips">` +
+            Array.from({length: maxPips}, (_,i) =>
+                `<div class="pip${i < filled ? '' : ' empty'}"></div>`
+            ).join('') + `</div>`;
+    }
+
+    // --- NEW: Handle Damage or Description displays ---
+    let extraDescHtml = '';
+    if (card.damage) {
+        // If the card deals damage (Wrath & Merged cards)
+        extraDescHtml = `<div class="card-damage-text">💥 ${card.damage} DMG</div>`;
+    } else if (card.desc) {
+        // Fallback for Utility cards or custom entries that already have a description text
+        extraDescHtml = `<div class="card-desc-text">${card.desc}</div>`;
+    }
+
     el.innerHTML = `
         <div class="card-icon">${card.icon}</div>
         <div class="card-name">${card.name}</div>
-        ${card.manaCost ? `<div class="card-cost">${card.manaCost} MP</div>` : ''}
-    `;
-    el.onclick = () => selectCardForDisplay(card, el);
+        ${pipsHtml}
+        ${extraDescHtml} 
+        <div class="card-costs">
+            ${card.manaCost > 0 ? `<span class="card-mana-cost">${card.manaCost} MP</span>` : ''}
+            ${resCostStr    ? `<span class="card-res-cost">${resCostStr}</span>` : ''}
+            ${!card.manaCost && !resCostStr ? `<span class="card-free">Free</span>` : ''}
+        </div>`;
+
+    el.addEventListener('click', () => stageCard(card));
     return el;
 }
 
-/* ==========================================
-   CARD USAGE
-   ========================================== */
-function useCombatCard(card) {
+/* =============================================
+   STAGING CARDS (display zone)
+   ============================================= */
+function stageCard(card) {
+    playSFX('tap');
+
+    // Utility cards: bypass staging, execute immediately
+    if (card.type === 'utility') {
+        if (utilityUsed.has(card.id)) {
+            setBattleLog(`${card.name} already used this fight!`);
+            return;
+        }
+        executeUtilityCard(card);
+        return;
+    }
+
+    // Already staged — remove it
+    const existingIdx = stagedCards.findIndex(s => s.uid === card.uid);
+    if (existingIdx !== -1) {
+        stagedCards.splice(existingIdx, 1);
+        renderHand();
+        renderDisplayZone();
+        return;
+    }
+    // Max 2 staged
+    if (stagedCards.length >= 2) {
+        setBattleLog('You can only stage up to 2 cards at a time.');
+        return;
+    }
+    stagedCards.push(card);
+    renderHand();
+    renderDisplayZone();
+}
+
+function renderDisplayZone() {
+    const zone    = document.getElementById('card-display-zone');
+    const slots   = document.getElementById('staged-slots');
+    const actions = document.getElementById('display-actions');
+    if (!zone || !slots || !actions) return;
+
+    if (stagedCards.length === 0) {
+        zone.classList.add('hidden');
+        return;
+    }
+    zone.classList.remove('hidden');
+
+    // Render staged cards
+    slots.innerHTML = '';
+    stagedCards.forEach(card => {
+        const el = document.createElement('div');
+        el.className = `staged-card ${card.type === 'merge-hand' ? 'merge-card' : card.type}`;
+
+        let resCostStr = '';
+        if (card.resCost && Object.keys(card.resCost).length > 0) {
+            resCostStr = Object.entries(card.resCost).map(([r,v]) => `${v}${r[0].toUpperCase()}`).join('+');
+        }
+
+        el.innerHTML = `
+            <span class="s-dismiss">✕ click to remove</span>
+            <span class="s-icon">${card.icon}</span>
+            <span class="s-name">${card.name}</span>
+            <span class="s-cost">${card.manaCost > 0 ? card.manaCost + ' MP' : ''}${resCostStr ? ' ' + resCostStr : ''}${!card.manaCost && !resCostStr ? 'Free' : ''}</span>`;
+        el.addEventListener('click', () => stageCard(card));
+        slots.appendChild(el);
+    });
+
+    // Action buttons
+    actions.innerHTML = '';
+    if (stagedCards.length === 1) {
+        const btn = document.createElement('button');
+        btn.className = 'game-btn attack-btn';
+        btn.textContent = 'USE CARD';
+        btn.addEventListener('click', executeAttack);
+        actions.appendChild(btn);
+    } else if (stagedCards.length === 2) {
+        const btn = document.createElement('button');
+        btn.className = 'game-btn merge-btn';
+        btn.textContent = '✦ MERGE';
+        btn.addEventListener('click', executeMerge);
+        actions.appendChild(btn);
+    }
+}
+
+/* =============================================
+   EXECUTE ATTACK
+   ============================================= */
+function executeAttack() {
+    if (stagedCards.length !== 1) return;
+    const card = stagedCards[0];
     if (!currentEnemy) return;
-    if (player.mana < card.manaCost) {
+
+    // Harmony card used from hand — apply effect
+    if (card.type === 'harmony') {
+        if (!executeHarmonyCard(card)) return;
+        hand = hand.filter(c => c.uid !== card.uid);
+        discardPile.push(card);
+        stagedCards = [];
+        updateDeckCountUI();
+        renderHand();
+        renderDisplayZone();
+        return;
+    }
+
+    // Check resources
+    if (card.resCost) {
+        for (const [res, amt] of Object.entries(card.resCost)) {
+            if ((resources[res] || 0) < amt) {
+                setBattleLog(`Not enough ${res} to use ${card.name}!`);
+                playSFX('tap');
+                return;
+            }
+        }
+    }
+    // Check mana
+    if ((card.manaCost || 0) > player.mana) {
         setBattleLog(`Not enough mana for ${card.name}!`);
         playSFX('tap');
         return;
     }
+
     playSFX('card');
 
-    player.mana = Math.max(0, player.mana - card.manaCost);
+    // Deduct costs
+    if (card.resCost) {
+        for (const [res, amt] of Object.entries(card.resCost)) {
+            resources[res] = Math.max(0, (resources[res] || 0) - amt);
+        }
+    }
+    player.mana = Math.max(0, player.mana - (card.manaCost || 0));
 
-    const totalDmg = card.damage + dmgBuff;
-    dmgBuff = 0; // Empower consumed
+    // Deal damage
+    const dmg = card.damage || 0;
+    currentEnemy.hp = Math.max(0, currentEnemy.hp - dmg);
+    setBattleLog(`${card.name} hits ${currentEnemy.name} for ${dmg} damage!`);
 
-    currentEnemy.hp = Math.max(0, currentEnemy.hp - totalDmg);
-    appendBattleLog(`${card.name} deals ${totalDmg} damage to ${currentEnemy.name}!`);
+    // Merge cards disappear; regular deck cards go to discard
+    hand = hand.filter(c => c.uid !== card.uid);
+    if (card.type !== 'merge-hand') discardPile.push(card);
 
+    stagedCards = [];
     updatePlayerUI();
     updateEnemyUI();
+    updateResourceUI();
+    updateDeckCountUI();
 
     if (currentEnemy.hp <= 0) {
         onEnemyDefeated();
         return;
     }
 
-    // Enemy counter-attack (simple)
-    setTimeout(enemyAttack, 600);
+    renderHand();
+    renderDisplayZone();
 }
 
-function useUtilityCard(card, el) {
-    if (usedUtility.has(card.id)) {
-        setBattleLog(`${card.name} already used!`);
-        playSFX('tap');
-        return;
-    }
+/* =============================================
+   UTILITY CARD EFFECTS (fixed bottom row)
+   ============================================= */
+function executeUtilityCard(card) {
     playSFX('card');
-    usedUtility.add(card.id);
-    el.classList.add('used');
 
-    if (card.healHp) {
-        player.hp = Math.min(player.maxHp, player.hp + card.healHp);
-        appendBattleLog(`${card.name}: Restored ${card.healHp} HP!`);
+    if (card.effect === 'healHp') {
+        player.hp = Math.min(player.maxHp, player.hp + (card.healHp || 0));
+        setBattleLog(`${card.name}: Restored ${card.healHp} HP!`);
+    } else if (card.effect === 'healMana') {
+        player.mana = Math.min(player.maxMana, player.mana + (card.healMana || 0));
+        setBattleLog(`${card.name}: Restored ${card.healMana} MP!`);
+    } else if (card.effect === 'shield') {
+        if (player.mana < (card.manaCost || 0)) {
+            setBattleLog(`Not enough mana for ${card.name}! Need ${card.manaCost} MP.`);
+            playSFX('tap');
+            return;
+        }
+        player.mana -= card.manaCost || 0;
+        shield += card.shieldAmt || 0;
+        setBattleLog(`${card.name}: Blocking ${card.shieldAmt} damage next hit!`);
     }
-    if (card.healMana) {
-        player.mana = Math.min(player.maxMana, player.mana + card.healMana);
-        appendBattleLog(`${card.name}: Restored ${card.healMana} Mana!`);
-    }
-    if (card.buffDmg) {
-        dmgBuff += card.buffDmg;
-        appendBattleLog(`${card.name}: Next attack deals +${card.buffDmg} damage!`);
+
+    utilityUsed.add(card.id);
+    updatePlayerUI();
+    updateResourceUI();
+    renderUtility();
+}
+
+/* =============================================
+   HARMONY CARD EFFECTS
+   ============================================= */
+function executeHarmonyCard(card) {
+    playSFX('card');
+
+    if (card.effect === 'mana') {
+        // Check resource cost
+        if (card.resCost) {
+            for (const [res, amt] of Object.entries(card.resCost)) {
+                if (resources[res] < amt) {
+                    setBattleLog(`Not enough ${res} for ${card.name}!`);
+                    playSFX('tap');
+                    return false;
+                }
+            }
+            for (const [res, amt] of Object.entries(card.resCost)) {
+                resources[res] = Math.max(0, resources[res] - amt);
+            }
+        }
+        player.mana = Math.min(player.maxMana, player.mana + (card.healMana || 0));
+        setBattleLog(`${card.name}: Restored ${card.healMana} MP!`);
+    } else if (card.effect === 'resource') {
+        if (player.mana < (card.manaCost || 0)) {
+            setBattleLog(`Not enough mana for ${card.name}!`);
+            playSFX('tap');
+            return false;
+        }
+        player.mana -= card.manaCost || 0;
+        // Simple: restore to all resources equally
+        const gain = card.healRes || 4;
+        resources.forest = Math.min(MAX_RES, resources.forest + gain);
+        resources.ocean  = Math.min(MAX_RES, resources.ocean  + gain);
+        resources.land   = Math.min(MAX_RES, resources.land   + gain);
+        setBattleLog(`${card.name}: +${gain} to all resources!`);
+    } else if (card.effect === 'freemerge') {
+        freeMerge = true;
+        setBattleLog(`${card.name}: Next merge is FREE!`);
     }
 
     updatePlayerUI();
+    updateResourceUI();
+    return true;
+}
+
+/* =============================================
+   EXECUTE MERGE
+   ============================================= */
+function executeMerge() {
+    if (stagedCards.length !== 2) return;
+    const [a, b] = stagedCards;
+
+    // If either staged card is a harmony card, apply its effect and discard it
+    let handled = false;
+    for (const card of [a, b]) {
+        if (card.type === 'harmony') {
+            if (!executeHarmonyCard(card)) return;
+            hand = hand.filter(c => c.uid !== card.uid);
+            discardPile.push(card);
+            handled = true;
+        }
+    }
+    if (handled) {
+        stagedCards = [];
+        updateDeckCountUI();
+        renderHand();
+        renderDisplayZone();
+        return;
+    }
+
+    // Both are wrath/merge-hand — create a merge card
+    const elements = [a.element, b.element].sort();
+    const key      = elements.join('_');
+    const template = MERGE_TABLE[key] || MERGE_TABLE['forest_forest'];
+
+    const mergeCost = freeMerge ? 0 : (template.manaCost || 5);
+    if (player.mana < mergeCost) {
+        setBattleLog(`Not enough mana to merge! Need ${mergeCost} MP.`);
+        playSFX('tap');
+        return;
+    }
+    player.mana -= mergeCost;
+    freeMerge = false;
+
+    // Both source cards go to discard
+    hand = hand.filter(c => c.uid !== a.uid && c.uid !== b.uid);
+    if (a.type !== 'merge-hand') discardPile.push(a);
+    if (b.type !== 'merge-hand') discardPile.push(b);
+
+    // Merge card lands back in hand
+    const mergeCard = {
+        ...template,
+        id:  'merge_' + Date.now(),
+        uid: 'merge_' + Math.random().toString(36).slice(2),
+        type: 'merge-hand',
+        element: elements[0]
+    };
+    hand.push(mergeCard);
+    setBattleLog(`Merged into ${mergeCard.name}!`);
+
+    stagedCards = [];
+    updatePlayerUI();
+    updateDeckCountUI();
+    renderHand();
+    renderDisplayZone();
+}
+
+/* =============================================
+   END TURN — enemy attacks
+   ============================================= */
+function endTurn() {
+    if (!currentEnemy || currentEnemy.hp <= 0) return;
+    playSFX('tap');
+
+    const dmg = Math.floor(Math.random() * (currentEnemy.atk || 10)) + (Math.floor((currentEnemy.atk || 10) / 2));
+    player.hp = Math.max(0, player.hp - dmg);
+    setBattleLog(`${currentEnemy.name} strikes back for ${dmg} damage!`);
+
+    updatePlayerUI();
+
+    if (player.hp <= 0) {
+        onPlayerDeath();
+        return;
+    }
+
+    // Refresh hand wrath slots after enemy turn
+    refreshHandAfterTurn();
+}
+
+/* =============================================
+   DRAW BUTTON
+   ============================================= */
+function addCardsFromDeck() {
+    if (player.mana < 25) {
+        setBattleLog('Not enough mana to draw! Need 25 MP.');
+        playSFX('tap');
+        return;
+    }
+    if (drawPile.length === 0 && discardPile.length === 0) {
+        setBattleLog('No cards left to draw!');
+        return;
+    }
+    playSFX('card');
+    player.mana -= 25;
+    for (let i = 0; i < 4; i++) {
+        const drawn = dealFromDrawPile();
+        if (drawn) hand.push(drawn);
+    }
+    updatePlayerUI();
+    updateDeckCountUI();
+    renderHand();
+    document.getElementById('btn-draw').style.display = 'none';
+}
+
+/* =============================================
+   ENEMY MANAGEMENT
+   ============================================= */
+function loadNextEnemy() {
+    if (enemyIndex >= enemyQueue.length) {
+        onLevelComplete();
+        return;
+    }
+    currentEnemy = { ...enemyQueue[enemyIndex] };
+    renderTrackerDots();
+    updateEnemyUI();
+    updatePlayerUI();
+    updateResourceUI();
+    renderHand();
+    renderDisplayZone();
+    setBattleLog(`${currentEnemy.name} steps forward!`);
 }
 
 function onEnemyDefeated() {
-    setBattleLog(`${currentEnemy.name} defeated!`);
-    const dot = document.querySelectorAll('.tracker-dot')[enemyIndex];
-    if (dot) dot.classList.add('dead');
+    setBattleLog(`${currentEnemy.name} is defeated!`);
 
-    // Partial mana restore between fights
-    player.mana = Math.min(player.maxMana, player.mana + 15);
-    // Restore utility cards for next enemy
-    usedUtility.clear();
-    dmgBuff = 0;
+    // Mark dot dead
+    const dots = document.querySelectorAll('.tracker-dot');
+    if (dots[enemyIndex]) dots[enemyIndex].classList.add('dead');
+
+    // Partial mana/resource restore between enemies
+    player.mana = Math.min(player.maxMana, player.mana + 12);
+    resources.forest = Math.min(MAX_RES, resources.forest + 2);
+    resources.ocean  = Math.min(MAX_RES, resources.ocean  + 2);
+    resources.land   = Math.min(MAX_RES, resources.land   + 2);
+
+    // Clear staged
+    stagedCards = [];
+    renderDisplayZone();
 
     enemyIndex++;
     setTimeout(loadNextEnemy, 900);
 }
 
-// ===================== MERGING =====================
-function performMerge() {
-    const [a, b] = selectedCards;
-    let newElement = '';
-    
-    if ((a.element === 'ocean' && b.element === 'forest') || (a.element === 'forest' && b.element === 'ocean')) {
-        newElement = 'forest_ocean';
-    } else if ((a.element === 'forest' && b.element === 'land') || (a.element === 'land' && b.element === 'forest')) {
-        newElement = 'forest_land';
-    } else if ((a.element === 'land' && b.element === 'ocean') || (a.element === 'ocean' && b.element === 'land')) {
-        newElement = 'land_ocean';
+function onLevelComplete() {
+    // Unlock next level
+    const nodeId = `q-${currentLevelId.split('-')[1]}`;
+    unlockNextLevel(nodeId);
+
+    const victMsg = document.getElementById('victory-msg');
+    if (currentLevelId === '1-3') {
+        if (victMsg) victMsg.textContent = 'You have conquered Chapter 1! More to come...';
+    } else {
+        if (victMsg) victMsg.textContent = 'Level cleared! The path ahead opens...';
     }
 
-    // Create merged card
-    const merged = {
-        id: 'merge_'+Date.now(),
-        type: 'wrath',
-        name: `${a.element} + ${b.element} Fusion`,
-        icon: '✨',
-        damage: Math.floor((a.damage + b.damage) / 1.5),
-        manaCost: Math.max(a.manaCost, b.manaCost) + 5,
-        element: newElement
-    };
-
-    hand = hand.filter(c => c.uid !== a.uid && c.uid !== b.uid);
-    hand.push(merged);
-    
-    selectedCards = [];
-    document.getElementById('card-display-zone').classList.add('hidden');
-    renderHand();
-    setBattleLog(`Created ${merged.name}!`);
+    document.getElementById('level-complete-popup').style.display = 'block';
+    document.getElementById('modal-overlay').style.display = 'block';
 }
 
-// ===================== CARD SELECTION & DISPLAY =====================
-function selectCardForDisplay(card, originalEl) {
-    if (selectedCards.length >= 2) return;
-    
-    selectedCards.push(card);
-    renderCardDisplay();
-    
-    // Remove from hand visually
-    originalEl.style.opacity = '0.3';
-    originalEl.style.pointerEvents = 'none';
+function onPlayerDeath() {
+    setBattleLog('You have been defeated...');
+    setTimeout(() => {
+        leaveBattle();
+    }, 1800);
 }
 
-function renderCardDisplay() {
-    const zone = document.getElementById('card-display-zone');
-    const slots = document.getElementById('card-display-slots');
-    slots.innerHTML = '';
-    
-    selectedCards.forEach((card, i) => {
-        const staged = document.createElement('div');
-        staged.className = 'staged-card';
-        staged.innerHTML = `<div class="card-icon">${card.icon}</div><div class="card-name">${card.name}</div>`;
-        staged.onclick = () => removeFromDisplay(i);
-        slots.appendChild(staged);
-    });
-
-    const actions = document.getElementById('card-display-actions');
-    actions.innerHTML = '';
-
-    if (selectedCards.length === 1) {
-        const attackBtn = document.createElement('button');
-        attackBtn.className = 'game-btn attack-btn';
-        attackBtn.textContent = 'ATTACK';
-        attackBtn.onclick = performAttack;
-        actions.appendChild(attackBtn);
-    } else if (selectedCards.length === 2) {
-        const mergeBtn = document.createElement('button');
-        mergeBtn.className = 'game-btn merge-btn';
-        mergeBtn.textContent = 'MERGE';
-        mergeBtn.onclick = performMerge;
-        actions.appendChild(mergeBtn);
-    }
-
-    zone.classList.remove('hidden');
-}
-
-function removeFromDisplay(index) {
-    selectedCards.splice(index, 1);
-    renderCardDisplay();
-    if (selectedCards.length === 0) {
-        document.getElementById('card-display-zone').classList.add('hidden');
-    }
-    renderHand(); // restore hand visuals
-}
-
-// ===================== END TURN =====================
-function endTurn() {
-    // Move used cards to discard
-    discardPile.push(...hand);
-    hand = [];
-    
-    // Enemy turn
-    if (currentEnemy) {
-        const dmg = 12 + Math.floor(Math.random() * 9);
-        player.hp = Math.max(0, player.hp - dmg);
-        setBattleLog(`${currentEnemy.name} attacks for ${dmg}!`);
-        updatePlayerUI();
-    }
-
-    // Draw new hand
-    drawNewHand();
-
-    if (player.hp <= 0) {
-        // game over
-        setTimeout(() => alert("You were defeated..."), 600);
-    }
-}
-
-function drawNewHand() {
-    while (hand.length < 4 && deck.length > 0) {
-        hand.push(deck.pop());
-    }
-    if (deck.length === 0 && discardPile.length > 0) {
-        deck = discardPile;
-        discardPile = [];
-        // shuffle would go here
-    }
-    renderHand();
-    updateDeckUI();
-}
-
-/* ==========================================
-   ENEMY AI (basic)
-   ========================================== */
-function enemyAttack() {
-    if (!currentEnemy || currentEnemy.hp <= 0) return;
-
-    const dmg = Math.floor(Math.random() * 10) + 8; // 8-17
-    player.hp = Math.max(0, player.hp - dmg);
-    appendBattleLog(`${currentEnemy.name} strikes for ${dmg} damage!`);
-    updatePlayerUI();
-
-    if (player.hp <= 0) {
-        onPlayerDeath();
-    }
-}
-
-// ===================== DECK / ADD CARDS =====================
-function updateDeckUI() {
-    document.getElementById('deck-count-label').textContent = `Deck: ${deck.length}`;
-    document.getElementById('discard-count-label').textContent = `Discard: ${discardPile.length}`;
-}
-
-function addCardsFromDeck() {
-    if (player.mana < 25) return;
-    player.mana -= 25;
-    for (let i = 0; i < 4; i++) {
-        if (deck.length) hand.push(deck.pop());
-    }
-    updatePlayerUI();
-    renderHand();
-    updateDeckUI();
-}
-
-/* ==========================================
+/* =============================================
    UI UPDATERS
-   ========================================== */
+   ============================================= */
 function updatePlayerUI() {
-    // HP + Mana
-    const hpPct = (player.hp / player.maxHp) * 100;
-    document.getElementById('player-hp-bar').style.width = `${hpPct}%`;
-    document.getElementById('player-hp-label').textContent = `${player.hp} / ${player.maxHp}`;
-    
-    const manaPct = (player.mana / player.maxMana) * 100;
-    document.getElementById('player-mana-bar').style.width = `${manaPct}%`;
-    document.getElementById('player-mana-label').textContent = `Mana: ${player.mana} / ${player.maxMana}`;
+    const hpPct   = (player.hp   / player.maxHp)   * 100;
+    const manaPct = (player.mana / player.maxMana)  * 100;
+
+    const hpBar   = document.getElementById('player-hp-bar');
+    const manaBar = document.getElementById('player-mana-bar');
+    const hpLbl   = document.getElementById('player-hp-label');
+    const manaLbl = document.getElementById('player-mana-label');
+
+    if (hpBar)   hpBar.style.width   = hpPct   + '%';
+    if (manaBar) manaBar.style.width = manaPct + '%';
+    if (hpLbl)   hpLbl.textContent   = `${player.hp}/${player.maxHp}`;
+    if (manaLbl) manaLbl.textContent = `${player.mana}/${player.maxMana}`;
 }
 
 function updateEnemyUI() {
     if (!currentEnemy) return;
     const pct = (currentEnemy.hp / currentEnemy.maxHp) * 100;
 
-    const bar  = document.getElementById('enemy-hp-bar');
-    const lbl  = document.getElementById('enemy-hp-label');
-    const name = document.getElementById('enemy-name-label');
+    const bar    = document.getElementById('enemy-hp-bar');
+    const lbl    = document.getElementById('enemy-hp-label');
+    const nameLbl= document.getElementById('enemy-name-label');
 
-    if (bar)  bar.style.width   = `${pct}%`;
-    if (lbl)  lbl.textContent   = `${currentEnemy.hp} / ${currentEnemy.maxHp}`;
-    if (name) name.textContent  = currentEnemy.name.toUpperCase();
+    if (bar)     bar.style.width   = pct + '%';
+    if (lbl)     lbl.textContent   = `${currentEnemy.hp}/${currentEnemy.maxHp}`;
+    if (nameLbl) nameLbl.textContent = currentEnemy.name.toUpperCase();
 
-    // Swap sprite if defined
+    // Swap sprite
     const sprite = document.querySelector('.enemy-sprite');
     if (sprite && currentEnemy.sprite) sprite.src = currentEnemy.sprite;
 }
 
-function updateResourcesUI() {
+function updateResourceUI() {
+    const maxRes = MAX_RES;
+
     ['forest','ocean','land'].forEach(res => {
-        const pct = (player.resources[res] / 10) * 100;
-        const bar = document.getElementById(`res-${res}-bar`);
-        const count = document.getElementById(`res-${res}`);
-        if (bar) bar.style.width = `${pct}%`;
-        if (count) count.textContent = player.resources[res];
+        const bar  = document.getElementById(`res-${res}-bar`);
+        const num  = document.getElementById(`res-${res}`);
+        const pct  = (resources[res] / maxRes) * 100;
+        if (bar) bar.style.width = pct + '%';
+        if (num) num.textContent = resources[res];
     });
 }
 
@@ -673,37 +935,15 @@ function renderTrackerDots() {
     });
 }
 
-/* ==========================================
-   QUEST MAP UNLOCK LOGIC
-   ========================================== */
-function updateMapUI() {
-    const unlockMap = {
-        'ch1_start_done':     { id: 'q-2',   show: true },
-        'ch1_level2_done':    { id: 'q-2-1', show: true },
-        'ch1_defense_done':   { id: 'q-3',   show: true },
-        'stage3_1_unlocked':  { id: 'q-3-1', show: true },
-        'stage4_unlocked':    { id: 'q-4',   show: true },
-        'stage5_unlocked':    { id: 'q-5',   show: true }
-    };
-    unlockedNodes.forEach(tag => {
-        const entry = unlockMap[tag];
-        if (!entry) return;
-        const el = document.getElementById(entry.id);
-        if (!el) return;
-        if (entry.show) el.classList.remove('hidden');
-        el.classList.remove('locked');
-        const tag_ = el.querySelector('.quest-tag');
-        if (tag_) { tag_.textContent = '▶ ENTER'; }
-    });
+/* =============================================
+   BATTLE LOG
+   ============================================= */
+function setBattleLog(text) {
+    const el = document.getElementById('battle-log-text');
+    if (el) el.textContent = text;
+    addToLog('BATTLE', text);
 }
 
-function unlockNode(tag) {
-    if (!unlockedNodes.includes(tag)) unlockedNodes.push(tag);
-}
-
-/* ==========================================
-   LOG
-   ========================================== */
 function addToLog(name, text) {
     gameHistory.push({ name, text });
 }
@@ -712,14 +952,17 @@ function toggleLog(e) {
     if (e) e.stopPropagation();
     const log  = document.getElementById('history-log');
     const cont = document.getElementById('log-content');
+    if (!log) return;
 
     if (log.style.display === 'none' || !log.style.display) {
-        cont.innerHTML = gameHistory.map(entry =>
-            `<div class="log-entry">
-                <span class="log-name">${entry.name}</span>
-                <span class="log-text">${entry.text}</span>
-            </div>`
-        ).join('');
+        if (cont) {
+            cont.innerHTML = gameHistory.map(entry =>
+                `<div class="log-entry">
+                    <span class="log-name">${entry.name}</span>
+                    <span class="log-text">${entry.text}</span>
+                </div>`
+            ).join('');
+        }
         log.style.display = 'flex';
         document.getElementById('modal-overlay').style.display = 'block';
     } else {
@@ -728,18 +971,13 @@ function toggleLog(e) {
     }
 }
 
-/* ==========================================
-   DEV TOOLS
-   ========================================== */
+/* =============================================
+   DEV SHORTCUTS
+   ============================================= */
 if (isDev) {
     document.addEventListener('keydown', e => {
-        if (e.key === 'K') { // Kill current enemy instantly
-            if (currentEnemy) { currentEnemy.hp = 0; onEnemyDefeated(); }
-        }
-        if (e.key === 'H') { // Full heal player
-            player.hp = player.maxHp;
-            player.mana = player.maxMana;
-            updatePlayerUI();
-        }
+        if (e.key === 'K') { if (currentEnemy) { currentEnemy.hp = 0; onEnemyDefeated(); } }
+        if (e.key === 'H') { player.hp = player.maxHp; player.mana = player.maxMana; updatePlayerUI(); }
+        if (e.key === 'R') { resources = {forest:10,ocean:10,land:10}; updateResourceUI(); }
     });
 }
