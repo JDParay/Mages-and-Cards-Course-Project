@@ -141,8 +141,9 @@
         </div>
 
         <div class="combatant-panel right-panel" id="enemy-panel">
-            <img src="assets/enemy_1.png" alt="Enemy" class="combatant-sprite enemy-sprite"
-                 onerror="this.outerHTML='<div class=&quot;sprite-ph enemy-ph&quot;>&#128121;</div>'">
+            <img src="assets/enemy_1.png" alt="Enemy" class="combatant-sprite enemy-sprite" id="enemy-sprite-img"
+                 onerror="this.onerror=null; this.style.display='none'; var ph=document.getElementById('enemy-ph-fallback'); if(ph) ph.style.display='flex';">
+            <div class="sprite-ph enemy-ph" id="enemy-ph-fallback" style="display:none">&#128121;</div>
             <div class="combatant-info">
                 <span class="combatant-name enemy-name" id="enemy-name-label">WRAITH</span>
                 <div class="stat-bar-row">
@@ -264,6 +265,11 @@
     <h2 class="modal-title">Credits</h2>
     <div class="credits-grid">
         <div class="credit-entry"><span>Jeko Damiel Paray</span><span>Developer</span></div>
+        <div class="credit-entry"><span>Pixabay</span><span>Audio Assets</span></div>
+        <div class="credit-entry"><span>Tarquini S.</span><span>Tester</span></div>
+        <div class="credit-entry"><span>Tamdang A.</span><span>Tester</span></div>
+        <div class="credit-entry"><span>Besana A.L.</span><span>Tester</span></div>
+        <div class="credit-entry"><span>Lechoncito J.</span><span>Tester</span></div>
     </div>
 </div>
 

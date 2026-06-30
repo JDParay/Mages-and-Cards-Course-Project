@@ -942,8 +942,18 @@ function updateEnemyUI() {
     if (nameLbl) nameLbl.textContent = currentEnemy.name.toUpperCase();
 
     // Swap sprite
-    const sprite = document.querySelector('.enemy-sprite');
-    if (sprite && currentEnemy.sprite) sprite.src = currentEnemy.sprite;
+    const sprite = document.getElementById('enemy-sprite-img');
+    const fallback = document.getElementById('enemy-ph-fallback');
+    if (sprite && currentEnemy.sprite) {
+        sprite.onerror = function () {
+            sprite.onerror = null;
+            sprite.style.display = 'none';
+            if (fallback) fallback.style.display = 'flex';
+        };
+        sprite.style.display = '';
+        if (fallback) fallback.style.display = 'none';
+        sprite.src = currentEnemy.sprite;
+    }
 }
 
 function updateResourceUI() {
