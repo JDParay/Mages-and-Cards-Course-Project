@@ -305,6 +305,8 @@ async function startBattle(file, startNode) {
     freeMerge    = false;
     gameHistory  = [];
     enemyIndex   = 0;
+    utilityUsed.clear();
+    renderUtility();
 
     // Set level label
     const lbl = document.getElementById('level-label');
@@ -320,17 +322,17 @@ async function startBattle(file, startNode) {
 function getDemoEnemies(levelId) {
     const sets = {
         '1-1': [
-            { name:'Goblin',   hp:55,  maxHp:55,  sprite:'assets/enemy_1.png',    atk:20  },
-            { name:'Goblin Guard',  hp:70,  maxHp:70,  sprite:'assets/enemy_1.png',    atk:25 }
+            { name:'Goblin',        hp:55,  maxHp:55,  sprite:'assets/enemy_goblin.png',        atk:20 },
+            { name:'Goblin Guard',  hp:70,  maxHp:70,  sprite:'assets/enemy_goblin_guard.png',  atk:25 }
         ],
         '1-2': [
-            { name:'Goblin Prince',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:20 },
-            { name:'Goblin KIng',   hp:80,  maxHp:80,  sprite:'assets/enemy_2.png',    atk:25 },
-            { name:'Executioner',   hp:100, maxHp:100, sprite:'assets/enemy_2.png',    atk:30 }
+            { name:'Goblin Prince', hp:80,  maxHp:80,  sprite:'assets/enemy_goblin_prince.png', atk:20 },
+            { name:'Goblin King',   hp:80,  maxHp:80,  sprite:'assets/enemy_goblin_king.png',   atk:25 },
+            { name:'Executioner',   hp:100, maxHp:100, sprite:'assets/enemy_executioner.png',   atk:30 }
         ],
         '1-3': [
-            { name:'Apprentice',hp:90,  maxHp:90,  sprite:'assets/enemy_boss.png', atk:30 },
-            { name:'Dark Mage',hp:110,maxHp:110, sprite:'assets/enemy_boss.png', atk:35 }
+            { name:'Apprentice',    hp:90,  maxHp:90,  sprite:'assets/enemy_apprentice.png',    atk:30 },
+            { name:'Dark Mage',     hp:110, maxHp:110, sprite:'assets/enemy_dark_mage.png',     atk:35 }
         ]
     };
     return (sets[levelId] || sets['1-1']).map(e => ({ ...e }));
