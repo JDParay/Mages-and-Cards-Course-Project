@@ -690,10 +690,12 @@ body {
 
 /* =============================================
    MOBILE: LANDSCAPE — rescale fixed-px desktop layout
-   Targets phones in landscape (most maxing out ~900-930px wide,
-   ~430px tall). Tablets in landscape keep the desktop layout.
+   Keyed off HEIGHT, not width, because phone landscape width
+   varies wildly (700px-1000px+) but the real constraint is
+   always the short side being ~330-480px tall. Width ceiling
+   is generous so this still fires regardless of phone width.
    ============================================= */
-@media (max-width:930px) and (orientation:landscape) {
+@media (max-height:500px) and (orientation:landscape), (max-width:1100px) and (orientation:landscape) {
 
     #rotate-overlay { display:none !important; }
 
@@ -730,9 +732,11 @@ body {
     .tracker-line { width:13px; }
     .game-btn.small-btn { padding:4px 8px; font-size:0.6rem; }
 
+    /* ---------- BATTLE SCREEN STRUCTURE: fit within viewport height ---------- */
+    #vn-game-screen { height:100vh; overflow:hidden; }
     /* ---------- ARENA / SPRITES ---------- */
-    #arena-banner { min-height:150px; padding:0 10px 4px; }
-    .combatant-sprite { width:90px; }
+    #arena-banner { flex:1 1 auto; min-height:0; height:auto; padding:0 10px 4px; }
+    .combatant-sprite { width:90px; max-height:55%; }
     .sprite-ph { font-size:2.2rem; }
     .combatant-name { font-size:0.6rem; }
     .stat-bar-row { width:110px; gap:3px; }
@@ -743,7 +747,7 @@ body {
     #battle-log-text { font-size:0.62rem; }
 
     /* ---------- HAND AREA ---------- */
-    #hand-area { bottom:118px; gap:14px; }
+    #hand-area { bottom:124px; gap:14px; }
     #utility-wrapper { padding:5px 0; }
     .card-row { gap:4px; }
     .utility-row::before { font-size:0.42rem; top:-11px; }
@@ -800,8 +804,8 @@ body {
     .slider-row label { font-size:0.78rem; width:36px; }
 }
 
-/* ---------- EXTRA-SMALL PHONES IN LANDSCAPE (e.g. <700px) ---------- */
-@media (max-width:700px) and (orientation:landscape) {
+/* ---------- EXTRA-SMALL / VERY SHORT PHONES IN LANDSCAPE ---------- */
+@media (max-height:400px) and (orientation:landscape), (max-width:700px) and (orientation:landscape) {
     .main-logo-img { width:230px; }
     .chapter-card { width:100px; }
     .chapter-thumb { height:128px; }
@@ -810,7 +814,7 @@ body {
     .combatant-sprite { width:70px; }
     .stat-bar-row { width:85px; }
     .spell-card { width:62px; height:80px; }
-    #hand-area { bottom:100px; gap:8px; }
+    #hand-area { bottom:106px; gap:8px; }
     #bottom-panel { height:100px; grid-template-columns:90px 1fr 4px; }
     #narrative-panel { padding-left:80px; }
     #action-sidebar-controls { min-width:90px; }
