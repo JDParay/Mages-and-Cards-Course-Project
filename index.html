@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Mages &amp; Cards</title>
     <link rel="icon" type="image/png" href="assets/icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -10,6 +13,13 @@
 </head>
 <body>
 <div id="bg-layer" class="waterfall-bg"></div>
+
+<!-- ===================== ROTATE DEVICE OVERLAY (mobile portrait) ===================== -->
+<div id="rotate-overlay">
+    <div class="rotate-icon">&#128241;</div>
+    <p class="rotate-text">Please rotate your device</p>
+    <p class="rotate-subtext">Mages &amp; Cards is best played in landscape mode</p>
+</div>
 
 <!-- ===================== MAIN MENU ===================== -->
 <div id="main-menu-screen" class="screen">

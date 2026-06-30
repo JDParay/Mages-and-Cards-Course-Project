@@ -647,3 +647,171 @@ body {
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:rgba(232,127,255,.3); border-radius:3px; }
 ::-webkit-scrollbar-thumb:hover { background:rgba(232,127,255,.55); }
+
+/* =============================================
+   ROTATE-DEVICE OVERLAY (portrait lock)
+   ============================================= */
+#rotate-overlay {
+    display:none; /* shown only via the portrait media query below */
+    position:fixed; inset:0; z-index:99999;
+    background:radial-gradient(ellipse at 40% 60%,#2a1155 0%,#0d0a1a 70%);
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:30px;
+    color:var(--text);
+}
+.rotate-icon {
+    font-size:3.4rem; line-height:1; margin-bottom:18px;
+    animation:rotateHint 1.8s ease-in-out infinite;
+    filter:drop-shadow(0 0 14px var(--pink-glow));
+}
+@keyframes rotateHint {
+    0%,100% { transform:rotate(0deg); }
+    50%     { transform:rotate(90deg); }
+}
+.rotate-text {
+    font-family:'Cinzel Decorative',serif; font-size:1.2rem;
+    color:var(--pink); margin:0 0 8px;
+    text-shadow:0 0 10px var(--pink-glow);
+}
+.rotate-subtext {
+    font-family:'Lato',sans-serif; font-size:0.82rem;
+    color:var(--dim); margin:0; max-width:280px;
+}
+
+/* =============================================
+   MOBILE: PORTRAIT — lock the game, show rotate prompt
+   ============================================= */
+@media (max-width:1024px) and (orientation:portrait) {
+    #rotate-overlay { display:flex; }
+    .screen, #vn-game-screen, .modal-overlay, .modal-box {
+        display:none !important;
+    }
+}
+
+/* =============================================
+   MOBILE: LANDSCAPE — rescale fixed-px desktop layout
+   Targets phones in landscape (most maxing out ~900-930px wide,
+   ~430px tall). Tablets in landscape keep the desktop layout.
+   ============================================= */
+@media (max-width:930px) and (orientation:landscape) {
+
+    #rotate-overlay { display:none !important; }
+
+    /* ---------- MAIN MENU ---------- */
+    .main-logo-img { width:300px; margin-bottom:14px; }
+    .button-stack { width:190px; gap:8px; }
+    .game-btn { padding:9px 14px; font-size:0.8rem; }
+    .menu-footer { padding:8px 16px; font-size:0.62rem; }
+
+    /* ---------- CHAPTER SELECT ---------- */
+    .campaign-header { padding:12px 18px; gap:10px; }
+    .campaign-title { font-size:1.1rem; }
+    .back-btn { padding:5px 10px; font-size:0.72rem; }
+    .chapter-grid { gap:14px; margin-top:30px; }
+    .chapter-card { width:130px; }
+    .chapter-thumb { height:165px; }
+    .chapter-info { padding:9px 10px; }
+    .chapter-card h3 { font-size:0.78rem; }
+    .chapter-subtitle { font-size:0.56rem; }
+
+    /* ---------- LEVEL MAP ---------- */
+    .level-map { margin-top:50px; padding:10px; }
+    .map-node { width:64px; height:64px; }
+    .map-dot { font-size:1.1rem; }
+    .map-line { width:50px; margin-bottom:30px; }
+    .map-level-id { font-size:0.62rem; }
+    .map-level-name { font-size:0.56rem; max-width:80px; }
+
+    /* ---------- BATTLE TOP BAR ---------- */
+    #battle-top-bar { padding:4px 8px; gap:6px; }
+    .level-label-txt { font-size:0.66rem; min-width:24px; }
+    .tracker-dot { width:7px; height:7px; }
+    .tracker-dot.current { width:10px; height:10px; }
+    .tracker-line { width:13px; }
+    .game-btn.small-btn { padding:4px 8px; font-size:0.6rem; }
+
+    /* ---------- ARENA / SPRITES ---------- */
+    #arena-banner { min-height:150px; padding:0 10px 4px; }
+    .combatant-sprite { width:90px; }
+    .sprite-ph { font-size:2.2rem; }
+    .combatant-name { font-size:0.6rem; }
+    .stat-bar-row { width:110px; gap:3px; }
+    .bar-tag { font-size:0.48rem; width:13px; }
+    .bar-track { height:5px; }
+    .bar-label { font-size:0.6rem; min-width:34px; }
+    #battle-log-box { height:34px; padding:4px 12px; }
+    #battle-log-text { font-size:0.62rem; }
+
+    /* ---------- HAND AREA ---------- */
+    #hand-area { bottom:118px; gap:14px; }
+    #utility-wrapper { padding:5px 0; }
+    .card-row { gap:4px; }
+    .utility-row::before { font-size:0.42rem; top:-11px; }
+
+    /* ---------- SPELL CARDS ---------- */
+    .spell-card { width:78px; height:98px; padding:4px 3px; }
+    .card-type-img { width:9px; height:9px; }
+    .card-icon { font-size:0.95rem; }
+    .card-name { font-size:0.4rem; }
+    .card-mana-cost { font-size:0.45rem; }
+    .card-res-cost { font-size:0.44rem; }
+    .card-free { font-size:0.44rem; }
+    .pip { width:3px; height:3px; }
+    .spell-card.wrath:hover:not(.used):not(.selected),
+    .spell-card.merge-hand:hover:not(.used):not(.selected) {
+        transform:translateY(-12px) scale(1.04);
+    }
+    .spell-card.harmony:hover:not(.used):not(.selected) {
+        transform:translateY(-10px) scale(1.04);
+    }
+
+    /* ---------- BOTTOM PANEL ---------- */
+    #bottom-panel {
+        height:120px;
+        grid-template-columns:110px 1fr 4px;
+    }
+    #resource-panel { gap:4px; padding:5px 5px 5px 7px; }
+    .res-icon { width:11px; height:11px; }
+    .res-emoji { font-size:0.7rem; }
+    .res-track { height:4px; }
+    .res-num { font-size:0.5rem; min-width:13px; }
+    .deck-counter { margin-top:3px; padding-top:3px; }
+    .deck-counter span { font-size:0.6rem; }
+
+    #narrative-panel { padding:4px 0 5px 100px; }
+    #action-sidebar-controls {
+        min-width:110px; gap:6px; padding:5px 5px 5px 7px;
+    }
+    .game-btn.draw-btn, .game-btn.end-turn-btn { font-size:0.58rem; padding:5px 8px; }
+    .game-btn.attack-btn, .game-btn.merge-btn { font-size:0.6rem; padding:5px 10px; }
+
+    /* ---------- MODALS ---------- */
+    .modal-box { padding:18px 20px; width:92%; max-width:340px; }
+    .modal-title { font-size:1.1rem; }
+    .small-modal { padding:16px 18px; max-width:280px; }
+    .tutorial-modal { max-width:92vw; padding:14px 16px; }
+    .tutorial-img { max-height:60vh; }
+    .tutorial-text { font-size:0.68rem; line-height:1.5; }
+    .log-modal { width:88%; max-width:360px; height:80vh; padding:14px; }
+    .log-name { font-size:0.6rem; }
+    .log-text { font-size:0.7rem; }
+    .credit-entry { font-size:0.7rem; padding:6px 0; }
+    .settings-container { gap:12px; margin:10px 0; }
+    .slider-row label { font-size:0.78rem; width:36px; }
+}
+
+/* ---------- EXTRA-SMALL PHONES IN LANDSCAPE (e.g. <700px) ---------- */
+@media (max-width:700px) and (orientation:landscape) {
+    .main-logo-img { width:230px; }
+    .chapter-card { width:100px; }
+    .chapter-thumb { height:128px; }
+    .map-node { width:50px; height:50px; }
+    .map-line { width:34px; }
+    .combatant-sprite { width:70px; }
+    .stat-bar-row { width:85px; }
+    .spell-card { width:62px; height:80px; }
+    #hand-area { bottom:100px; gap:8px; }
+    #bottom-panel { height:100px; grid-template-columns:90px 1fr 4px; }
+    #narrative-panel { padding-left:80px; }
+    #action-sidebar-controls { min-width:90px; }
+}
